@@ -23,11 +23,11 @@ class Service(val name: String, private val content: YAML) {
         content.getListByPath("depends_on", listOf<String>())
             .map { Link(name, it) }
 
-    fun volumes(): Map<String, String> =
+    fun volumes(): List<Volume> =
         content.getListByPath("volumes", listOf<String>())
             .map { it.split(":") }
             .filter { it.size >= 2 }
-            .associateTo(mutableMapOf()) { it[0] to it[1] }
+            .map { Volume(name, it[1], it[0]) }
 
     fun ports(): List<PortBinding> =
         content.getListByPath("ports", listOf<Any>())
@@ -53,4 +53,6 @@ class Service(val name: String, private val content: YAML) {
     data class MaybeReference(val internal: Boolean, val port: Int, val service: String? = null)
 
     data class Link(val from: String, val to: String, val alias: String? = null)
+
+    data class Volume(val service: String, val target: String, val mounted: String)
 }

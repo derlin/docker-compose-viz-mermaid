@@ -6,6 +6,8 @@ import java.lang.NumberFormatException
 
 data class PortBinding(val service: String, val internal: Int, val external: Int = internal) {
 
+    val internalIfDifferent = if (internal == external) null else internal
+
     companion object {
         fun parse(service: String, declaration: Any): PortBinding? =
             when (declaration) {

@@ -1,9 +1,14 @@
 package ch.derlin.dc2mermaid
 
 import ch.derlin.dc2mermaid.data.DockerCompose
+import ch.derlin.dc2mermaid.graph.CONNECTOR.*
+import ch.derlin.dc2mermaid.graph.MermaidGraph
+import ch.derlin.dc2mermaid.graph.Shape.*
+import ch.derlin.dc2mermaid.graph.withGeneratedIds
 import ch.derlin.dc2mermaid.helpers.YAML
 import ch.derlin.dc2mermaid.helpers.YamlUtils
 import java.io.File
+
 
 fun main() {
     val dc = File("docker-compose.yaml")
@@ -11,54 +16,44 @@ fun main() {
         .let { YamlUtils.yaml.load<YAML>(it) }
         .let { DockerCompose(it) }
 
+    val graph = MermaidGraph()
 
-    val unreferenced = dc.services.map { it.name }.toMutableSet()
-
-    val builder = StringBuilder()
-    builder.appendLine("flowchart TB")
-
-    var volumeIds = 0
-    dc.services.forEach { service ->
-        service.volumes().forEach {
-            builder.appendLine("  V$volumeIds${"{{"} ${it.value} ${"}}"} -. ${it.key} .-x ${service.name}")
-            unreferenced -= service.name
-            volumeIds++
-        }
-    }
-    builder.appendLine()
-
-    dc.extendedLinks.sortedBy { it.from }.forEach { link ->
-        val connector = link.alias?.let { "-- $it -->" } ?: "-->"
-        builder.appendLine("  ${link.from} $connector ${link.to}")
-        unreferenced -= setOf(link.from, link.to)
+    dc.services.forEach {
+        graph.addNode(it.name, shape = if (it.name == "db") CYNLINDRIC else null)
     }
 
-    unreferenced.forEach { builder.appendLine("  $it") }
-    builder.appendLine()
-
-    var portIds = 0
-    dc.ports.forEach { port ->
-        val connector = if (port.external != port.internal) "-. ${port.internal} .->" else "-.->"
-        builder.appendLine("  P$portIds((${port.external})) $connector ${port.service}")
-        portIds++
-    }
-    builder.appendLine()
-
-    if (volumeIds > 0) {
-        builder.appendLine()
-        builder.appendLine("classDef volumes fill:#fdfae4,stroke:#867a22")
-        builder.appendLine("class " + (0..volumeIds).joinToString(",") { "V$it" } + " volumes")
+    val volumeIds = dc.services.flatMap { it.volumes() }.withGeneratedIds("V") { id, volume ->
+        graph.addNode(volume.target, id, HEXAGON)
+        graph.addLink(id, volume.service, connector = DOT_X, text = volume.mounted)
     }
 
-    if (portIds > 0) {
-        builder.appendLine()
-        builder.appendLine("classDef ports fill:#f8f8f8,stroke:#ccc")
-        builder.appendLine("class " + (0..portIds).joinToString(",") { "P$it" } + " ports")
+    dc.links.sortedBy { it.from }.forEach { link ->
+        graph.addLink(link.from, link.to, text = link.alias)
     }
 
-    builder.appendLine()
-    builder.appendLine("classDef comp fill:#fbfff7,stroke:#8bc34a")
-    builder.appendLine("class service,web,bff,db comp")
+    val portIds = dc.ports.withGeneratedIds("P") { id, port ->
+        graph.addNode(port.external, id, ROUND)
+        graph.addLink(id, port.service, connector = DOT_ARROW, text = port.internalIfDifferent)
+    }
 
-    println(builder.toString())
+    if (volumeIds.isNotEmpty()) {
+        graph.addClass(
+            "classDef volumes fill:#fdfae4,stroke:#867a22",
+            "class " + volumeIds.joinToString(",") + " volumes"
+        )
+    }
+
+    if (portIds.isNotEmpty()) {
+        graph.addClass(
+            "classDef ports fill:#f8f8f8,stroke:#ccc",
+            "class " + portIds.joinToString(",") + " ports"
+        )
+    }
+
+    graph.addClass(
+        "classDef comp fill:#fbfff7,stroke:#8bc34a",
+        "class service,web,bff,db comp"
+    )
+
+    println(graph.build())
 }
