@@ -13,7 +13,15 @@ repositories {
 
 dependencies {
     implementation("org.yaml:snakeyaml:1.29")
+    implementation("com.github.ajalt:clikt:2.8.0")
     testImplementation(kotlin("test"))
+}
+
+tasks.jar {
+    manifest {
+        attributes += "main-Class" to "ch.derlin.dc2mermaid.CliKt"
+    }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }
 
 tasks.test {

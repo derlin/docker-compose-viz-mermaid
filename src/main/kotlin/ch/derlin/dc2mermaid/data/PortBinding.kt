@@ -2,7 +2,6 @@ package ch.derlin.dc2mermaid.data
 
 import ch.derlin.dc2mermaid.helpers.YAML
 import ch.derlin.dc2mermaid.helpers.YamlUtils.getByPath
-import java.lang.NumberFormatException
 
 data class PortBinding(val service: String, val internal: Int, val external: Int = internal) {
 

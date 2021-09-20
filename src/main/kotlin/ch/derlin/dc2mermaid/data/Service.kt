@@ -8,26 +8,17 @@ class Service(val name: String, private val content: YAML) {
 
     fun links() = linksFromLinks() + linksFromDependsOn()
 
-    private fun getAllLinks(): List<String> =
-        content.getListByPath("depends_on", listOf<String>()) +
-                content.getListByPath("links", listOf<String>())
-
     private fun linksFromLinks(): List<Link> =
         content.getListByPath("links", listOf<String>())
-            .map { link ->
-                val split = link.split(":")
-                Link(name, split[0], if (split.size > 1) split[1] else null)
-            }
+            .map { Link.parse(name, it) }
 
     private fun linksFromDependsOn(): List<Link> =
         content.getListByPath("depends_on", listOf<String>())
-            .map { Link(name, it) }
+            .map { Link.parse(name, it) }
 
     fun volumes(): List<Volume> =
         content.getListByPath("volumes", listOf<String>())
-            .map { it.split(":") }
-            .filter { it.size >= 2 }
-            .map { Volume(name, it[1], it[0]) }
+            .mapNotNull { Volume.parse(name, it) }
 
     fun ports(): List<PortBinding> =
         content.getListByPath("ports", listOf<Any>())
@@ -37,22 +28,39 @@ class Service(val name: String, private val content: YAML) {
         content.getByPath("environment")
             ?.let { it as? YAML }?.values?.mapNotNull { it as? String }
             ?.filter { ":" in it }
-            ?.mapNotNull { value ->
-                "^(?:https?://)?([^:]+):(\\d+)[ ;,]*$".toRegex().matchEntire(value)?.let {
+            ?.mapNotNull { MaybeReference.parse(it) }
+            ?: listOf()
+
+    override fun toString(): String = "Service[$name]"
+
+    data class MaybeReference(val internal: Boolean, val port: Int, val service: String? = null) {
+        companion object {
+            fun parse(s: String): MaybeReference? =
+                "^(?:https?://)?([^:]+):(\\d+)[ ;,]*$".toRegex().matchEntire(s)?.let {
                     MaybeReference(
                         internal = it.groupValues[0] in listOf("localhost", "120.0.0.1", "${"{"}DOCKER_HOST_IP${"}"}"),
                         port = it.groupValues[2].toInt(),
                         service = it.groupValues[1]
                     )
                 }
-            } ?: listOf()
+        }
+    }
 
-    override fun toString(): String = "Service[$name]"
+    data class Link(val from: String, val to: String, val alias: String? = null) {
+        companion object {
+            fun parse(name: String, linkMapping: String): Link =
+                linkMapping.split(":").let {
+                    Link(name, it[0], if (it.size > 1) it[1] else null)
+                }
+        }
+    }
 
-
-    data class MaybeReference(val internal: Boolean, val port: Int, val service: String? = null)
-
-    data class Link(val from: String, val to: String, val alias: String? = null)
-
-    data class Volume(val service: String, val target: String, val mounted: String)
+    data class Volume(val service: String, val target: String, val mounted: String) {
+        companion object {
+            fun parse(name: String, volumeMapping: String): Volume? =
+                volumeMapping.split(":")
+                    .takeIf { it.size >= 2 }
+                    ?.let { Volume(name, it[1], it[0]) }
+        }
+    }
 }
