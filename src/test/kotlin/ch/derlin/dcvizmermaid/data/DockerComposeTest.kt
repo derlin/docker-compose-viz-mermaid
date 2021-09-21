@@ -91,14 +91,13 @@ class DockerComposeTest : AbstractTestBase() {
                 volumeBinding(null, "/some/path/xx.sock") to null,
 
                 // transformed
-                volumeBinding("/something", "none") to volumeBinding(null, "none"),
-                volumeBinding("./something", "config") to volumeBinding("/Users/test/config", "config"),
-                volumeBinding(null, "config") to volumeBinding("/Users/test/config", "config"),
+                volumeBinding("none", "/something") to volumeBinding(null, "/something"),
+                volumeBinding("config", "/target/path") to volumeBinding("/Users/test/config", "/target/path"),
 
                 ).forEach { (vb, expected) ->
                 assertThat(vb)
                     .transform { DockerCompose.processVolumes(globalVolumes, listOf(vb)) }
-                    .isEqualTo(listOf(expected?.copy(inline = false) ?: vb))
+                    .isEqualTo(listOf(expected?.copy(externalRef = vb.source) ?: vb))
             }
         }
     }

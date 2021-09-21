@@ -8,7 +8,7 @@ enum class Shape {
     NONE, RECT_ROUNDED, CIRCLE, HEXAGON, PARALLELOGRAM, CYLINDER, STADIUM;
 
     fun format(id: Any, name: Any) = when (this) {
-        NONE -> "$name"
+        NONE -> if (id == name) "$name" else "$id[$name]"
         RECT_ROUNDED -> "$id($name)"
         CIRCLE -> "$id(($name))"
         HEXAGON -> "$id{{$name}}"

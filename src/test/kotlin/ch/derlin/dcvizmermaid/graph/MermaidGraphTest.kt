@@ -9,6 +9,27 @@ import org.junit.jupiter.api.Test
 class MermaidGraphTest {
 
     @Test
+    fun `add node ensures valid ids`() {
+        val n1 = "some_node-1"
+        val n2 = "@@node-#2"
+
+        val graph = MermaidGraph()
+        graph.addNode(n1)
+        graph.addNode(n2, shape = Shape.HEXAGON)
+        graph.addNode("n3")
+
+        graph.addLink(n1, n2)
+        graph.addLink(n2, "n3")
+        graph.addLink(n1, "n3")
+
+        assertThat(buildAndGetLines(graph)).containsExactlyInAnyOrder(
+            "somenode1[$n1] --> node2{{$n2}}",
+            "somenode1 --> n3",
+            "node2 --> n3"
+        )
+    }
+
+    @Test
     fun `nodes should be unique`() {
         val nodes = (1..9).map { "S$it" }
         val graph = MermaidGraph()

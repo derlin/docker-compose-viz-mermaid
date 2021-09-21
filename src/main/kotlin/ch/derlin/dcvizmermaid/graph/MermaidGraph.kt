@@ -10,14 +10,15 @@ class MermaidGraph(val order: String = "TB") {
     private val classes: MutableList<String> = mutableListOf()
 
     fun addNode(name: Any, id: String = name.toString(), shape: Shape? = null) {
-        if (id !in nodes) {
-            require(shape != null || name == id) { "for shape NONE, id and name must be equal, but $id != $name" }
-            nodes[id] = Node(id, name.toString(), shape ?: NONE)
+        with(id.toValidId()) {
+            if (this !in nodes) {
+                nodes[this] = Node(this, name.toString(), shape ?: NONE)
+            }
         }
     }
 
     fun addLink(from: Any, to: Any, connector: CONNECTOR? = null, text: Any? = null) {
-        links += Link(from.toString(), to.toString(), connector ?: ARROW, text)
+        links += Link(from.toValidId(), to.toValidId(), connector ?: ARROW, text)
     }
 
     fun addClass(vararg def: String) {

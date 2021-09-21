@@ -46,8 +46,8 @@ class DockerCompose(private val content: YAML) {
 
         fun processVolumes(globalVolumes: Map<String, String?>, volumeBindings: Collection<VolumeBinding>) =
             volumeBindings.map { binding ->
-                if (binding.target !in globalVolumes) binding
-                else binding.copy(source = globalVolumes[binding.target], inline = false)
+                if (binding.source !in globalVolumes) binding
+                else binding.copy(source = globalVolumes[binding.source], externalRef = binding.source)
             }
     }
 

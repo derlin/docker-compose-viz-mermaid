@@ -9,9 +9,11 @@ data class VolumeBinding(
     val source: String? = null,
     val target: String? = null,
     val type: VolumeType = VolumeType.VOLUME,
-    val inline: Boolean = true,
+    val externalRef: String? = null,
     val ro: Boolean = false,
 ) {
+
+    val inline = externalRef == null
 
     init {
         requireNotNull(target ?: source) { "A volume binding should at least have a source or target defined" }

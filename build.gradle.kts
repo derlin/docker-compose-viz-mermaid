@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -27,8 +28,17 @@ tasks.jar {
 
 tasks.test {
     useJUnitPlatform()
+    outputs.upToDateWhen { false } // always run tests !
+    testLogging {
+        // get actual information about failed tests in the console
+        // should be used inside
+        showStackTraces = true
+        showCauses = true
+        showExceptions = true
+        exceptionFormat = TestExceptionFormat.FULL
+    }
 }
 
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }

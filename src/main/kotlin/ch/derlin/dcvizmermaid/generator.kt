@@ -2,12 +2,9 @@ package ch.derlin.dcvizmermaid
 
 import ch.derlin.dcvizmermaid.data.DockerCompose
 import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType
+import ch.derlin.dcvizmermaid.graph.*
 import ch.derlin.dcvizmermaid.graph.CONNECTOR.*
-import ch.derlin.dcvizmermaid.graph.GraphOrientation
-import ch.derlin.dcvizmermaid.graph.MermaidGraph
 import ch.derlin.dcvizmermaid.graph.Shape.*
-import ch.derlin.dcvizmermaid.graph.idGenerator
-import ch.derlin.dcvizmermaid.graph.withGeneratedIds
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 
 val knownDbs = listOf("db", "redis", "mysql", "postgres", "postgresql")
@@ -32,13 +29,12 @@ fun generateMermaid(
     val volumeIds = if (!withVolumes) listOf() else {
         val idGen = idGenerator("V")
         dc.volumeBindings.map { volume ->
-            val id = if (volume.inline) idGen() else "V" + requireNotNull(volume.target)
+            val id = (volume.externalRef ?: volume.source ?: idGen()).toValidId()
             val details = if (volume.type == VolumeType.VOLUME) "" else "(${volume.type})"
-            graph.addNode(volume.target + details, id, if (volume.inline) HEXAGON else RECT_ROUNDED)
-            graph.addLink(id, volume.service, connector = if (volume.ro) DOT_X else DOT_DBL_X, text = volume.source)
+            graph.addNode((volume.source ?: "<empty>") + details, id, if (volume.inline) HEXAGON else RECT_ROUNDED)
+            graph.addLink(id, volume.service, connector = if (volume.ro) DOT_X else DOT_DBL_X, text = volume.target)
             id
         }
-
     }
 
     (if (withImplicitLinks) dc.extendedLinks else dc.links).sortedBy { it.from }.forEach { link ->

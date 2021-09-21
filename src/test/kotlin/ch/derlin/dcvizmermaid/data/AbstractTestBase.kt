@@ -11,7 +11,7 @@ abstract class AbstractTestBase {
     protected fun parseStringPort(p: String) = PortBinding.parse("service", p)
     protected fun parseYamlPort(p: String) = PortBinding.parse("service", YamlUtils.load(p))
 
-    protected fun volumeBinding(source: String? = null, target: String, ro: Boolean = false) =
+    protected fun volumeBinding(source: String?, target: String, ro: Boolean = false) =
         VolumeBinding("service", source, target, ro = ro)
 
     protected fun parseVolumeBinding(v: Any) = VolumeBinding.parse("service", v)
