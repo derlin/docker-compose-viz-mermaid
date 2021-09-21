@@ -10,6 +10,8 @@ object YamlUtils {
 
     val yaml = Yaml()
 
+    fun load(content: String): YAML = yaml.load<YAML>(content)
+
     fun YAML.dumpTo(writer: Writer) {
         writer.write(yaml.dumpAsMap(this))
     }

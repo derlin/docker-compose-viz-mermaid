@@ -19,9 +19,9 @@ data class PortBinding(val service: String, val internal: Int, val external: Int
         private fun parseString(service: String, declaration: String): PortBinding? {
             // TODO: ranges and bounds
             try {
-                val split = declaration.split(":").reversed()
+                val split = declaration.substringBefore("/").split(":").reversed()
                 val internal = split[0]
-                val external = split.getOrNull(1) ?: internal
+                val external = split.getOrNull(1)?.ifBlank { null } ?: internal
                 return PortBinding(service, internal.toInt(), external.toInt())
             } catch (ex: NumberFormatException) {
                 return null

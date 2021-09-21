@@ -15,6 +15,7 @@ dependencies {
     implementation("org.yaml:snakeyaml:1.29")
     implementation("com.github.ajalt:clikt:2.8.0")
     testImplementation(kotlin("test"))
+    testImplementation("com.willowtreeapps.assertk:assertk:0.24")
 }
 
 tasks.jar {

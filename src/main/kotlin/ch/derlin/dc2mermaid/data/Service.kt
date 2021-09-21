@@ -36,9 +36,9 @@ class Service(val name: String, private val content: YAML) {
     data class MaybeReference(val internal: Boolean, val port: Int, val service: String? = null) {
         companion object {
             fun parse(s: String): MaybeReference? =
-                "^(?:https?://)?([^:]+):(\\d+)[ ;,]*$".toRegex().matchEntire(s)?.let {
+                "^(?:https?://)?([^:]+):(\\d+)(?:[ ;,/].*)?$".toRegex().matchEntire(s)?.let {
                     MaybeReference(
-                        internal = it.groupValues[0] in listOf("localhost", "120.0.0.1", "${"{"}DOCKER_HOST_IP${"}"}"),
+                        internal = it.groupValues[1] !in listOf("localhost", "127.0.0.1", "$${"{"}DOCKER_HOST_IP${"}"}"),
                         port = it.groupValues[2].toInt(),
                         service = it.groupValues[1]
                     )

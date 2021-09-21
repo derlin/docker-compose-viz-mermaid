@@ -18,7 +18,7 @@ fun generateMermaid(
     withScpClasses: Boolean = false
 ): String {
 
-    val dc = DockerCompose(YamlUtils.yaml.load(dockerComposeContent))
+    val dc = DockerCompose(YamlUtils.load(dockerComposeContent))
     val graph = MermaidGraph()
 
     dc.services.forEach {
