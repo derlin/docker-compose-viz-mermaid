@@ -1,19 +1,21 @@
 package ch.derlin.dc2mermaid
 
 import ch.derlin.dc2mermaid.data.DockerCompose
-import ch.derlin.dc2mermaid.graph.CONNECTOR.DOT_ARROW
-import ch.derlin.dc2mermaid.graph.CONNECTOR.DOT_X
+import ch.derlin.dc2mermaid.data.VolumeBinding.VolumeType
+import ch.derlin.dc2mermaid.graph.CONNECTOR.*
 import ch.derlin.dc2mermaid.graph.MermaidGraph
 import ch.derlin.dc2mermaid.graph.Shape.*
+import ch.derlin.dc2mermaid.graph.idGenerator
 import ch.derlin.dc2mermaid.graph.withGeneratedIds
 import ch.derlin.dc2mermaid.helpers.YamlUtils
 
+val knownDbs = listOf("db", "redis", "mysql", "postgres", "postgresql")
 
 fun generateMermaid(
     dockerComposeContent: String,
     withPorts: Boolean = false,
     withVolumes: Boolean = false,
-    withExtendedLinks: Boolean = false,
+    withImplicitLinks: Boolean = false,
     withClasses: Boolean = false,
     withScpClasses: Boolean = false
 ): String {
@@ -22,23 +24,28 @@ fun generateMermaid(
     val graph = MermaidGraph()
 
     dc.services.forEach {
-        graph.addNode(it.name, shape = if (it.name == "db") CYNLINDRIC else null)
+        graph.addNode(it.name, shape = if (it.name in knownDbs) CYNLINDRIC else null)
     }
 
     val volumeIds = if (!withVolumes) listOf() else {
-        dc.services.flatMap { it.volumes() }.withGeneratedIds("V") { id, volume ->
-            graph.addNode(volume.target, id, HEXAGON)
-            graph.addLink(id, volume.service, connector = DOT_X, text = volume.mounted)
+        val idGen = idGenerator("V")
+        dc.volumeBindings.map { volume ->
+            val id = if(volume.inline) idGen() else "V" + requireNotNull(volume.target)
+            val details = if (volume.type == VolumeType.VOLUME) "" else "(${volume.type})"
+            graph.addNode(volume.target + details, id, if (volume.inline) HEXAGON else RECT_ROUNDED)
+            graph.addLink(id, volume.service, connector = if (volume.ro) DOT_X else DOT_DBL_X, text = volume.source)
+            id
         }
+
     }
 
-    (if (withExtendedLinks) dc.extendedLinks else dc.links).sortedBy { it.from }.forEach { link ->
+    (if (withImplicitLinks) dc.extendedLinks else dc.links).sortedBy { it.from }.forEach { link ->
         graph.addLink(link.from, link.to, text = link.alias)
     }
 
 
     val portIds = if (!withPorts) listOf() else dc.ports.withGeneratedIds("P") { id, port ->
-        graph.addNode(port.external, id, ROUND)
+        graph.addNode(port.externalPort, id, ROUND)
         graph.addLink(id, port.service, connector = DOT_ARROW, text = port.internalIfDifferent)
     }
 

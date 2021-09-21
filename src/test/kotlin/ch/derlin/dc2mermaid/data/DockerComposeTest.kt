@@ -1,16 +1,13 @@
-package ch.derlin.dc2mermaid
+package ch.derlin.dc2mermaid.data
 
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
-import ch.derlin.dc2mermaid.data.DockerCompose
-import ch.derlin.dc2mermaid.data.PortBinding
-import ch.derlin.dc2mermaid.data.Service
 import ch.derlin.dc2mermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class DockerComposeTest {
+class DockerComposeTest : AbstractTestBase() {
 
     @Test
     fun `parse services`() {
@@ -77,10 +74,32 @@ class DockerComposeTest {
                     .transform { DockerCompose.linksFromMaybeRefs("service", portBindings, listOf(ref)) }
                     .isEmpty()
             }
-
         }
     }
 
-    private fun link(to: String) = Service.Link("service", to)
+    @Test
+    fun `process volumes`() {
+        val globalVolumes = mapOf(
+            "none" to null,
+            "config" to "/Users/test/config"
+        )
 
+        assertAll {
+            mapOf(
+                // untouched
+                volumeBinding("./source", "/config", ro = true) to null,
+                volumeBinding(null, "/some/path/xx.sock") to null,
+
+                // transformed
+                volumeBinding("/something", "none") to volumeBinding(null, "none"),
+                volumeBinding("./something", "config") to volumeBinding("/Users/test/config", "config"),
+                volumeBinding(null, "config") to volumeBinding("/Users/test/config", "config"),
+
+                ).forEach { (vb, expected) ->
+                assertThat(vb)
+                    .transform { DockerCompose.processVolumes(globalVolumes, listOf(vb)) }
+                    .isEqualTo(listOf(expected?.copy(inline = false) ?: vb))
+            }
+        }
+    }
 }

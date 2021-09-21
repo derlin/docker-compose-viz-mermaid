@@ -44,7 +44,7 @@ class Cli : CliktCommand(
             by option("--ports", "-p").flag("--no-ports", "-P", default = false)
     private val withVolumes: Boolean
             by option("--volumes", "-v").flag("--no-volumes", "-V", default = true)
-    private val withExtendedLinks: Boolean
+    private val withImplicitLinks: Boolean
             by option("--ilinks", "-l", help = linksHelp).flag("--no-ilinks", "-L", default = true)
     private val withClasses: Boolean
             by option("--classes", "-c", help = classHelp).flag("--no-classes", "-C", default = true)
@@ -65,7 +65,7 @@ class Cli : CliktCommand(
             (dockerComposeInput ?: findDefaultFile()).readText(),
             withPorts = withPorts,
             withVolumes = withVolumes,
-            withExtendedLinks = withExtendedLinks,
+            withImplicitLinks = withImplicitLinks,
             withClasses = withClasses,
             withScpClasses = withScpClasses
         )

@@ -3,9 +3,9 @@ package ch.derlin.dc2mermaid.data
 import ch.derlin.dc2mermaid.helpers.YAML
 import ch.derlin.dc2mermaid.helpers.YamlUtils.getByPath
 
-data class PortBinding(val service: String, val internal: Int, val external: Int = internal) {
+data class PortBinding(val service: String, val internalPort: Int, val externalPort: Int = internalPort) {
 
-    val internalIfDifferent = if (internal == external) null else internal
+    val internalIfDifferent = if (internalPort == externalPort) null else internalPort
 
     companion object {
         fun parse(service: String, declaration: Any): PortBinding? =
@@ -31,7 +31,7 @@ data class PortBinding(val service: String, val internal: Int, val external: Int
         private fun parseYaml(service: String, declaration: YAML): PortBinding? {
             if (declaration.containsKey("published")) {
                 declaration.getByPath("published", Int::class)?.let { external ->
-                    return PortBinding(service, internal = declaration.getByPath("target", Int::class) ?: 0, external = external)
+                    return PortBinding(service, internalPort = declaration.getByPath("target", Int::class) ?: 0, externalPort = external)
                 }
             }
             return null

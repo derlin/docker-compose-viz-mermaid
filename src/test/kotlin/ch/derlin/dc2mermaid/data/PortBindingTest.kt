@@ -1,15 +1,13 @@
-package ch.derlin.dc2mermaid
+package ch.derlin.dc2mermaid.data
 
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
-import ch.derlin.dc2mermaid.data.PortBinding
-import ch.derlin.dc2mermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class PortBindingTest {
+class PortBindingTest: AbstractTestBase() {
 
     @Test
     fun `parse short port bindings`() {
@@ -62,8 +60,4 @@ class PortBindingTest {
             assertThat(port(3000, 1234)).transform { it.internalIfDifferent }.isEqualTo(3000)
         }
     }
-
-    private fun port(internal: Int, external: Int? = null) = PortBinding("service", internal, external ?: internal)
-    private fun parseStringPort(p: String) = PortBinding.parse("service", p)
-    private fun parseYamlPort(p: String) = PortBinding.parse("service", YamlUtils.load(p))
 }

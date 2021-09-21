@@ -16,9 +16,10 @@ class Service(val name: String, private val content: YAML) {
         content.getListByPath("depends_on", listOf<String>())
             .map { Link.parse(name, it) }
 
-    fun volumes(): List<Volume> =
-        content.getListByPath("volumes", listOf<String>())
-            .mapNotNull { Volume.parse(name, it) }
+    fun volumes(): List<VolumeBinding> =
+        listOf("volumes", "volumes_from")
+            .flatMap { content.getListByPath(it, listOf<Any>()) }
+            .mapNotNull { VolumeBinding.parse(name, it) }
 
     fun ports(): List<PortBinding> =
         content.getListByPath("ports", listOf<Any>())
@@ -36,7 +37,7 @@ class Service(val name: String, private val content: YAML) {
     data class MaybeReference(val internal: Boolean, val port: Int, val service: String? = null) {
         companion object {
             fun parse(s: String): MaybeReference? =
-                "^(?:https?://)?([^:]+):(\\d+)(?:[ ;,/].*)?$".toRegex().matchEntire(s)?.let {
+                "^(?:(?:[a-z]+:)+//)?([^:]+):(\\d+)(?:/.*)?$".toRegex().matchEntire(s)?.let {
                     MaybeReference(
                         internal = it.groupValues[1] !in listOf("localhost", "127.0.0.1", "$${"{"}DOCKER_HOST_IP${"}"}"),
                         port = it.groupValues[2].toInt(),
@@ -52,15 +53,6 @@ class Service(val name: String, private val content: YAML) {
                 linkMapping.split(":").let {
                     Link(name, it[0], if (it.size > 1) it[1] else null)
                 }
-        }
-    }
-
-    data class Volume(val service: String, val target: String, val mounted: String) {
-        companion object {
-            fun parse(name: String, volumeMapping: String): Volume? =
-                volumeMapping.split(":")
-                    .takeIf { it.size >= 2 }
-                    ?.let { Volume(name, it[1], it[0]) }
         }
     }
 }
