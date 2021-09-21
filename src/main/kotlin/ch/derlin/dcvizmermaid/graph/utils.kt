@@ -1,4 +1,4 @@
-package ch.derlin.dc2mermaid.graph
+package ch.derlin.dcvizmermaid.graph
 
 fun idGenerator(idPrefix: String): () -> String {
     var num = 0

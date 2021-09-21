@@ -1,6 +1,6 @@
-package ch.derlin.dc2mermaid.data
+package ch.derlin.dcvizmermaid.data
 
-import ch.derlin.dc2mermaid.helpers.YamlUtils
+import ch.derlin.dcvizmermaid.helpers.YamlUtils
 
 abstract class AbstractTestBase {
 

@@ -1,14 +1,14 @@
-package ch.derlin.dc2mermaid
+package ch.derlin.dcvizmermaid
 
-import ch.derlin.dc2mermaid.data.DockerCompose
-import ch.derlin.dc2mermaid.data.VolumeBinding.VolumeType
-import ch.derlin.dc2mermaid.graph.CONNECTOR.*
-import ch.derlin.dc2mermaid.graph.GraphOrientation
-import ch.derlin.dc2mermaid.graph.MermaidGraph
-import ch.derlin.dc2mermaid.graph.Shape.*
-import ch.derlin.dc2mermaid.graph.idGenerator
-import ch.derlin.dc2mermaid.graph.withGeneratedIds
-import ch.derlin.dc2mermaid.helpers.YamlUtils
+import ch.derlin.dcvizmermaid.data.DockerCompose
+import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType
+import ch.derlin.dcvizmermaid.graph.CONNECTOR.*
+import ch.derlin.dcvizmermaid.graph.GraphOrientation
+import ch.derlin.dcvizmermaid.graph.MermaidGraph
+import ch.derlin.dcvizmermaid.graph.Shape.*
+import ch.derlin.dcvizmermaid.graph.idGenerator
+import ch.derlin.dcvizmermaid.graph.withGeneratedIds
+import ch.derlin.dcvizmermaid.helpers.YamlUtils
 
 val knownDbs = listOf("db", "redis", "mysql", "postgres", "postgresql")
 

@@ -1,7 +1,7 @@
-package ch.derlin.dc2mermaid
+package ch.derlin.dcvizmermaid
 
-import ch.derlin.dc2mermaid.graph.GraphOrientation
-import ch.derlin.dc2mermaid.graph.MermaidOutput
+import ch.derlin.dcvizmermaid.graph.GraphOrientation
+import ch.derlin.dcvizmermaid.graph.MermaidOutput
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.context

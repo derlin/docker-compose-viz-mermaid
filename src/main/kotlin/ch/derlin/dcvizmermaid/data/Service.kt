@@ -1,8 +1,8 @@
-package ch.derlin.dc2mermaid.data
+package ch.derlin.dcvizmermaid.data
 
-import ch.derlin.dc2mermaid.helpers.YAML
-import ch.derlin.dc2mermaid.helpers.YamlUtils.getByPath
-import ch.derlin.dc2mermaid.helpers.YamlUtils.getListByPath
+import ch.derlin.dcvizmermaid.helpers.YAML
+import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
+import ch.derlin.dcvizmermaid.helpers.YamlUtils.getListByPath
 
 class Service(val name: String, private val content: YAML) {
 

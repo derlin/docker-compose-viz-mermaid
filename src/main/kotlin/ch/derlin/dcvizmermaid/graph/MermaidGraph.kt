@@ -1,7 +1,7 @@
-package ch.derlin.dc2mermaid.graph
+package ch.derlin.dcvizmermaid.graph
 
-import ch.derlin.dc2mermaid.graph.CONNECTOR.ARROW
-import ch.derlin.dc2mermaid.graph.Shape.NONE
+import ch.derlin.dcvizmermaid.graph.CONNECTOR.ARROW
+import ch.derlin.dcvizmermaid.graph.Shape.NONE
 
 class MermaidGraph(val order: String = "TB") {
 

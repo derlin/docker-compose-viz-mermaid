@@ -1,7 +1,7 @@
-package ch.derlin.dc2mermaid.data
+package ch.derlin.dcvizmermaid.data
 
-import ch.derlin.dc2mermaid.helpers.YAML
-import ch.derlin.dc2mermaid.helpers.YamlUtils.getByPath
+import ch.derlin.dcvizmermaid.helpers.YAML
+import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 
 data class PortBinding(val service: String, val internalPort: Int, val externalPort: Int = internalPort) {
 

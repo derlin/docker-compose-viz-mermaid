@@ -1,9 +1,9 @@
-package ch.derlin.dc2mermaid.data
+package ch.derlin.dcvizmermaid.data
 
-import ch.derlin.dc2mermaid.data.Service.Link
-import ch.derlin.dc2mermaid.data.Service.MaybeReference
-import ch.derlin.dc2mermaid.helpers.YAML
-import ch.derlin.dc2mermaid.helpers.YamlUtils.getByPath
+import ch.derlin.dcvizmermaid.data.Service.Link
+import ch.derlin.dcvizmermaid.data.Service.MaybeReference
+import ch.derlin.dcvizmermaid.helpers.YAML
+import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 
 
 class DockerCompose(private val content: YAML) {

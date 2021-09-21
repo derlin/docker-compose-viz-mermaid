@@ -1,4 +1,4 @@
-package ch.derlin.dc2mermaid.graph
+package ch.derlin.dcvizmermaid.graph
 
 enum class GraphOrientation {
     LR, RL, TB, BT

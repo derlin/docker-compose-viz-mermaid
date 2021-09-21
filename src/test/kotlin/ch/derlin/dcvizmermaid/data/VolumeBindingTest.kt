@@ -1,9 +1,9 @@
-package ch.derlin.dc2mermaid.data
+package ch.derlin.dcvizmermaid.data
 
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import ch.derlin.dc2mermaid.helpers.YamlUtils
+import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
 class VolumeBindingTest : AbstractTestBase() {

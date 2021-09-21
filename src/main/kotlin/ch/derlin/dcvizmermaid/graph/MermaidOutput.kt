@@ -1,4 +1,4 @@
-package ch.derlin.dc2mermaid.graph
+package ch.derlin.dcvizmermaid.graph
 
 import java.io.File
 import java.net.URL

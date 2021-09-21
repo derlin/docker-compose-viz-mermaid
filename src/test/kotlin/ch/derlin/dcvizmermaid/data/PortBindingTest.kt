@@ -1,4 +1,4 @@
-package ch.derlin.dc2mermaid.data
+package ch.derlin.dcvizmermaid.data
 
 import assertk.assertAll
 import assertk.assertThat

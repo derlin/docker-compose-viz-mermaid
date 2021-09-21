@@ -1,4 +1,4 @@
-package ch.derlin.dc2mermaid.helpers
+package ch.derlin.dcvizmermaid.helpers
 
 import org.yaml.snakeyaml.Yaml
 import java.io.Writer

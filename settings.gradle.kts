@@ -1,3 +1,3 @@
 
-rootProject.name = "docker-compose-to-mermaid"
+rootProject.name = "docker-compose-viz-mermaid"
 
