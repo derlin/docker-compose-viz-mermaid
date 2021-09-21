@@ -6,7 +6,7 @@ import assertk.assertions.isEqualTo
 import ch.derlin.dc2mermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class VolumeBindingTest: AbstractTestBase() {
+class VolumeBindingTest : AbstractTestBase() {
 
 
     @Test

@@ -1,15 +1,19 @@
 package ch.derlin.dc2mermaid.graph
 
+enum class GraphOrientation {
+    LR, RL, TB, BT
+}
+
 enum class Shape {
-    NONE, RECT_ROUNDED, ROUND, HEXAGON, PARALLELOGRAM, CYNLINDRIC, STADIUM;
+    NONE, RECT_ROUNDED, CIRCLE, HEXAGON, PARALLELOGRAM, CYLINDER, STADIUM;
 
     fun format(id: Any, name: Any) = when (this) {
         NONE -> "$name"
         RECT_ROUNDED -> "$id($name)"
-        ROUND -> "$id(($name))"
+        CIRCLE -> "$id(($name))"
         HEXAGON -> "$id{{$name}}"
         PARALLELOGRAM -> "$id{{$name}}"
-        CYNLINDRIC -> "$id[($name)]"
+        CYLINDER -> "$id[($name)]"
         STADIUM -> "$id([$name])"
     }
 }

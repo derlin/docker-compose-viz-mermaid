@@ -1,8 +1,5 @@
 package ch.derlin.dc2mermaid.data
 
-import ch.derlin.dc2mermaid.data.PortBinding
-import ch.derlin.dc2mermaid.data.Service
-import ch.derlin.dc2mermaid.data.VolumeBinding
 import ch.derlin.dc2mermaid.helpers.YamlUtils
 
 abstract class AbstractTestBase {
@@ -14,6 +11,8 @@ abstract class AbstractTestBase {
     protected fun parseStringPort(p: String) = PortBinding.parse("service", p)
     protected fun parseYamlPort(p: String) = PortBinding.parse("service", YamlUtils.load(p))
 
-    protected fun volumeBinding(source: String? = null, target: String, ro: Boolean = false) = VolumeBinding("service", source, target, ro = ro)
+    protected fun volumeBinding(source: String? = null, target: String, ro: Boolean = false) =
+        VolumeBinding("service", source, target, ro = ro)
+
     protected fun parseVolumeBinding(v: Any) = VolumeBinding.parse("service", v)
 }

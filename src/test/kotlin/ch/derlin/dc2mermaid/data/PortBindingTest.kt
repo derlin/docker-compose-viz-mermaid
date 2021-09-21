@@ -7,7 +7,7 @@ import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import org.junit.jupiter.api.Test
 
-class PortBindingTest: AbstractTestBase() {
+class PortBindingTest : AbstractTestBase() {
 
     @Test
     fun `parse short port bindings`() {

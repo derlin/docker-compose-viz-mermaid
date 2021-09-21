@@ -10,8 +10,10 @@ class MermaidGraph(val order: String = "TB") {
     private val classes: MutableList<String> = mutableListOf()
 
     fun addNode(name: Any, id: String = name.toString(), shape: Shape? = null) {
-        require(shape != null || name == id) { "for shape NONE, id and name must be equal, but $id != $name" }
-        nodes[id] = Node(id, name.toString(), shape ?: NONE)
+        if (id !in nodes) {
+            require(shape != null || name == id) { "for shape NONE, id and name must be equal, but $id != $name" }
+            nodes[id] = Node(id, name.toString(), shape ?: NONE)
+        }
     }
 
     fun addLink(from: Any, to: Any, connector: CONNECTOR? = null, text: Any? = null) {
@@ -28,14 +30,14 @@ class MermaidGraph(val order: String = "TB") {
 
         links
             .map { formatLink(it) }
-            .forEach { builder.appendIndentedLine(it) }
-        builder.appendLine()
+            .map { builder.appendIndentedLine(it) }
+            .also { if (it.isNotEmpty()) builder.appendLine() }
 
         nodes.values
             .filter { it.neverReferenced }
             .map { it.format() }
-            .forEach { builder.appendIndentedLine(it) }
-        builder.appendLine()
+            .map { builder.appendIndentedLine(it) }
+            .also { if (it.isNotEmpty()) builder.appendLine() }
 
         classes.forEach { builder.appendIndentedLine(it) }
         return builder.toString()

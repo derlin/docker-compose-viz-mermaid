@@ -1,5 +1,6 @@
 package ch.derlin.dc2mermaid
 
+import ch.derlin.dc2mermaid.graph.GraphOrientation
 import ch.derlin.dc2mermaid.graph.MermaidOutput
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -40,6 +41,8 @@ class Cli : CliktCommand(
     private val dockerComposeInput: File?
             by argument("docker-compose-path").file(mustExist = true, mustBeReadable = true, canBeDir = false).optional()
 
+    private val direction: GraphOrientation
+            by option("-d", "--dir", help = "Graph orientation").enum<GraphOrientation>(ignoreCase = true).default(GraphOrientation.TB)
     private val withPorts: Boolean
             by option("--ports", "-p").flag("--no-ports", "-P", default = false)
     private val withVolumes: Boolean
@@ -63,6 +66,7 @@ class Cli : CliktCommand(
     override fun run() {
         val mermaidGraph = generateMermaid(
             (dockerComposeInput ?: findDefaultFile()).readText(),
+            direction = direction,
             withPorts = withPorts,
             withVolumes = withVolumes,
             withImplicitLinks = withImplicitLinks,
