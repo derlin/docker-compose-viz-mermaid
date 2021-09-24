@@ -1,4 +1,4 @@
-# vc
+{% raw %}# P
 # inspired from:
 # https://github.com/gabrielgu/contact-book/blob/2f1fe0fe7e3ac98494cd0cc3a12b9b9ca77e0570/docker-compose.yaml
 version: "3.8"
@@ -69,4 +69,4 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
 volumes:
-  settings: ./settings
+  settings: ./settings{% endraw %}

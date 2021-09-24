@@ -1,5 +1,4 @@
-# pvc
-# inspired from
+{% raw %}# inspired from
 # https://github.com/Mrsmithz/itkmitl-devops-assignments/blob/332db5a2fe8008018872398e2b247ae2ad39ea33/assignments/08-docker-compose/docker-compose.yaml
 services:
   ratings:
@@ -46,4 +45,4 @@ services:
     depends_on:
       - reviews
       - ratings
-      - details
+      - details{% endraw %}

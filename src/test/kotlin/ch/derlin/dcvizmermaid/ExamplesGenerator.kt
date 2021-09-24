@@ -51,10 +51,10 @@ class ExamplesGenerator {
 
     private fun processFullExamples(file: File) {
 
-        file.copyTo(File("$outputPathText/${file.name}"))
+        if (genDocs) File("$outputPathText/${file.name}").writeRaw(file.readText())
 
         val text = file.readText()
-        val options = text.lines().first().substringAfter("#").takeIf { it.trim().all { c -> c.lowercase() in "pvc" } } ?: ""
+        val options = text.lines().first().substringAfter("#").takeIf { it.trim().all { c -> c in "PVC" } } ?: ""
 
         GraphTheme.values().forEach { theme ->
             val basename = "${file.nameWithoutExtension}-${theme.name.lowercase()}"
@@ -65,6 +65,9 @@ class ExamplesGenerator {
                 withVolumes = 'V' !in options,
                 withClasses = 'C' !in options,
             )
+
+            // jekyll is killing me...
+            if (genDocs) File("$outputPathText/$basename.txt").writeRaw(graph.build())
 
             MermaidOutput.MARKDOWN.process(graph, Path.of("$outputPathText/$basename.md"), withBackground = false)
             MermaidOutput.SVG.process(graph, Path.of("$outputPathImages/$basename.svg"), withBackground = true)
@@ -86,4 +89,6 @@ class ExamplesGenerator {
             MermaidOutput.SVG.process(graph, Path.of("$outputPathImages/$basename.svg"), withBackground = true)
         }
     }
+
+    private fun File.writeRaw(text: String) = writeText("{% raw %}$text{% endraw %}")
 }

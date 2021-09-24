@@ -1,5 +1,4 @@
-# pv
-# from https://github.com/maxking/docker-mailman/blob/9d9a627f72f3fcaa29f15f0ddfe0f77c686189ca/docker-compose-postorius.yaml
+{% raw %}# from https://github.com/maxking/docker-mailman/blob/9d9a627f72f3fcaa29f15f0ddfe0f77c686189ca/docker-compose-postorius.yaml
 services:
   mailman-core:
     image: maxking/mailman-core:0.4
@@ -63,4 +62,4 @@ networks:
       driver: default
       config:
         -
-          subnet: 172.19.199.0/24
+          subnet: 172.19.199.0/24{% endraw %}

@@ -1,5 +1,4 @@
-```mermaid
-%%{init: {'theme': 'dark'}}%%
+{% raw %}%%{init: {'theme': 'dark'}}%%
 flowchart TB
   Vsettings([settings]) -. /root/.m2 .-x apiuser[api-user]
   Vapiuser{{./api-user}} x-. /app .-x apiuser
@@ -17,4 +16,4 @@ flowchart TB
 
   classDef volumes fill:#0f544e,stroke:#23968b
   class Vsettings,Vapiuser,V0,Vsettings,Vapicontactbook,Vscriptssql volumes
-```
+{% endraw %}

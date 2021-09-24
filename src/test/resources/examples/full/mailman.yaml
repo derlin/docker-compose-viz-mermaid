@@ -1,4 +1,3 @@
-# pv
 # from https://github.com/maxking/docker-mailman/blob/9d9a627f72f3fcaa29f15f0ddfe0f77c686189ca/docker-compose-postorius.yaml
 services:
   mailman-core:

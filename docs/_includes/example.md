@@ -3,6 +3,10 @@
 
 {% include toc.md %}
 
+{% if include.description %}
+{{ include.description }}
+{% endif %}
+
 ## docker-compose
 Given the following docker-compose:
 ```yaml
@@ -13,7 +17,9 @@ Given the following docker-compose:
 
 Using the default output, the following mermaid diagram is generated:
 
-{% include generated/{{ include.name }}-default.md %}
+```
+{% include generated/{{ include.name }}-default.txt %}
+```
 
 ## Images (svg)
 
