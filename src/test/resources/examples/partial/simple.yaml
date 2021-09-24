@@ -1,0 +1,18 @@
+services:
+
+  app:
+    image: app
+    ports:
+      - 80:8080
+    volumes:
+      - ./app:/root/app
+    links:
+      - db
+
+  db:
+    image: db
+    volumes:
+      - db-data:/var/db_data
+
+volumes:
+  db-data:

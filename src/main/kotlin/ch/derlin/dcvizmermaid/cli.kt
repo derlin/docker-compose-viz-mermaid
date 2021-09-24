@@ -1,6 +1,7 @@
 package ch.derlin.dcvizmermaid
 
 import ch.derlin.dcvizmermaid.graph.GraphOrientation
+import ch.derlin.dcvizmermaid.graph.GraphTheme
 import ch.derlin.dcvizmermaid.graph.MermaidOutput
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -24,8 +25,12 @@ class Cli : CliktCommand(
     There are different kind of outputs:
     ```
     * 'text' (default) outputs the mermaid graph (use -o to output to a file instead of stdout);
-    * 'png' generates the image and saves it 'image.png' (use -o to change the destination);
+    * 'markdown' is same as text, but wraps the graph text in '```mermaid```'
+    * 'png' or 'svg' generates the image and saves it 'image.[png|svg]' (use -o to change the destination);
     * 'editor' // 'preview' generates a link to the mermaid online editor, and print it to the console.
+    
+    When using theme and classes, the output may become hard to read depending on the background. 
+    It is thus possible to force a background (using a hack) with the option `-b`.
     ```
 """.trimIndent()
 ) {
@@ -43,6 +48,8 @@ class Cli : CliktCommand(
 
     private val direction: GraphOrientation
             by option("-d", "--dir", help = "Graph orientation").enum<GraphOrientation>(ignoreCase = true).default(GraphOrientation.TB)
+    private val theme: GraphTheme
+            by option("-t", "--theme", help = "Graph theme").enum<GraphTheme>(ignoreCase = true).default(GraphTheme.DEFAULT)
     private val withPorts: Boolean
             by option("--ports", "-p").flag("--no-ports", "-P", default = false)
     private val withVolumes: Boolean
@@ -56,6 +63,8 @@ class Cli : CliktCommand(
 
     private val outputType: MermaidOutput
             by option("--format", "-f", help = formatHelp).enum<MermaidOutput>(ignoreCase = true).default(MermaidOutput.TEXT)
+    private val forceBackground: Boolean
+            by option("--with-bg", "-b", help = linksHelp).flag("--no-bg", "-B", default = false)
 
     private val outputFile: Path? by option("--out", "-o", help = outHelp).path()
 
@@ -64,9 +73,10 @@ class Cli : CliktCommand(
     }
 
     override fun run() {
-        val mermaidGraph = generateMermaid(
+        val mermaidGraph = generateMermaidGraph(
             (dockerComposeInput ?: findDefaultFile()).readText(),
             direction = direction,
+            theme = theme,
             withPorts = withPorts,
             withVolumes = withVolumes,
             withImplicitLinks = withImplicitLinks,

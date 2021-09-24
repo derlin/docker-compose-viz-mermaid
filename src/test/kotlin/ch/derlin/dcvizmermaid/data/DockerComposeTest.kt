@@ -79,25 +79,22 @@ class DockerComposeTest : AbstractTestBase() {
 
     @Test
     fun `process volumes`() {
-        val globalVolumes = mapOf(
-            "none" to null,
-            "config" to "/Users/test/config"
-        )
+        val namedVolumes = setOf("app-settings", "config")
 
         assertAll {
             mapOf(
                 // untouched
-                volumeBinding("./source", "/config", ro = true) to null,
-                volumeBinding(null, "/some/path/xx.sock") to null,
+                volumeBinding("./source", "/config", ro = true) to false,
+                volumeBinding(null, "/some/path/xx.sock") to false,
 
                 // transformed
-                volumeBinding("none", "/something") to volumeBinding(null, "/something"),
-                volumeBinding("config", "/target/path") to volumeBinding("/Users/test/config", "/target/path"),
+                volumeBinding("app-settings", "/something") to true,
+                volumeBinding("config", "/target/path") to true,
 
-                ).forEach { (vb, expected) ->
+                ).forEach { (vb, modified) ->
                 assertThat(vb)
-                    .transform { DockerCompose.processVolumes(globalVolumes, listOf(vb)) }
-                    .isEqualTo(listOf(expected?.copy(externalRef = vb.source) ?: vb))
+                    .transform { DockerCompose.processVolumes(namedVolumes, listOf(vb)) }
+                    .isEqualTo(listOf(if (modified) vb.copy(type = VolumeBinding.VolumeType.VOLUME) else vb))
             }
         }
     }

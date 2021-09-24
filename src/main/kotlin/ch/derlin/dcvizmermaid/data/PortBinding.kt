@@ -10,6 +10,7 @@ data class PortBinding(val service: String, val internalPort: Int, val externalP
     companion object {
         fun parse(service: String, declaration: Any): PortBinding? =
             when (declaration) {
+                is Int -> parseString(service, declaration.toString())
                 is String -> parseString(service, declaration)
                 is Map<*, *> -> parseYaml(service, declaration as YAML)
                 else -> null
@@ -17,7 +18,6 @@ data class PortBinding(val service: String, val internalPort: Int, val externalP
 
 
         private fun parseString(service: String, declaration: String): PortBinding? {
-            // TODO: ranges and bounds
             try {
                 val split = declaration.substringBefore("/").split(":").reversed()
                 val internal = split[0]

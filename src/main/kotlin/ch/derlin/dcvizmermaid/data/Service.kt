@@ -25,12 +25,17 @@ class Service(val name: String, private val content: YAML) {
         content.getListByPath("ports", listOf<Any>())
             .mapNotNull { PortBinding.parse(name, it) }
 
-    fun envMatchingPorts(): List<MaybeReference> =
-        content.getByPath("environment")
-            ?.let { it as? YAML }?.values?.mapNotNull { it as? String }
-            ?.filter { ":" in it }
-            ?.mapNotNull { MaybeReference.parse(it) }
-            ?: listOf()
+    fun envMatchingPorts(): List<MaybeReference> {
+        // environments can be expressed either as list, or as map...
+        val environmentValues = when (val env = content.getByPath("environment")) {
+            is Map<*, *> -> env.values.mapNotNull { it as? String }
+            is List<*> -> env.mapNotNull { it as? String }.map { it.substringAfter("=") }
+            else -> listOf()
+        }
+        return environmentValues
+            .filter { ":" in it }
+            .mapNotNull { MaybeReference.parse(it) }
+    }
 
     override fun toString(): String = "Service[$name]"
 

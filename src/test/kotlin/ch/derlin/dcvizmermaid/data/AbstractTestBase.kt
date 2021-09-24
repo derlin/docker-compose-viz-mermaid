@@ -1,6 +1,6 @@
 package ch.derlin.dcvizmermaid.data
 
-import ch.derlin.dcvizmermaid.helpers.YamlUtils
+import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType
 
 abstract class AbstractTestBase {
 
@@ -8,11 +8,10 @@ abstract class AbstractTestBase {
     protected fun parseLink(s: String) = Service.Link.parse("service", s)
 
     protected fun port(internal: Int, external: Int? = null) = PortBinding("service", internal, external ?: internal)
-    protected fun parseStringPort(p: String) = PortBinding.parse("service", p)
-    protected fun parseYamlPort(p: String) = PortBinding.parse("service", YamlUtils.load(p))
+    protected fun parsePort(p: Any) = PortBinding.parse("service", p)
 
-    protected fun volumeBinding(source: String?, target: String, ro: Boolean = false) =
-        VolumeBinding("service", source, target, ro = ro)
+    protected fun volumeBinding(source: String?, target: String, ro: Boolean = false, type: VolumeType = VolumeType.BIND) =
+        VolumeBinding("service", source, target, ro = ro, type = type)
 
     protected fun parseVolumeBinding(v: Any) = VolumeBinding.parse("service", v)
 }

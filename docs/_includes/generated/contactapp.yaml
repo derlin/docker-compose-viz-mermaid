@@ -1,0 +1,72 @@
+# vc
+# inspired from:
+# https://github.com/gabrielgu/contact-book/blob/2f1fe0fe7e3ac98494cd0cc3a12b9b9ca77e0570/docker-compose.yaml
+version: "3.8"
+
+services:
+
+  api-user:
+    build:
+      context: ./api-user
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8081:8081"
+    volumes:
+      - type: volume
+        source: settings
+        target: /root/.m2
+        read_only: true
+      - type: bind
+        source: ./api-user
+        target: /app
+      - type: tmpfs
+        target: /cache
+    depends_on:
+      - mysql
+      - zookeeper
+      - kafka
+
+  api-contact-book:
+    build:
+      context: ./api-contact-book
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8082:8082"
+    volumes:
+      - settings:/root/.m2:ro
+      - ./api-contact-book:/app
+    depends_on:
+      - mysql
+      - zookeeper
+      - kafka
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./scripts/sql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.2.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+
+  kafka:
+    image: confluentinc/cp-kafka:5.2.1
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+volumes:
+  settings: ./settings

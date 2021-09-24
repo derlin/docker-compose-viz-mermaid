@@ -7,11 +7,8 @@ import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 
 
 class DockerCompose(private val content: YAML) {
-    // no version => version 1
-    val isVersion1 = content.getOrDefault("version", 1) == 1
-
     val services: List<Service> by lazy {
-        val root = if (isVersion1) content else content.getByPath("services", type = Map::class) as YAML
+        val root = if ("services" !in content) content else content.getByPath("services", type = Map::class) as YAML
         root
             .filterNot { it.key == "version" }
             .filterNot { it.value == null }
@@ -26,12 +23,11 @@ class DockerCompose(private val content: YAML) {
     }
 
     val volumeBindings: Set<VolumeBinding> by lazy {
-        processVolumes(volumes(), services.flatMap { it.volumes() }).toSet()
+        processVolumes(namedVolumes(), services.flatMap { it.volumes() }).toSet()
     }
 
-    private fun volumes(): Map<String, String?> = if (!content.containsKey("volumes")) mapOf() else {
-        (content["volumes"] as YAML).mapValues { it.value as String? }
-    }
+    private fun namedVolumes(): Set<String> = if (!content.containsKey("volumes")) setOf() else (content["volumes"] as YAML).keys
+
 
     companion object {
         fun linksFromMaybeRefs(serviceName: String, ports: Iterable<PortBinding>, maybeRefs: Iterable<MaybeReference>): List<Link> =
@@ -44,10 +40,10 @@ class DockerCompose(private val content: YAML) {
                 maybePort?.let { Link(serviceName, it.service) }
             }
 
-        fun processVolumes(globalVolumes: Map<String, String?>, volumeBindings: Collection<VolumeBinding>) =
+        fun processVolumes(namedVolumes: Collection<String>, volumeBindings: Collection<VolumeBinding>) =
             volumeBindings.map { binding ->
-                if (binding.source !in globalVolumes) binding
-                else binding.copy(source = globalVolumes[binding.source], externalRef = binding.source)
+                if (binding.source !in namedVolumes) binding
+                else binding.copy(type = VolumeBinding.VolumeType.VOLUME)
             }
     }
 

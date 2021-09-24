@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  web:
+    image: some-web
+    links:
+      - product-api
+      - search-api:search-api-alias
+
+  product-api:
+    image: product-api
+    depends_on:
+      - db
+
+  search-api:
+    image: search-api
+    depends_on:
+      - db
+
+  db:
+    image: db

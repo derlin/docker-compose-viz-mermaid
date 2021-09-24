@@ -4,7 +4,7 @@ name: Test and build
 # events but only for the master branch
 on:
   push:
-    branches: [ '*' ]
+    branches: [ 'develop', 'main' ]
   pull_request:
     branches: [ main ]
 

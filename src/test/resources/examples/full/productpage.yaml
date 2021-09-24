@@ -1,0 +1,49 @@
+# pvc
+# inspired from
+# https://github.com/Mrsmithz/itkmitl-devops-assignments/blob/332db5a2fe8008018872398e2b247ae2ad39ea33/assignments/08-docker-compose/docker-compose.yaml
+services:
+  ratings:
+    image: ghcr.io/mrsmithz/itkmitl-bookinfo-ratings:dev
+    ports:
+      - 8080:8080
+    environment:
+      SERVICE_VERSION: v2
+      MONGO_DB_URL: mongodb://mongodb:27017/ratings
+      MONGO_DB_USERNAME: ratings
+      MONGO_DB_PASSWORD: 123456
+    depends_on:
+      - mongodb
+  mongodb:
+    image: bitnami/mongodb:5.0.2-debian-10-r2
+    volumes:
+      - "./databases:/docker-entrypoint-initdb.d"
+    environment:
+      MONGODB_ROOT_PASSWORD: root1234
+      MONGODB_USERNAME: ratings
+      MONGODB_PASSWORD: 123456
+      MONGODB_DATABASE: ratings
+  details:
+    image: ghcr.io/mrsmithz/itkmitl-bookinfo-details:dev
+    ports:
+      - 8081:8081
+  reviews:
+    image: ghcr.io/mrsmithz/itkmitl-bookinfo-reviews:dev
+    ports:
+      - 8082:8082
+    environment:
+      RATINGS_SERVICE: http://ratings:8080
+      ENABLE_RATINGS: "true"
+    depends_on:
+      - ratings
+  productpage:
+    image: ghcr.io/mrsmithz/itkmitl-bookinfo-productpage:dev
+    ports:
+      - 8083:8083
+    environment:
+      REVIEWS_HOSTNAME: http://reviews:8082
+      RATINGS_HOSTNAME: http://ratings:8080
+      DETAILS_HOSTNAME: http://details:8081
+    depends_on:
+      - reviews
+      - ratings
+      - details

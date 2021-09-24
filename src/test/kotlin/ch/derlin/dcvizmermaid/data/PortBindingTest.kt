@@ -5,6 +5,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
+import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
 class PortBindingTest : AbstractTestBase() {
@@ -15,6 +16,7 @@ class PortBindingTest : AbstractTestBase() {
 
         assertAll {
             mapOf(
+                3000 to port(3000),
                 "3000" to port(3000),
                 //"3000-3005",
                 "8000:8010" to port(8010, 8000),
@@ -26,7 +28,7 @@ class PortBindingTest : AbstractTestBase() {
                 "6060:6060/udp" to port(6060),
                 //"12400-12500:1240" to
             ).forEach { (port, expected) ->
-                assertThat(port).transform { parseStringPort(it) }.isNotNull().isEqualTo(expected)
+                assertThat(port).transform { parsePort(it) }.isNotNull().isEqualTo(expected)
             }
         }
     }
@@ -48,7 +50,7 @@ class PortBindingTest : AbstractTestBase() {
                 mode: host
                 """.trimIndent() to null
             ).forEach { (port, expected) ->
-                assertThat(port).transform { parseYamlPort(it) }.isEqualTo(expected)
+                assertThat(port).transform { parsePort(YamlUtils.load(it)) }.isEqualTo(expected)
             }
         }
     }

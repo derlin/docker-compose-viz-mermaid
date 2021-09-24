@@ -1,37 +1,37 @@
 package ch.derlin.dcvizmermaid
 
 import ch.derlin.dcvizmermaid.data.DockerCompose
-import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType
 import ch.derlin.dcvizmermaid.graph.*
 import ch.derlin.dcvizmermaid.graph.CONNECTOR.*
-import ch.derlin.dcvizmermaid.graph.Shape.*
+import ch.derlin.dcvizmermaid.graph.Shape.CIRCLE
+import ch.derlin.dcvizmermaid.graph.Shape.CYLINDER
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 
-val knownDbs = listOf("db", "redis", "mysql", "postgres", "postgresql")
+val knownDbs = listOf("db", "database", "redis", "mysql", "postgres", "postgresql", "mongo", "mongodb")
 
-fun generateMermaid(
+fun generateMermaidGraph(
     dockerComposeContent: String,
     direction: GraphOrientation = GraphOrientation.TB,
+    theme: GraphTheme = GraphTheme.DEFAULT,
     withPorts: Boolean = false,
     withVolumes: Boolean = false,
     withImplicitLinks: Boolean = false,
     withClasses: Boolean = false,
-    withScpClasses: Boolean = false
-): String {
+    withScpClasses: Boolean = false,
+): MermaidGraph {
 
     val dc = DockerCompose(YamlUtils.load(dockerComposeContent))
-    val graph = MermaidGraph()
+    val graph = MermaidGraph(direction, theme)
 
     dc.services.forEach {
         graph.addNode(it.name, shape = if (it.name in knownDbs) CYLINDER else null)
     }
 
     val volumeIds = if (!withVolumes) listOf() else {
-        val idGen = idGenerator("V")
+        var num = 0
         dc.volumeBindings.map { volume ->
-            val id = (volume.externalRef ?: volume.source ?: idGen()).toValidId()
-            val details = if (volume.type == VolumeType.VOLUME) "" else "(${volume.type})"
-            graph.addNode((volume.source ?: "<empty>") + details, id, if (volume.inline) HEXAGON else RECT_ROUNDED)
+            val id = "V" + (volume.source ?: num++).toValidId()
+            graph.addNode(volume.source ?: " ", id, volume.type.toShape())
             graph.addLink(id, volume.service, connector = if (volume.ro) DOT_X else DOT_DBL_X, text = volume.target)
             id
         }
@@ -49,23 +49,12 @@ fun generateMermaid(
 
     if (withClasses) {
         if (volumeIds.isNotEmpty())
-            graph.addClass(
-                "classDef volumes fill:#fdfae4,stroke:#867a22",
-                "class " + volumeIds.joinToString(",") + " volumes"
-            )
-
+            graph.addClass(VolumeClazz, volumeIds)
         if (portIds.isNotEmpty())
-            graph.addClass(
-                "classDef ports fill:#f8f8f8,stroke:#ccc",
-                "class " + portIds.joinToString(",") + " ports"
-            )
-
+            graph.addClass(PortsClazz, portIds)
         if (withScpClasses)
-            graph.addClass(
-                "classDef comp fill:#fbfff7,stroke:#8bc34a",
-                "class service,web,bff,db comp"
-            )
+            graph.addClass(ScpClazz, "service,web,bff,db scp".split(","))
     }
 
-    return graph.build()
+    return graph
 }

@@ -11,7 +11,7 @@ class MermaidGraphTest {
     @Test
     fun `add node ensures valid ids`() {
         val n1 = "some_node-1"
-        val n2 = "@@node-#2"
+        val n2 = "/path/to/x"
 
         val graph = MermaidGraph()
         graph.addNode(n1)
@@ -19,13 +19,13 @@ class MermaidGraphTest {
         graph.addNode("n3")
 
         graph.addLink(n1, n2)
-        graph.addLink(n2, "n3")
         graph.addLink(n1, "n3")
+        graph.addLink(n2, "n3")
 
-        assertThat(buildAndGetLines(graph)).containsExactlyInAnyOrder(
-            "somenode1[$n1] --> node2{{$n2}}",
+        assertThat(buildAndGetLines(graph)).containsExactly(
+            "somenode1[$n1] --> pathtox{{$n2}}",
             "somenode1 --> n3",
-            "node2 --> n3"
+            "pathtox --> n3",
         )
     }
 
@@ -97,6 +97,18 @@ class MermaidGraphTest {
     }
 
     @Test
+    fun `only text with strange characters is quoted`() {
+        val graph = MermaidGraph()
+        graph.addNode("[node @ 1]", "n1")
+        graph.addNode("node 2!", "n2")
+        graph.addLink("n1", "n2", text = "-> #test")
+
+        assertThat(buildAndGetLines(graph)).containsOnly(
+            "n1[\"[node @ 1]\"] -- \"-> #test\" --> n2[node 2!]",
+        )
+    }
+
+    @Test
     fun `test full graph`() {
         val graph = MermaidGraph()
         graph.addNode("db", shape = Shape.CIRCLE)
@@ -111,19 +123,36 @@ class MermaidGraphTest {
 
         assertThat(graph.build()).isEqualTo(
             """
-        flowchart TB
-          service x-.-x db((db))
-          web -. REST .-> service
-        
-          n{{none}}
-        
-          classDef W
-          class web W
+          %%{init: {'theme': 'default'}}%%
+          flowchart TB
+            service x-.-x db((db))
+            web -. REST .-> service
+          
+            n{{none}}
+          
+            classDef W
+            class web W
+        """.trimIndent() + "\n"
+        )
+
+        assertThat(graph.build(withBackground = true)).isEqualTo(
+            """
+          %%{init: {'theme': 'default', 'themeVariables': {'clusterBkg': '#FFF', 'clusterBorder': '#FFF'}}}%%
+          flowchart LR
+          subgraph " "
+            service x-.-x db((db))
+            web -. REST .-> service
+          
+            n{{none}}
+          
+            classDef W
+            class web W
+          end
         """.trimIndent() + "\n"
         )
     }
 
     private fun buildAndGetLines(graph: MermaidGraph): List<String> =
-        graph.build().lines().drop(1).filter { it.isNotEmpty() }.map { it.trim() }
+        graph.build().lines().drop(2).filter { it.isNotEmpty() }.map { it.trim() }
 
 }
