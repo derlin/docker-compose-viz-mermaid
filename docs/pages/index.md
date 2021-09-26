@@ -1,7 +1,7 @@
 ---
 title: Home
 nav_order: 1
-description: "Vizualize docker-compose files with Mermaid."
+description: "Visualize docker-compose files with Mermaid."
 permalink: /
 ---
 
@@ -28,9 +28,6 @@ java -jar docker-compose-viz-mermaid-*.jar
 
 ## Usage
 
-<span class="label label-red">Important</span> Images generation require a network connection.
-
-
 The best way to understand how it works is to run the tool with the `-h` option:
 ```text
 {% include generated/help.md %}
@@ -38,7 +35,7 @@ The best way to understand how it works is to run the tool with the `-h` option:
 
 ## How to read the flowchart
 
-The generated graph/image should be rather straight-forward (see [examples]({{ site.baseurl }}{% link pages/examples.md %})).
+The generated graph should be rather straight-forward (see [examples]({{ site.baseurl }}{% link pages/examples.md %})).
 
 ### Links and dependencies
 
@@ -90,26 +87,56 @@ Volume shapes and text depend on the type of volume:
 * *tmpfs mount* --> diamond with no text;
 * *named pipe* --> banner, text matching the path on the host.
 
-Volumes are pointing to the container using dotted connectors ending with `x`. *read-only* connectors miss the `x` on the volume side.
+Volumes are pointing to the container using dotted connectors ending with `x` on both sides.
+*read-only* connectors miss the `x` on the volume side.
 The text inside the shape is the *source* of the volume (on the host), while the text on the connector is the *target* (inside the
 container).
 
 {% include graph.md image='volumes-default.svg' %}
 
-If classes are enabled, the color of the port will be yellowish (light) or purple (dark).
+If classes are enabled, the color of the port will be yellowish (light theme) or purple (dark theme).
 
-## DBs
+### DBs
 
 The tool tries to automatically detect database services and render them as cylindrical shapes. 
 The detection is dumb enough, looking for services named `database`, `db` or well-known database providers (`mysql`, `redis`, etc.).
 
-## About graph rendering
+## Generating images
 
-{{ site.title }} outputs the generated graph in mermaid syntax by default. However, it is also able to render the graph directly
-in multiple formats (`-f` option). To do so, it takes advantage of online tools, namely:
+{{ site.title }} outputs the generated graph in mermaid syntax by default, and is its primary purpose.
+Once you have a mermaid graph, a lot of tools and options exist to generate pretty much anything (png, svg, pdf, etc.).
+
+For example, the [mermaid-cli](https://github.com/mermaid-js/mermaid-cli) has many options and capabilities,
+and I strongly suggest to check it out.
+Another possibility to get images is to copy-paste your graph in the [Mermaid Live Editor](https//mermaid.live)
+(or you the `-f editor` option, which will generate the link to the editor with the graph directly).
+
+**Automatic way**
+
+For convenience, {{ site.title }} also gives you the option to generate images directly in multiple formats
+(see [output types]({{ site.baseurl }}{% link pages/options.md %}#output-types)). To do so, it takes advantage of online tools, namely:
 
 * [Kroki](https://kroki.io/) for svg rendering (as mermaid live has some issues),
 * [Mermaid Live Editor](https://mermaid.live/) for the rest.
 
-If you see any problem in the rendered output, generate the mermaid graph and try using those tools directly.
+Note that the image may sometimes be of poor quality, or not what you expect.
+If you see any problem in the rendered output, generate the images manually or try using the above tools directly.
 Don't hesitate to report issues on their own github repositories if required.
+
+## Data privacy
+
+This tool processes docker-compose, which can hold sensitive information.
+Thus, it is important to state that docker-compose-viz-mermaid only reads the information needed to show the graph and
+**doesn't store or spy on anything**.
+As long as you only ask for mermaid graphs as text (default output), everything stays on your machine,
+and you can always check the output to see if anything sensitive is exposed.
+
+When generating links to the mermaid editor or the live preview
+(see [output types]({{ site.baseurl }}{% link pages/options.md %}#output-types)),
+the graph is encoded in base64 to generate the link. It is up to you to decide to open the link, and hence "*share*" your graph with
+the mermaid online tools (which to my knowledge use client-side JS for rendering, thus is safe from a data privacy standpoint).
+
+**Image generation** is the only output format which **directly uses third-party services**
+(see [generating images]({{ site.baseurl }}{% link pages/index.md %}#generating-images)).
+Again, only the graph is sent for rendering, and not the docker-compose itself. If you have a doubt, do not use image generation
+and rely on the [mermaid-cli tool](https://github.com/mermaid-js/mermaid-cli) or other more trusted alternatives to render images.
