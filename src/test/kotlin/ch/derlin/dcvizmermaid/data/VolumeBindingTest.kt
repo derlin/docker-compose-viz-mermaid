@@ -12,7 +12,6 @@ class VolumeBindingTest : AbstractTestBase() {
 
     @Test
     fun `parse volumes short syntax`() {
-        //  TODO: support long version + support global volumes
         assertAll {
             mapOf(
                 "/var/postgres.sock:/var/postgres.sock" to volumeBinding("/var/postgres.sock", "/var/postgres.sock", type = BIND),
@@ -28,15 +27,23 @@ class VolumeBindingTest : AbstractTestBase() {
 
     @Test
     fun `parse volumes long syntax`() {
-        //  TODO: support long version + support global volumes
         assertAll {
             mapOf(
                 """
                 type: bind
                 source: ./mydata
                 target: /data/dir
+                """.trimIndent() to volumeBinding("./mydata", "/data/dir", type = BIND),
+                """
+                type: bind
+                source: ./mydata
+                target: /data/dir
                 read_only: true
                 """.trimIndent() to volumeBinding("./mydata", "/data/dir", ro = true, type = BIND),
+                """
+                type: volume
+                target: /data
+                """.trimIndent() to volumeBinding(null, "/data", type = VOLUME),
                 """
                 type: volume
                 source: mydata

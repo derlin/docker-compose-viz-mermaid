@@ -8,6 +8,7 @@ import ch.derlin.dcvizmermaid.graph.Shape.CYLINDER
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 
 val knownDbs = listOf("db", "database", "redis", "mysql", "postgres", "postgresql", "mongo", "mongodb")
+const val anonymousVolumeText = "⋅ ∃ ⋅"
 
 fun generateMermaidGraph(
     dockerComposeContent: String,
@@ -31,7 +32,8 @@ fun generateMermaidGraph(
         var num = 0
         dc.volumeBindings.map { volume ->
             val id = "V" + (volume.source ?: num++).toValidId()
-            graph.addNode(volume.source ?: " ", id, volume.type.toShape())
+            val text = if(volume.isAnonymousVolume()) anonymousVolumeText else volume.source ?: " "
+            graph.addNode(text, id, volume.type.toShape())
             graph.addLink(id, volume.service, connector = if (volume.ro) DOT_X else DOT_DBL_X, text = volume.target)
             id
         }

@@ -15,6 +15,8 @@ data class VolumeBinding(
         requireNotNull(target ?: source) { "A volume binding should at least have a source or target defined" }
     }
 
+    fun isAnonymousVolume() = type == VolumeType.VOLUME && source == null
+
     enum class VolumeType {
         BIND, // bind mount (the most common): linked to a path on the host
         VOLUME, // named volume: persistent, but created/stored under /var/lib/docker/volumes/ (anonymous volumes are possible)
@@ -33,7 +35,7 @@ data class VolumeBinding(
             volumeMapping.split(":").let {
                 when (it.size) {
                     1 ->
-                        VolumeBinding(service, target = it[0]) // anonymous volume
+                        VolumeBinding(service, target = it[0], type = VolumeType.VOLUME) // anonymous volume
                     2 ->
                         if (it.last() in listOf("ro", "rw")) VolumeBinding(service, target = it[0], ro = it[1] == "ro")
                         else VolumeBinding(service, source = it[0], target = it[1])

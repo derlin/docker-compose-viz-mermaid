@@ -4,7 +4,10 @@ services:
     volumes:
       - type: volume
         source: named-volume
-        target: /nv
+        target: /v/named
+
+      - type: volume
+        target: /v/anonymous
 
       - type: bind
         source: /host/bind-ro

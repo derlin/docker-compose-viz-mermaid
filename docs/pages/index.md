@@ -82,10 +82,11 @@ If classes are enabled, the color of the port will be gray.
 ### Volumes
 
 Volume shapes and text depend on the type of volume:
-* *host binds* --> hexagonal shape, text matching the path on the host;
-* *named volumes* --> rounded rectangle, text matching the name of the volume;
-* *tmpfs mount* --> diamond with no text;
-* *named pipe* --> banner, text matching the path on the host.
+* *host binds* → hexagonal shape, text matching the path on the host;
+* *named volumes* → rounded rectangle, text matching the name of the volume;
+  - *anonymous volumes* → text set to `⋅ ∃ ⋅` (logical operator meaning *there exists*);
+* *tmpfs mount* → diamond with no text;
+* *named pipe* → banner, text matching the path on the host.
 
 Volumes are pointing to the container using dotted connectors ending with `x` on both sides.
 *read-only* connectors miss the `x` on the volume side.
