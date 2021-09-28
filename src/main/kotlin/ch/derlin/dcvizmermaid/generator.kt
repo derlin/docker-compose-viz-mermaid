@@ -55,7 +55,7 @@ fun generateMermaidGraph(
         if (portIds.isNotEmpty())
             graph.addClass(PortsClazz, portIds)
         if (withScpClasses)
-            graph.addClass(ScpClazz, "service,web,bff,db scp".split(","))
+            graph.addClass(ScpClazz, "service,web,bff,db".split(","))
     }
 
     return graph

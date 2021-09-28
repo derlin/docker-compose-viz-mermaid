@@ -21,7 +21,7 @@ object PortsClazz : CssClazz() {
 }
 
 object ScpClazz : CssClazz() {
-    override val name: String = "ports"
+    override val name: String = "scp"
     override fun styles(theme: GraphTheme): String = when (theme) {
         GraphTheme.DEFAULT -> "fill:#fbfff7,stroke:#8bc34a"
         GraphTheme.DARK -> "fill:#3f51b5"
