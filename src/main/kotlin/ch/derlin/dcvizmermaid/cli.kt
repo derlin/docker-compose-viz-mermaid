@@ -84,7 +84,7 @@ class Cli : CliktCommand(
             withScpClasses = withScpClasses
         )
 
-        outputType.process(mermaidGraph, outputFile)
+        outputType.process(mermaidGraph, outputFile, withBackground = forceBackground)
     }
 
     private fun findDefaultFile() =
