@@ -11,6 +11,8 @@ Those tests are however disabled by default. To generate them, use:
 
 ## Run this site locally
 
+**INFO**: the script `jekyll.sh` does everything automatically for you.
+
 Launch Jekyll in a docker container:
 ```bash
 docker run --rm --volume="$PWD:/srv/jekyll" -p 4000:4000 -it jekyll/builder:3.8 bash
