@@ -117,12 +117,15 @@ Another possibility to get images is to copy-paste your graph in the [Mermaid Li
 For convenience, {{ site.title }} also gives you the option to generate images directly in multiple formats
 (see [output types]({{ site.baseurl }}{% link pages/options.md %}#output-types)). To do so, it takes advantage of online tools, namely:
 
-* [Kroki](https://kroki.io/) for svg rendering (as mermaid live has some issues),
+* [mermaid.ink](https://mermaid.ink/) for svg rendering,
 * [Mermaid Live Editor](https://mermaid.live/) for the rest.
 
 Note that the image may sometimes be of poor quality, or not what you expect.
 If you see any problem in the rendered output, generate the images manually or try using the above tools directly.
-Don't hesitate to report issues on their own github repositories if required.
+Don't hesitate to report issues on their own GitHub repositories if required.
+
+(*NOTE*: the URLs may be overriden using environment variables,
+see [Use self-hosted third-party tools]({{ site.baseurl }}{% link pages/options.md %}#use-self-hosted-third-party-tools))
 
 ## Data privacy
 
@@ -141,3 +144,5 @@ the mermaid online tools (which to my knowledge use client-side JS for rendering
 (see [generating images]({{ site.baseurl }}{% link pages/index.md %}#generating-images)).
 Again, only the graph is sent for rendering, and not the docker-compose itself. If you have a doubt, do not use image generation
 and rely on the [mermaid-cli tool](https://github.com/mermaid-js/mermaid-cli) or other more trusted alternatives to render images.
+
+See also [Use self-hosted third-party tools]({{ site.baseurl }}{% link pages/options.md %}#use-self-hosted-third-party-tools).

@@ -73,3 +73,14 @@ If you do not want to use this feature, turn off classes generation using `--no-
 
 There are many options available in order to control what is rendered: ports, volumes, implicit links, etc.
 Have a look at the [usage]({{ site.baseurl }}{% link pages/index.md %}#usage) for more information.
+
+## Use self-hosted third-party tools
+
+In case you have Mermaid Live Editor // Mermaid Ink running inside your organisation, it is possible to use them instead of
+the OpenSource ones using the following environment variables:
+
+| Environment variable      | Default value |
+| :-------------------------| :------------ |
+| `MERMAID_INK_URL`         | <https://mermaid.ink> |
+| `MERMAID_LIVE_EDITOR_URL` | <https://mermaid-js.github.io/mermaid-live-editor> |
+| `KROKI_URL`               | <https://kroki.io> (unused) |

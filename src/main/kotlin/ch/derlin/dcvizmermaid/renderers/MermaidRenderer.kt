@@ -1,5 +1,6 @@
 package ch.derlin.dcvizmermaid.renderers
 
+import ch.derlin.dcvizmermaid.Config
 import ch.derlin.dcvizmermaid.graph.GraphTheme
 import java.util.*
 
@@ -7,15 +8,13 @@ class MermaidRenderer(graph: String, theme: GraphTheme) {
 
     private val payloadBase64 by lazy { toMermaidBase64(graph, theme) }
 
-    fun getEditorLink() = "$mermaidLiveEditorBaseUrl/edit#$payloadBase64"
-    fun getPreviewLink() = "$mermaidLiveEditorBaseUrl/view/#$payloadBase64"
-    fun getPngLink() = "$mermaidRendererBaseUrl/img/$payloadBase64"
-    fun getSvgLink() = "$mermaidRendererBaseUrl/svg/$payloadBase64"
+    fun getEditorLink() = "${Config.mermaidLiveEditorUrl}/edit#$payloadBase64"
+    fun getPreviewLink() = "${Config.mermaidLiveEditorUrl}/view/#$payloadBase64"
+
+    fun getPngLink() = "${Config.mermaidInkUrl}/img/$payloadBase64"
+    fun getSvgLink() = "${Config.mermaidInkUrl}/svg/$payloadBase64"
 
     companion object {
-
-        const val mermaidLiveEditorBaseUrl = "https://mermaid-js.github.io/mermaid-live-editor"
-        const val mermaidRendererBaseUrl = "https://mermaid.ink"
 
         fun toMermaidBase64(graph: String, theme: GraphTheme = GraphTheme.DEFAULT): String {
             val escapedCode = graph.replace("\"", "\\\"").replace("\n", "\\n")

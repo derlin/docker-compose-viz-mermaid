@@ -1,23 +1,17 @@
 package ch.derlin.dcvizmermaid.renderers
 
-import java.io.IOException
-import java.nio.charset.Charset
+import ch.derlin.dcvizmermaid.Config
 import java.util.*
 import java.util.zip.Deflater
 
 object KrokiRenderer {
 
-    const val krokiBaseUrl = "https://kroki.io/mermaid"
+    fun getSvgLink(graph: String) = "${Config.krokiUrl}/mermaid/svg/${encode(graph)}"
+    fun getPngLink(graph: String) = "${Config.krokiUrl}/mermaid/png/${encode(graph)}"
 
-    fun getSvgLink(graph: String) = "$krokiBaseUrl/svg/${encode(graph)}"
+    private fun encode(decoded: String): String =
+        String(Base64.getUrlEncoder().encode(compress(decoded.toByteArray())), Charsets.UTF_8)
 
-
-    @Throws(IOException::class)
-    fun encode(decoded: String): String = compress(decoded.toByteArray()).let {
-        String(Base64.getUrlEncoder().encode(it), Charset.forName("utf-8"))
-    }
-
-    @Throws(IOException::class)
     private fun compress(source: ByteArray): ByteArray {
         // see https://github.com/DaveJarvis/keenwrite/issues/138#issuecomment-922562707
         val deflater = Deflater()
