@@ -12,7 +12,7 @@ enum class GraphTheme {
         return "%%{init: {${options.joinToString(", ")}}}%%"
     }
 
-    private fun bgColor(): String = when (this) {
+    fun bgColor(): String = when (this) {
         DEFAULT -> "#FFF"
         DARK -> "#444"
     }

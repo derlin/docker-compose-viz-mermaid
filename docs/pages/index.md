@@ -107,25 +107,21 @@ The detection is dumb enough, looking for services named `database`, `db` or wel
 {{ site.title }} outputs the generated graph in mermaid syntax by default, and is its primary purpose.
 Once you have a mermaid graph, a lot of tools and options exist to generate pretty much anything (png, svg, pdf, etc.).
 
-For example, the [mermaid-cli](https://github.com/mermaid-js/mermaid-cli) has many options and capabilities,
-and I strongly suggest to check it out.
+For example, the [mermaid-cli](https://github.com/mermaid-js/mermaid-cli) has many options and capabilities.
 Another possibility to get images is to copy-paste your graph in the [Mermaid Live Editor](https//mermaid.live)
 (or you the `-f editor` option, which will generate the link to the editor with the graph directly).
 
 **Automatic way**
 
 For convenience, {{ site.title }} also gives you the option to generate images directly in multiple formats
-(see [output types]({{ site.baseurl }}{% link pages/options.md %}#output-types)). To do so, it takes advantage of online tools, namely:
+(see [output types]({{ site.baseurl }}{% link pages/options.md %}#output-types)).
 
-* [mermaid.ink](https://mermaid.ink/) for svg rendering,
-* [Mermaid Live Editor](https://mermaid.live/) for the rest.
+To do so, it launches and instruments a headless Chromium using <https://playwright.dev> by default.
+The latter will download Chromium the first time it is launched, so be patient and don't worry:
+the next execution will be dazzlingly fast.
 
-Note that the image may sometimes be of poor quality, or not what you expect.
-If you see any problem in the rendered output, generate the images manually or try using the above tools directly.
-Don't hesitate to report issues on their own GitHub repositories if required.
-
-(*NOTE*: the URLs may be overriden using environment variables,
-see [Use self-hosted third-party tools]({{ site.baseurl }}{% link pages/options.md %}#use-self-hosted-third-party-tools))
+There is also an option to use well-known online tools to render images, namely <https://mermaid.ink/> or <https://kroki.io>.
+Have a look at [environment variables]({{ site.baseurl }}{% link pages/options.md %}#environment-variables) for details.
 
 ## Data privacy
 
@@ -140,9 +136,8 @@ When generating links to the mermaid editor or the live preview
 the graph is encoded in base64 to generate the link. It is up to you to decide to open the link, and hence "*share*" your graph with
 the mermaid online tools (which to my knowledge use client-side JS for rendering, thus is safe from a data privacy standpoint).
 
-**Image generation** is the only output format which **directly uses third-party services**
-(see [generating images]({{ site.baseurl }}{% link pages/index.md %}#generating-images)).
-Again, only the graph is sent for rendering, and not the docker-compose itself. If you have a doubt, do not use image generation
-and rely on the [mermaid-cli tool](https://github.com/mermaid-js/mermaid-cli) or other more trusted alternatives to render images.
-
-See also [Use self-hosted third-party tools]({{ site.baseurl }}{% link pages/options.md %}#use-self-hosted-third-party-tools).
+Image generation uses a headless Chromium running locally by default. It is thus completely safe.
+However, other renderers are available, that can use third-party services
+(see [generating images]({{ site.baseurl }}{% link pages/index.md %}#generating-images) and
+see [environment variables]({{ site.baseurl }}{% link pages/options.md %}#environment-variables)).
+For complete privacy, always use the default renderer.

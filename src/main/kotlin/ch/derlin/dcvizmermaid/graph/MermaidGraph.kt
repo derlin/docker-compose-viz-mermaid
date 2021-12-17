@@ -62,7 +62,7 @@ class MermaidGraph(val direction: GraphOrientation = GraphOrientation.TB, val th
         val to = nodes[link.to]
 
         require(from != null && to != null) {
-            "Got a link to unknown node(s): $from, $to"
+            "Got a link to unknown node(s): $from -> $to"
         }
         return "${from.format()} ${link.connector.format(link.text)} ${to.format()}"
     }

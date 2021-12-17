@@ -1,8 +1,9 @@
 package ch.derlin.dcvizmermaid.graph
 
+import ch.derlin.dcvizmermaid.Config
+import ch.derlin.dcvizmermaid.renderers.LocalRenderer
 import ch.derlin.dcvizmermaid.renderers.MermaidRenderer
 import java.io.File
-import java.net.URL
 import java.nio.file.Path
 
 
@@ -10,17 +11,24 @@ enum class MermaidOutput {
     TEXT, MARKDOWN, EDITOR, PREVIEW, PNG, SVG;
 
     fun process(mermaidGraph: MermaidGraph, outputFile: Path? = null, withBackground: Boolean = false) {
-        val text = mermaidGraph.build(withBackground)
+        val text = buildGraph(mermaidGraph, withBackground)
+        val renderer = Config.renderer
+        val previewer = MermaidRenderer
+        val bgColor = if (withBackground) mermaidGraph.theme.bgColor() else null
 
         when (this) {
             TEXT -> outputFile.print(text)
             MARKDOWN -> outputFile.print("```mermaid\n$text```")
-            EDITOR -> println(MermaidRenderer(text, mermaidGraph.theme).getEditorLink())
-            PREVIEW -> println(MermaidRenderer(text, mermaidGraph.theme).getPreviewLink())
-            PNG, SVG -> MermaidRenderer(text, mermaidGraph.theme).let {
-                (if (this == PNG) it.getPngLink() else it.getSvgLink()).downloadImage(outputFile, ext = this.name.lowercase())
-            }
+            EDITOR -> println(previewer.getEditorLink(text, mermaidGraph.theme))
+            PREVIEW -> println(previewer.getPreviewLink(text, mermaidGraph.theme))
+            PNG -> renderer.savePng(outputFile.orDefaultForExtension("png"), text, mermaidGraph.theme, bgColor)
+            SVG -> renderer.saveSvg(outputFile.orDefaultForExtension("svg"), text, mermaidGraph.theme, bgColor)
         }
+    }
+
+    private fun buildGraph(mermaidGraph: MermaidGraph, withBackground: Boolean) = when (this) {
+        TEXT, MARKDOWN, EDITOR -> mermaidGraph.build(withBackground)
+        else -> mermaidGraph.build() // mermaid.ink supports background color
     }
 
     private fun Path?.print(content: String) {
@@ -29,12 +37,5 @@ enum class MermaidOutput {
         } ?: println(content)
     }
 
-    private fun String.downloadImage(outputPath: Path? = null, ext: String = "png"): String {
-        val outputFile = outputPath?.toFile() ?: File("image.$ext")
-        URL(this).openStream().transferTo(outputFile.outputStream())
-        println("Saved image to $outputFile")
-        return outputFile.absolutePath
-    }
-
-
+    private fun Path?.orDefaultForExtension(ext: String) = this?.toFile() ?: File("image.$ext")
 }
