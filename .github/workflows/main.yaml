@@ -68,6 +68,9 @@ jobs:
       - name: Generate Jar
         run: ./gradlew jar
 
+      - name: Generate Jar (No local)
+        run: ./gradlew jar -PnoPlaywright
+
       - name: Upload Jar
         uses: actions/upload-artifact@v2
         with:

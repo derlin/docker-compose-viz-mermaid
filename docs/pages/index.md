@@ -21,7 +21,14 @@ This is a simple jar, that you can download from:
 * [nightly](https://github.com/derlin/docker-compose-viz-mermaid/releases/tag/nightly),
 * [releases](https://github.com/derlin/docker-compose-viz-mermaid/releases).
 
-Given a JRE is installed on your machine, run:
+Note that {{ site.title }} comes in two flavors:
+
+* normal jar (default): quite heavy (86M+), but contains everything to generate PNG/SVG locally, with no internet access.
+  This is best for security, and the rendering is of good quality;
+* `_no_local` jar: very light, but uses third-party online tools to generate PNG/SVG (<https://mermaid.ink> by default).
+  The quality is sometimes off, and depends on the upstream. Not all features are perfectly supported (e.g. no PNG for kroki.io).
+
+Given a JRE (java 8+) is installed on your machine, run:
 ```bash
 java -jar docker-compose-viz-mermaid-*.jar
 ```
