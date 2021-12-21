@@ -20,9 +20,14 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
 }
 
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
 tasks.jar {
     val noPlaywright = project.hasProperty("noPlaywright")
-    if(noPlaywright) {
+    if (noPlaywright) {
         archiveBaseName.set("${archiveBaseName.get()}_no_local")
     }
     manifest {
@@ -36,6 +41,40 @@ tasks.jar {
         // exclude playwright dependencies if ran with the argument -PnoPlaywright
         .filter { !(noPlaywright && it.path.contains("/com.microsoft.playwright/")) }
         .map { if (it.isDirectory) it else zipTree(it) })
+}
+
+abstract class ExecutableJarTask: DefaultTask() {
+    // This custom task will prepend the content of a bash launch script
+    // at the beginning of a jar, and make it executable (chmod +x)
+
+    @org.gradle.api.tasks.InputDirectory
+    var inputDir: File = project.buildDir.resolve("libs") // where to find the initial jar
+
+    @org.gradle.api.tasks.OutputDirectory
+    var outputDir: File = project.buildDir.resolve("bin") // where to write the modified jar
+
+    @org.gradle.api.tasks.InputFile
+    var launchScript: File = project.rootDir.resolve("launch.sh") // script to prepend
+
+    @TaskAction
+    fun createExecutableJars() {
+        project.mkdir(outputDir)
+        project.fileTree(inputDir) { include("*.jar") }.forEach { jar ->
+            outputDir.resolve(jar.name).run {
+                outputStream().use { out ->
+                    out.write(launchScript.readBytes())
+                    out.write(jar.readBytes())
+                }
+                setExecutable(true)
+                println("created executable: $path")
+            }
+        }
+    }
+}
+
+tasks.register<ExecutableJarTask>("exec-jar") {
+    dependsOn("jar")
+    launchScript = project.rootDir.resolve("bin/launcher.sh")
 }
 
 tasks.test {
@@ -56,8 +95,4 @@ tasks.test {
             //excludeTestsMatching("*Generator*")
         }
     }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
 }

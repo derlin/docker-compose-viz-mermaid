@@ -71,14 +71,17 @@ jobs:
       - name: Generate Jar (No local)
         run: ./gradlew jar -PnoPlaywright
 
+      - name: Make jars executable
+        run: ./gradlew exec-jar
+
       - name: Upload Jar
         uses: actions/upload-artifact@v2
         with:
-          path: build/libs/*.jar
+          path: build/bin/*.jar
 
       - name: Create info file
         run: |
-          echo -e "ref: $GITHUB_REF \ncommit: $GITHUB_SHA\nbuild: $(date +"%Y-%m-%dT%H:%M:%SZ")" > build/libs/info.txt
+          echo -e "ref: $GITHUB_REF \ncommit: $GITHUB_SHA\nbuild: $(date +"%Y-%m-%dT%H:%M:%SZ")" > build/bin/info.txt
 
       - name: Update nightly release
         uses: eine/tip@master
@@ -86,4 +89,4 @@ jobs:
           tag: nightly
           rm: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          files: build/libs/*.*
+          files: build/bin/*.*
