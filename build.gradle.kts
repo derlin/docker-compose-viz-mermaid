@@ -47,11 +47,11 @@ abstract class ExecutableJarTask: DefaultTask() {
     // This custom task will prepend the content of a bash launch script
     // at the beginning of a jar, and make it executable (chmod +x)
 
-    @org.gradle.api.tasks.InputDirectory
-    var inputDir: File = project.buildDir.resolve("libs") // where to find the initial jar
+    @org.gradle.api.tasks.InputFiles
+    var originalJars: ConfigurableFileTree = project.fileTree("${project.buildDir}/libs") { include("*.jar") }
 
     @org.gradle.api.tasks.OutputDirectory
-    var outputDir: File = project.buildDir.resolve("bin") // where to write the modified jar
+    var outputDir: File = project.buildDir.resolve("bin") // where to write the modified jar(s)
 
     @org.gradle.api.tasks.InputFile
     var launchScript: File = project.rootDir.resolve("launch.sh") // script to prepend
@@ -59,7 +59,7 @@ abstract class ExecutableJarTask: DefaultTask() {
     @TaskAction
     fun createExecutableJars() {
         project.mkdir(outputDir)
-        project.fileTree(inputDir) { include("*.jar") }.forEach { jar ->
+        originalJars.forEach { jar ->
             outputDir.resolve(jar.name).run {
                 outputStream().use { out ->
                     out.write(launchScript.readBytes())
@@ -73,7 +73,7 @@ abstract class ExecutableJarTask: DefaultTask() {
 }
 
 tasks.register<ExecutableJarTask>("exec-jar") {
-    dependsOn("jar")
+    // dependsOn("jar") // since we have two flavors (-PnoPlaywright), don't depend on jar
     launchScript = project.rootDir.resolve("bin/launcher.sh")
 }
 
