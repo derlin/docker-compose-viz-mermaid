@@ -8,7 +8,7 @@ permalink: /
 <image src="{{ site.baseurl }}/assets/dcviz-banner.svg" style="max-width: 400px" />
 {: .no_toc }
 
-Inspired from, [docker-compose-viz](https://github.com/pmsipilot/docker-compose-viz),
+Inspired from [docker-compose-viz](https://github.com/pmsipilot/docker-compose-viz),
 {{ site.title }} is a tool to transform docker-compose files into mermaid flowcharts.
 {: .fs-6 .fw-300 }
 

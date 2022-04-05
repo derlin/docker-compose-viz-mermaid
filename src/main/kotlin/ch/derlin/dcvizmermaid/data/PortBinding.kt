@@ -17,24 +17,21 @@ data class PortBinding(val service: String, val internalPort: Int, val externalP
             }
 
 
-        private fun parseString(service: String, declaration: String): PortBinding? {
-            try {
-                val split = declaration.substringBefore("/").split(":").reversed()
-                val internal = split[0]
-                val external = split.getOrNull(1)?.ifBlank { null } ?: internal
-                return PortBinding(service, internal.toInt(), external.toInt())
-            } catch (ex: NumberFormatException) {
-                return null
-            }
+        private fun parseString(service: String, declaration: String): PortBinding? = try {
+            val split = declaration.substringBefore("/").split(":").reversed()
+            val internal = split[0]
+            val external = split.getOrNull(1)?.ifBlank { null } ?: internal
+            PortBinding(service, internal.toInt(), external.toInt())
+        } catch (ex: NumberFormatException) {
+            null
         }
 
-        private fun parseYaml(service: String, declaration: YAML): PortBinding? {
+
+        private fun parseYaml(service: String, declaration: YAML): PortBinding? =
             if (declaration.containsKey("published")) {
                 declaration.getByPath("published", Int::class)?.let { external ->
                     return PortBinding(service, internalPort = declaration.getByPath("target", Int::class) ?: 0, externalPort = external)
                 }
-            }
-            return null
-        }
+            } else null
     }
 }
