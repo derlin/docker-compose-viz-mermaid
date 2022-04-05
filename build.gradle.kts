@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.6.10"
 }
 
 group = "ch.derlin"
@@ -13,9 +13,9 @@ repositories {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:1.29")
+    implementation("org.yaml:snakeyaml:1.30")
     implementation("com.github.ajalt:clikt:2.8.0")
-    implementation("com.microsoft.playwright:playwright:1.17.1")
+    implementation("com.microsoft.playwright:playwright:1.20.1")
     testImplementation(kotlin("test"))
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
 }
@@ -43,7 +43,7 @@ tasks.jar {
         .map { if (it.isDirectory) it else zipTree(it) })
 }
 
-abstract class ExecutableJarTask: DefaultTask() {
+abstract class ExecutableJarTask : DefaultTask() {
     // This custom task will prepend the content of a bash launch script
     // at the beginning of a jar, and make it executable (chmod +x)
 
