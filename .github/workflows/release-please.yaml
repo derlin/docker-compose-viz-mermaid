@@ -1,0 +1,46 @@
+name: Release Please
+on:
+  push:
+    branches: [ main ]
+jobs:
+  #
+  # Create/update a PR for the next release, bumping the version (in version.txt)
+  # depending on the conventional commits since the last release.
+  #
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.rp.outputs.release_created }}
+      tag: ${{ steps.rp.outputs.tag_name }}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: rp
+        with:
+          release-type: simple
+          changelog-types: '[{"type":"feat","section":"🚀 Features","hidden":false},{"type":"fix","section":"🐛 Bug Fixes","hidden":false},{"type":"docs","section":"💬 Documentation","hidden":false},{"type":"build","section":"🔧 Build","hidden":false}, {"type":"ci","section":"⟲ CI","hidden":false}]'
+
+  #
+  # IF a release was made, attach the artifacts to the release
+  #
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup gradle
+        uses: ./.github/actions/gradlew
+
+      - name: Build release jars
+        run: |
+          ./gradlew -Dsnapshot=false exec-jar
+          ./gradlew -Dsnapshot=false jar -PnoPlaywright
+          ./gradlew exec-jar
+
+      - name: Attach assets to release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag }}
+          files: |
+            target/*.jar

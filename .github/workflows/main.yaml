@@ -15,20 +15,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Verify gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+      - name: Setup gradle
+        uses: ./.github/actions/gradlew
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - name: Setup playwright cache location
+        shell: bash
+        run: echo "PLAYWRIGHT_BROWSERS_PATH=.playwright" >> $GITHUB_ENV
+
+      - name: Cache playwright executables
+        uses: actions/cache@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: gradle
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          path: .playwright
+          key: ${{ runner.os }}-playwright
 
       - name: Run tests
         run: ./gradlew test
@@ -40,9 +40,9 @@ jobs:
           path: build/reports/tests/test
           retention-days: 30
 
-  deploy:
+  deploy-nightly:
     #
-    # on push to MASTER only, if the tests were successful
+    # on push to MAIN only, if the tests were successful
     # build the packages and update nightly release
     #
     runs-on: ubuntu-latest
@@ -50,20 +50,10 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Verify gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: gradle
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Setup gradle
+        uses: ./.github/actions/gradlew
 
       - name: Generate Jar
         run: ./gradlew jar
@@ -74,17 +64,17 @@ jobs:
       - name: Make jars executable
         run: ./gradlew exec-jar
 
-      - name: Upload Jar
-        uses: actions/upload-artifact@v2
-        with:
-          path: build/bin/*.jar
+      #- name: Upload Jar
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    path: build/bin/*.jar
 
       - name: Create info file
         run: |
           echo -e "ref: $GITHUB_REF \ncommit: $GITHUB_SHA\nbuild: $(date +"%Y-%m-%dT%H:%M:%SZ")" > build/bin/info.txt
 
       - name: Update nightly release
-        uses: eine/tip@master
+        uses: pyTooling/Actions/releaser@main
         with:
           tag: nightly
           rm: true
