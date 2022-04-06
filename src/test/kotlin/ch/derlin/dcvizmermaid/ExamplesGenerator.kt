@@ -17,7 +17,6 @@ class ExamplesGenerator {
         private val outputPathImages = if (genDocs) "docs/assets/generated" else "target/generated"
         private val outputPathText = if (genDocs) "docs/_includes/generated" else "target/generated"
 
-
         @BeforeAll
         @JvmStatic
         fun cleanup() {

@@ -8,7 +8,7 @@ import assertk.assertions.isNull
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class PortBindingTest : AbstractTestBase() {
+class PortBindingTest : TestUtil() {
 
     @Test
     fun `parse short port bindings`() {
@@ -18,21 +18,20 @@ class PortBindingTest : AbstractTestBase() {
             mapOf(
                 3000 to port(3000),
                 "3000" to port(3000),
-                //"3000-3005",
+                // "3000-3005",
                 "8000:8010" to port(8010, 8000),
-                //"9090-9091:8080-8081",
+                // "9090-9091:8080-8081",
                 "49100:22" to port(22, 49100),
                 "127.0.0.1:8001:8001" to port(8001),
-                //"127.0.0.1:5000-5010:5000-5010",
+                // "127.0.0.1:5000-5010:5000-5010",
                 "127.0.0.1::5000" to port(5000),
                 "6060:6060/udp" to port(6060),
-                //"12400-12500:1240" to
+                // "12400-12500:1240" to
             ).forEach { (port, expected) ->
                 assertThat(port).transform { parsePort(it) }.isNotNull().isEqualTo(expected)
             }
         }
     }
-
 
     @Test
     fun `parse long port bindings`() {

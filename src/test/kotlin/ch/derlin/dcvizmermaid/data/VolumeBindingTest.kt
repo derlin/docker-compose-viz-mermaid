@@ -7,8 +7,7 @@ import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType.*
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class VolumeBindingTest : AbstractTestBase() {
-
+class VolumeBindingTest : TestUtil() {
 
     @Test
     fun `parse volumes short syntax`() {

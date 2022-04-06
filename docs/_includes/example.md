@@ -25,7 +25,8 @@ Using the default output, the following mermaid diagram is generated:
 
 Using default theme (`--with-bg` option):
 
-<image src="{{ site.baseurl }}/assets/generated/{{ include.name }}-default.svg" class="img-responsive" />
+<img src="{{ site.baseurl }}/assets/generated/{{ include.name }}-default.svg" class="img-responsive">
 
 Or dark theme (`--with-bg` option):
-<image src="{{ site.baseurl }}/assets/generated/{{ include.name }}-dark.svg" />
+
+<img src="{{ site.baseurl }}/assets/generated/{{ include.name }}-dark.svg">

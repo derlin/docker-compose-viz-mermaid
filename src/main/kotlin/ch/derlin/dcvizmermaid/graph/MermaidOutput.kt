@@ -1,7 +1,6 @@
 package ch.derlin.dcvizmermaid.graph
 
 import ch.derlin.dcvizmermaid.Config
-import ch.derlin.dcvizmermaid.renderers.LocalRenderer
 import ch.derlin.dcvizmermaid.renderers.MermaidRenderer
 import java.io.File
 import java.nio.file.Path

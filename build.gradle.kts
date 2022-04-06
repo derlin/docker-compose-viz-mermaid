@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
+//    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    id("io.gitlab.arturbosch.detekt").version("1.20.0-RC2")
 }
 
 group = "ch.derlin"
@@ -23,10 +25,11 @@ dependencies {
     implementation("org.yaml:snakeyaml:1.30")
     implementation("com.github.ajalt:clikt:2.8.0")
     implementation("com.microsoft.playwright:playwright:1.20.1")
+    implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
+
     testImplementation(kotlin("test"))
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
 }
-
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
@@ -44,10 +47,12 @@ tasks.jar {
             attributes += "env" to mapOf("MERMAID_RENDERER" to "mermaid.ink")
         }
     }
-    from(configurations.runtimeClasspath.get()
-        // exclude playwright dependencies if ran with the argument -PnoPlaywright
-        .filter { !(noPlaywright && it.path.contains("/com.microsoft.playwright/")) }
-        .map { if (it.isDirectory) it else zipTree(it) })
+    from(
+        configurations.runtimeClasspath.get()
+            // exclude playwright dependencies if ran with the argument -PnoPlaywright
+            .filter { !(noPlaywright && it.path.contains("/com.microsoft.playwright/")) }
+            .map { if (it.isDirectory) it else zipTree(it) }
+    )
 }
 
 abstract class ExecutableJarTask : DefaultTask() {
@@ -99,7 +104,12 @@ tasks.test {
         // use ./gradlew test -Pgenerate to generate also the docs
         if (project.hasProperty("docs")) {
             environment(mapOf("GEN_DOCS" to "1"))
-            //excludeTestsMatching("*Generator*")
+            // excludeTestsMatching("*Generator*")
         }
     }
+}
+
+detekt {
+    config = files(".detekt.yaml")
+    buildUponDefaultConfig = true
 }

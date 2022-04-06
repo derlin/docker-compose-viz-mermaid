@@ -7,7 +7,7 @@ import assertk.assertions.isEqualTo
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class DockerComposeTest : AbstractTestBase() {
+class DockerComposeTest : TestUtil() {
 
     @Test
     fun `parse services`() {
@@ -18,14 +18,14 @@ class DockerComposeTest : AbstractTestBase() {
                   image: web
                 service:
                   image: service
-            """.trimIndent(),
+                """.trimIndent(),
                 """
                 version: 1
                 web:
                   image: web
                 service:
                   image: service
-            """.trimIndent(),
+                """.trimIndent(),
                 """
                 version: "2.4"
                 services:
@@ -33,7 +33,7 @@ class DockerComposeTest : AbstractTestBase() {
                       image: web
                     service:
                       image: service
-            """.trimIndent(),
+                """.trimIndent(),
             ).forEach { content ->
                 assertThat(content)
                     .transform { DockerCompose(YamlUtils.load(content)).services }
@@ -91,7 +91,7 @@ class DockerComposeTest : AbstractTestBase() {
                 volumeBinding("app-settings", "/something") to true,
                 volumeBinding("config", "/target/path") to true,
 
-                ).forEach { (vb, modified) ->
+            ).forEach { (vb, modified) ->
                 assertThat(vb)
                     .transform { DockerCompose.processVolumes(namedVolumes, listOf(vb)) }
                     .isEqualTo(listOf(if (modified) vb.copy(type = VolumeBinding.VolumeType.VOLUME) else vb))

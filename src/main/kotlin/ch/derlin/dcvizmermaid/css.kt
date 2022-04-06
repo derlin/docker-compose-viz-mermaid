@@ -3,8 +3,7 @@ package ch.derlin.dcvizmermaid
 import ch.derlin.dcvizmermaid.graph.CssClazz
 import ch.derlin.dcvizmermaid.graph.GraphTheme
 
-
-object VolumeClazz : CssClazz() {
+object VolumeClazz : CssClazz {
     override val name: String = "volumes"
     override fun styles(theme: GraphTheme): String = when (theme) {
         GraphTheme.DARK -> "fill:#0f544e,stroke:#23968b"
@@ -12,7 +11,7 @@ object VolumeClazz : CssClazz() {
     }
 }
 
-object PortsClazz : CssClazz() {
+object PortsClazz : CssClazz {
     override val name: String = "ports"
     override fun styles(theme: GraphTheme): String = when (theme) {
         GraphTheme.DEFAULT -> "fill:#f8f8f8,stroke:#ccc"
@@ -20,7 +19,7 @@ object PortsClazz : CssClazz() {
     }
 }
 
-object ScpClazz : CssClazz() {
+object ScpClazz : CssClazz {
     override val name: String = "scp"
     override fun styles(theme: GraphTheme): String = when (theme) {
         GraphTheme.DEFAULT -> "fill:#fbfff7,stroke:#8bc34a"

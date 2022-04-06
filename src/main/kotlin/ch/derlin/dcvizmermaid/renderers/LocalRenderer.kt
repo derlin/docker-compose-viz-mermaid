@@ -9,6 +9,10 @@ import java.io.File
 
 object LocalRenderer : Renderer {
 
+    const val VIEWPORT_WIDTH = 1280
+    const val VIEWPORT_HEIGHT = 1024
+    const val VIEWPORT_SCALE_FACTOR = 1.2 // improve a bit the quality
+
     override fun savePng(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String {
         renderCodeOnPage(graph, theme.bgColor()) { page ->
             page.querySelector("svg")
@@ -31,8 +35,8 @@ object LocalRenderer : Renderer {
         Playwright.create().use { playwright ->
             val browser = playwright.chromium().launch().newContext(
                 Browser.NewContextOptions()
-                    .setViewportSize(1280, 1024)
-                    .setDeviceScaleFactor(1.2) // improve a bit the quality
+                    .setViewportSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
+                    .setDeviceScaleFactor(VIEWPORT_SCALE_FACTOR)
             )
             val page: Page = browser.newPage()
             page.setContent(HtmlPageRenderingMermaid(mermaidCode))

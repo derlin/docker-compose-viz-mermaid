@@ -5,7 +5,7 @@ description: "Visualize docker-compose files with Mermaid."
 permalink: /
 ---
 
-<image src="{{ site.baseurl }}/assets/dcviz-banner.svg" style="max-width: 400px" />
+<img src="{{ site.baseurl }}/assets/dcviz-banner.svg" style="max-width: 400px">
 {: .no_toc }
 
 Inspired from [docker-compose-viz](https://github.com/pmsipilot/docker-compose-viz),

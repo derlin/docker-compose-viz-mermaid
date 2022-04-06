@@ -29,9 +29,9 @@ enum class GraphOrientation {
     }
 }
 
-abstract class CssClazz {
-    abstract val name: String
-    abstract fun styles(theme: GraphTheme): String
+interface CssClazz {
+    val name: String
+    fun styles(theme: GraphTheme): String
 }
 
 enum class Shape {
@@ -53,30 +53,23 @@ enum class Shape {
     }
 }
 
-enum class CONNECTOR {
-    LINE, DOT_LINE,
-    ARROW, DOT_ARROW,
-    X, DOT_X, DOT_X_REV, DOT_DBL_X,
-    DBL_ARROW, DOT_DBL_ARROW;
+enum class CONNECTOR(val labelled: String, val simple: String) {
+    LINE("-- %s --", "--"),
+    DOT_LINE("-. %s .-", "-.-"),
 
-    fun format(text: Any?): String {
-        val validText = text?.toValidName()
-        return when (this) {
-            LINE -> validText?.let { "-- $it --" } ?: "--"
-            DOT_LINE -> validText?.let { "-. $it .-" } ?: "-.-"
+    ARROW("-- %s -->", "-->"),
+    DOT_ARROW("-. %s .->", "-.->"),
 
-            ARROW -> validText?.let { "-- $it -->" } ?: "-->"
-            DOT_ARROW -> validText?.let { "-. $it .->" } ?: "-.->"
+    DBL_ARROW("<-- %s -->", "<-->"),
+    DOT_DBL_ARROW("<-. %s .->", "<-.->"),
 
-            DBL_ARROW -> validText?.let { "<-- $it -->" } ?: "<-->"
-            DOT_DBL_ARROW -> validText?.let { "<-. $it .->" } ?: "<-.->"
+    X("-- %s --x", "--x"),
+    DOT_X("-. %s .-x", "-.-x"),
+    DOT_DBL_X("x-. %s .-x", "x-.-x"),
+    DOT_X_REV("x-. %s .-", "x-.-");
 
-            X -> validText?.let { "-- $it --x" } ?: "--x"
-            DOT_X -> validText?.let { "-. $it .-x" } ?: "-.-x"
-            DOT_X_REV -> validText?.let { "x-. $it .-" } ?: "x-.-"
-            DOT_DBL_X -> validText?.let { "x-. $it .-x" } ?: "x-.-x"
-        }
-    }
+    fun format(text: Any?): String =
+        text?.toValidName()?.let { labelled.format(it) } ?: simple
 }
 
 fun VolumeType.toShape() = when (this) {

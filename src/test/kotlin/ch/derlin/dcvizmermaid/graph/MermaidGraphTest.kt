@@ -1,6 +1,5 @@
 package ch.derlin.dcvizmermaid.graph
 
-
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.*
@@ -132,7 +131,7 @@ class MermaidGraphTest {
           
             classDef W
             class web W
-        """.trimIndent() + "\n"
+            """.trimIndent() + "\n"
         )
 
         assertThat(graph.build(withBackground = true)).isEqualTo(
@@ -148,11 +147,10 @@ class MermaidGraphTest {
             classDef W
             class web W
           end
-        """.trimIndent() + "\n"
+            """.trimIndent() + "\n"
         )
     }
 
     private fun buildAndGetLines(graph: MermaidGraph): List<String> =
         graph.build().lines().drop(2).filter { it.isNotEmpty() }.map { it.trim() }
-
 }

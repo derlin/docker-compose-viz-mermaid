@@ -1,1 +1,1 @@
-<image src="{{ site.baseurl }}/assets/generated/{{ include.image }}" class="img-responsive" />
+<img src="{{ site.baseurl }}/assets/generated/{{ include.image }}" class="img-responsive">

@@ -1,4 +1,4 @@
-package ch.derlin.dcvizmermaid.data;
+package ch.derlin.dcvizmermaid.data
 
 import ch.derlin.dcvizmermaid.helpers.YAML
 import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
@@ -31,6 +31,7 @@ data class VolumeBinding(
             else -> null
         }
 
+        @Suppress("MagicNumber")
         private fun parseString(service: String, volumeMapping: String): VolumeBinding? =
             volumeMapping.split(":").let {
                 when (it.size) {
@@ -41,10 +42,14 @@ data class VolumeBinding(
                         else VolumeBinding(service, source = it[0], target = it[1])
                     3 ->
                         VolumeBinding(service, source = it[0], target = it[1], ro = it[2] == "ro")
-                    else -> null
+                    else -> {
+                        logger.warn { "Invalid volume mapping found: '$it' (more than 3 parts separated by :)" }
+                        null
+                    }
                 }
             }
 
+        @Suppress("TooGenericExceptionCaught")
         private fun parseYaml(service: String, volumeMapping: YAML) =
             volumeMapping.getByPath("target", String::class)?.let { target ->
                 try {
@@ -56,7 +61,7 @@ data class VolumeBinding(
                         ro = volumeMapping.getByPath("read_only", Boolean::class) == true
                     )
                 } catch (ex: Exception) {
-                    println("Could not read volume $volumeMapping")
+                    logger.error("Could not read volume '$volumeMapping'") { ex }
                     null
                 }
             }

@@ -9,18 +9,12 @@ object YamlUtils {
 
     val yaml = Yaml()
 
-    fun load(content: String): YAML = yaml.load<YAML>(content)
+    fun load(content: String): YAML = yaml.load(content)
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T> YAML.getListByPath(path: String, default: List<T>): List<T> = getByPath(path)?.let { value ->
         require(value is List<*> && value.all { it is T }) { "Unexpected type for list $value" }
         value as List<T>
-    } ?: default
-
-
-    inline fun <reified T> YAML.getByPath(path: String, default: T): T = getByPath(path)?.let {
-        require(it is T) { "Wrong type for $it" }
-        it
     } ?: default
 
     @Suppress("UNCHECKED_CAST")

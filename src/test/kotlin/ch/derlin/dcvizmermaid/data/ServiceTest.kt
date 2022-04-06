@@ -5,7 +5,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 
-class ServiceTest : AbstractTestBase() {
+class ServiceTest : TestUtil() {
 
     @Test
     fun `parse link`() {
@@ -38,5 +38,4 @@ class ServiceTest : AbstractTestBase() {
             }
         }
     }
-
 }

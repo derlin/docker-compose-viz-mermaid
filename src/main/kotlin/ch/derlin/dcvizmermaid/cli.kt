@@ -32,7 +32,7 @@ class Cli : CliktCommand(
     When using theme and classes, the output may become hard to read depending on the background. 
     It is thus possible to force a background (using a hack) with the option `-b`.
     ```
-""".trimIndent()
+    """.trimIndent()
 ) {
 
     private val defaultFiles = listOf("docker-compose.yaml", "docker-compose.yml")
@@ -95,7 +95,6 @@ class Cli : CliktCommand(
                 "Could not find docker-compose file looking for ${defaultFiles.joinToString(", ")}." +
                         "Please, provide the exact path as argument."
             )
-
 }
 
 fun main(args: Array<String>) = Cli().main(args)
