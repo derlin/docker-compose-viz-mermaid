@@ -30,7 +30,6 @@ object LocalRenderer : Renderer {
         return outputFile.absolutePath.toString()
     }
 
-
     private fun renderCodeOnPage(mermaidCode: String, bgColor: String? = null, block: (Page) -> Unit) {
         Playwright.create().use { playwright ->
             val browser = playwright.chromium().launch().newContext(

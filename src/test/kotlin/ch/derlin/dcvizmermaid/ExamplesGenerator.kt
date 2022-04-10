@@ -57,7 +57,7 @@ class ExamplesGenerator {
 
         GraphTheme.values().forEach { theme ->
             val basename = "${file.nameWithoutExtension}-${theme.name.lowercase()}"
-            val graph = generateMermaidGraph(
+            val graph = GenerateGraph(
                 text,
                 theme = theme,
                 withPorts = 'P' !in options,
@@ -80,7 +80,7 @@ class ExamplesGenerator {
         // only images
         GraphTheme.values().forEach { theme ->
             val basename = "${file.nameWithoutExtension}-${theme.name.lowercase()}"
-            val graph = generateMermaidGraph(
+            val graph = GenerateGraph(
                 text, theme = theme,
                 withPorts = true, withVolumes = true, withClasses = true, withImplicitLinks = true
             )

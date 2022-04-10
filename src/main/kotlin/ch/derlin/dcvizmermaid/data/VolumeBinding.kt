@@ -2,7 +2,7 @@ package ch.derlin.dcvizmermaid.data
 
 import ch.derlin.dcvizmermaid.helpers.YAML
 import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
-
+import mu.KotlinLogging
 
 data class VolumeBinding(
     val service: String,
@@ -25,6 +25,9 @@ data class VolumeBinding(
     }
 
     companion object {
+
+        private val logger = KotlinLogging.logger {}
+
         fun parse(service: String, volumeMapping: Any): VolumeBinding? = when (volumeMapping) {
             is String -> parseString(service, volumeMapping)
             is Map<*, *> -> parseYaml(service, volumeMapping as YAML)
@@ -49,7 +52,7 @@ data class VolumeBinding(
                 }
             }
 
-        @Suppress("TooGenericExceptionCaught")
+        @Suppress("TooGenericExceptionCaught") // too many things can happen here in case of invalid binding
         private fun parseYaml(service: String, volumeMapping: YAML) =
             volumeMapping.getByPath("target", String::class)?.let { target ->
                 try {
@@ -66,5 +69,4 @@ data class VolumeBinding(
                 }
             }
     }
-
 }

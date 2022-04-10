@@ -2,7 +2,12 @@ package ch.derlin.dcvizmermaid.graph
 
 import assertk.assertAll
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsExactly
+import assertk.assertions.containsExactlyInAnyOrder
+import assertk.assertions.containsOnly
+import assertk.assertions.isEqualTo
+import assertk.assertions.isFailure
+import assertk.assertions.isSuccess
 import org.junit.jupiter.api.Test
 
 class MermaidGraphTest {
@@ -126,9 +131,9 @@ class MermaidGraphTest {
           flowchart TB
             service x-.-x db((db))
             web -. REST .-> service
-          
+
             n{{none}}
-          
+
             classDef W
             class web W
             """.trimIndent() + "\n"
@@ -141,9 +146,9 @@ class MermaidGraphTest {
           subgraph " "
             service x-.-x db((db))
             web -. REST .-> service
-          
+
             n{{none}}
-          
+
             classDef W
             class web W
           end

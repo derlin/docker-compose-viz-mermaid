@@ -5,7 +5,6 @@ import ch.derlin.dcvizmermaid.data.Service.MaybeReference
 import ch.derlin.dcvizmermaid.helpers.YAML
 import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 
-
 class DockerCompose(private val content: YAML) {
     val services: List<Service> by lazy {
         val root = if ("services" !in content) content else content.getByPath("services", type = Map::class) as YAML
@@ -28,7 +27,6 @@ class DockerCompose(private val content: YAML) {
 
     private fun namedVolumes(): Set<String> = if (!content.containsKey("volumes")) setOf() else (content["volumes"] as YAML).keys
 
-
     companion object {
         fun linksFromMaybeRefs(serviceName: String, ports: Iterable<PortBinding>, maybeRefs: Iterable<MaybeReference>): List<Link> =
             maybeRefs.mapNotNull { maybeRef ->
@@ -46,5 +44,4 @@ class DockerCompose(private val content: YAML) {
                 else binding.copy(type = VolumeBinding.VolumeType.VOLUME)
             }
     }
-
 }

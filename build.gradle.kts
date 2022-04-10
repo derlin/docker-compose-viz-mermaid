@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
-//    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
     id("io.gitlab.arturbosch.detekt").version("1.20.0-RC2")
 }
 
@@ -41,7 +41,7 @@ tasks.jar {
         archiveBaseName.set("${archiveBaseName.get()}_no_local")
     }
     manifest {
-        attributes += "main-Class" to "ch.derlin.dcvizmermaid.CliKt"
+        attributes += "main-Class" to "ch.derlin.dcvizmermaid.MainKt"
         if (noPlaywright) {
             // set default renderer to mermaid.ink if ran with the argument -PnoPlaywright
             attributes += "env" to mapOf("MERMAID_RENDERER" to "mermaid.ink")

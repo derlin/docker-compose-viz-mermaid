@@ -8,7 +8,7 @@ import assertk.assertions.isNull
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class PortBindingTest : TestUtil() {
+class PortBindingTest {
 
     @Test
     fun `parse short port bindings`() {

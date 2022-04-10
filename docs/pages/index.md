@@ -106,7 +106,7 @@ If classes are enabled, the color of the port will be yellowish (light theme) or
 
 ### DBs
 
-The tool tries to automatically detect database services and render them as cylindrical shapes. 
+The tool tries to automatically detect database services and render them as cylindrical shapes.
 The detection is dumb enough, looking for services named `database`, `db` or well-known database providers (`mysql`, `redis`, etc.).
 
 ## Generating images

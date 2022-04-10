@@ -16,7 +16,6 @@ data class PortBinding(val service: String, val internalPort: Int, val externalP
                 else -> null
             }
 
-
         private fun parseString(service: String, declaration: String): PortBinding? = try {
             val split = declaration.substringBefore("/").split(":").reversed()
             val internal = split[0]
@@ -25,7 +24,6 @@ data class PortBinding(val service: String, val internalPort: Int, val externalP
         } catch (ex: NumberFormatException) {
             null
         }
-
 
         private fun parseYaml(service: String, declaration: YAML): PortBinding? =
             if (declaration.containsKey("published")) {

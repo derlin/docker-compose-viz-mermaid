@@ -91,7 +91,7 @@ Further configuration is available through environment variables:
 
 By default, the rendering of images (SVG, PNG) is done locally using a headless Chromium.
 It is possible to change this behaviour and select one of <https://mermaid.ink> or <https://kroki.io>
-(doing so will make rending impossible without a network connection). 
+(doing so will make rending impossible without a network connection).
 
 All URLs to third-party tools are configurable, which is useful in case you have e.g.
 Mermaid Live Editor // Mermaid Ink running inside your organisation.

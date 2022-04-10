@@ -7,7 +7,7 @@ import assertk.assertions.isEqualTo
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class DockerComposeTest : TestUtil() {
+class DockerComposeTest {
 
     @Test
     fun `parse services`() {

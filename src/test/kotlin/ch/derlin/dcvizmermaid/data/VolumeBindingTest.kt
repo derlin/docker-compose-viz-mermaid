@@ -3,11 +3,14 @@ package ch.derlin.dcvizmermaid.data
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType.*
+import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType.BIND
+import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType.NPIPE
+import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType.TMPFS
+import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType.VOLUME
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
-class VolumeBindingTest : TestUtil() {
+class VolumeBindingTest {
 
     @Test
     fun `parse volumes short syntax`() {

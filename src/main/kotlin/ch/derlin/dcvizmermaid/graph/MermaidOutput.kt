@@ -5,7 +5,6 @@ import ch.derlin.dcvizmermaid.renderers.MermaidRenderer
 import java.io.File
 import java.nio.file.Path
 
-
 enum class MermaidOutput {
     TEXT, MARKDOWN, EDITOR, PREVIEW, PNG, SVG;
 

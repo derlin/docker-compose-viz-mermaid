@@ -29,11 +29,6 @@ enum class GraphOrientation {
     }
 }
 
-interface CssClazz {
-    val name: String
-    fun styles(theme: GraphTheme): String
-}
-
 enum class Shape {
     NONE, RECT_ROUNDED, CIRCLE, HEXAGON, PARALLELOGRAM, CYLINDER, STADIUM, RHOMBUS, ASYM;
 

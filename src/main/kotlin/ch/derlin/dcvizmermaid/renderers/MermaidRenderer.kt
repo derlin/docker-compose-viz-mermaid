@@ -3,7 +3,7 @@ package ch.derlin.dcvizmermaid.renderers
 import ch.derlin.dcvizmermaid.Config
 import ch.derlin.dcvizmermaid.graph.GraphTheme
 import java.io.File
-import java.util.*
+import java.util.Base64
 
 object MermaidRenderer : Renderer, Previewer {
 
@@ -27,7 +27,7 @@ object MermaidRenderer : Renderer, Previewer {
     private fun toMermaidBase64(graph: String, theme: GraphTheme = GraphTheme.DEFAULT): String {
         val escapedCode = graph.replace("\"", "\\\"").replace("\n", "\\n")
         val data = "{\"code\":\"$escapedCode\"," +
-                "\"mermaid\": {\"theme\": \"${theme.name.lowercase()}\"},\"updateEditor\":true,\"autoSync\":true,\"updateDiagram\":true}"
+            "\"mermaid\": {\"theme\": \"${theme.name.lowercase()}\"},\"updateEditor\":true,\"autoSync\":true,\"updateDiagram\":true}"
         return Base64.getEncoder().encodeToString(data.toByteArray()).trimEnd('=')
     }
 }

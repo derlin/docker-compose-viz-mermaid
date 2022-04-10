@@ -24,7 +24,7 @@ diagrams dynamically*. The syntax is easy and clear, and the output usually beau
 
 See [mermaid-js#integrations](https://mermaid-js.github.io/mermaid/#/integrations?id=integrations) for a full list.
 
-**GitHub** does not support it for now, but there are many browser extensions available 
+**GitHub** does not support it for now, but there are many browser extensions available
 that will automatically detect and render the diagrams in md files.
 I personally use [mermaid-extension](https://github.com/Stefan-S/mermaid-extension).
 

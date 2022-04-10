@@ -1,0 +1,16 @@
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+max_line_length = 140
+
+# the continuation indent size differs in IntelliJ by default ...
+[*.{kt,kts}]
+indent_size = 4
+continuation_indent_size = 4 # https://github.com/editorconfig/editorconfig/issues/412
+ij_continuation_indent_size = 4
+
+[*.{yaml,yml}]
+indent_size = 2
+insert_final_newline = true

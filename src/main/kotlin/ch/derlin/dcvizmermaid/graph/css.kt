@@ -1,7 +1,9 @@
-package ch.derlin.dcvizmermaid
+package ch.derlin.dcvizmermaid.graph
 
-import ch.derlin.dcvizmermaid.graph.CssClazz
-import ch.derlin.dcvizmermaid.graph.GraphTheme
+interface CssClazz {
+    val name: String
+    fun styles(theme: GraphTheme): String
+}
 
 object VolumeClazz : CssClazz {
     override val name: String = "volumes"

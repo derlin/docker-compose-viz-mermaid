@@ -2,7 +2,6 @@ package ch.derlin.dcvizmermaid.data
 
 import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType
 
-
 fun link(to: String, alias: String? = null) = Service.Link("service", to, alias)
 fun parseLink(s: String) = Service.Link.parse("service", s)
 
