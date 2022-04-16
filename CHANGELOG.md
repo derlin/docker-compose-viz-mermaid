@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.0.0...v1.1.0) (2022-04-16)
+
+
+### ⟲ CI
+
+* automate release and adopt conventional commits ([3f8a023](https://github.com/derlin/docker-compose-viz-mermaid/commit/3f8a02366825b595be97851d94e75846dcbf2b13))
+
+
+### 🚀 Features
+
+* add `--version` parameter ([c16942e](https://github.com/derlin/docker-compose-viz-mermaid/commit/c16942ef38b7a22203916ac2dbeafd87d5715c93))
+* improve cli help ([231c970](https://github.com/derlin/docker-compose-viz-mermaid/commit/231c97021cf20aece4437cd74a891cd26a8211c4))
+
 ## 1.0.0 (2022-04-05)
 
 ### 🚀 Features
