@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
+    id("com.gorylenko.gradle-git-properties") version "2.4.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
     id("io.gitlab.arturbosch.detekt").version("1.20.0-RC2")
 }
@@ -25,7 +26,7 @@ dependencies {
     implementation("org.yaml:snakeyaml:1.30")
     implementation("com.github.ajalt:clikt:2.8.0")
     implementation("com.microsoft.playwright:playwright:1.20.1")
-    implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
+    implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
 
     testImplementation(kotlin("test"))
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
@@ -107,6 +108,11 @@ tasks.test {
             // excludeTestsMatching("*Generator*")
         }
     }
+}
+
+gitProperties {
+    gitPropertiesName = "info.properties"
+    keys = listOf("git.build.version", "git.branch", "git.commit.id", "git.commit.message.short", "git.commit.time", "git.dirty")
 }
 
 detekt {

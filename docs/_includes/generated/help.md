@@ -13,8 +13,6 @@ Usage: cli [OPTIONS] [docker-compose-path]
   It is thus possible to force a background (using a hack) with the option `-b`.
 
 Options:
-  -d, --dir [LR|RL|TB|BT]                   Graph orientation (default: TB)
-  -t, --theme [DEFAULT|DARK]                Graph theme (default: DEFAULT)
   -p, --ports / -P, --no-ports
   -v, --volumes / -V, --no-volumes
   -l, --ilinks / -L, --no-ilinks            If set, try to find implicit links/depends_on by looking
@@ -28,5 +26,8 @@ Options:
   -b, --with-bg / -B, --no-bg               If set, try to find implicit links/depends_on by looking
                                             at the environment variables, see if one if pointing to
                                             the host:port of another service
+  -d, --dir [LR|RL|TB|BT]                   Graph orientation (default: TB)
+  -t, --theme [DEFAULT|DARK]                Graph theme (default: DEFAULT)
+  --version                                 Show the version and exit
   -o, --out PATH                            Only available for format TEXT and PNG
   -h, --help                                Show this message and exit

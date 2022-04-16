@@ -17,19 +17,23 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.path
 import java.io.File
 import java.nio.file.Path
+import java.util.Properties
+import kotlin.system.exitProcess
+
+private const val GIT_PROPERTIES_FILE = "info.properties"
 
 class Cli : CliktCommand(
     """
     Generate a mermaid graph from a docker-compose file.
-     
+
     There are different kind of outputs:
     ```
     * 'text' (default) outputs the mermaid graph (use -o to output to a file instead of stdout);
     * 'markdown' is same as text, but wraps the graph text in '```mermaid```'
     * 'png' or 'svg' generates the image and saves it 'image.[png|svg]' (use -o to change the destination);
     * 'editor' // 'preview' generates a link to the mermaid online editor, and print it to the console.
-    
-    When using theme and classes, the output may become hard to read depending on the background. 
+
+    When using theme and classes, the output may become hard to read depending on the background.
     It is thus possible to force a background (using a hack) with the option `-b`.
     ```
     """.trimIndent()
@@ -68,6 +72,9 @@ class Cli : CliktCommand(
     private val theme: GraphTheme by
     option("--theme", "-t", help = "Graph theme").enum<GraphTheme>(ignoreCase = true).default(GraphTheme.DEFAULT)
 
+    private val showVersionAndExit: Boolean by
+    option("--version", help = "Show the version and exit").flag(default = false)
+
     private val outputFile: Path? by option("--out", "-o", help = outHelp).path()
 
     init {
@@ -75,6 +82,8 @@ class Cli : CliktCommand(
     }
 
     override fun run() {
+        if (showVersionAndExit) showVersionAndExit()
+
         val mermaidGraph = GenerateGraph(
             (dockerComposeInput ?: findDefaultFile()).readText(),
             direction = direction,
@@ -97,4 +106,15 @@ class Cli : CliktCommand(
                 "Could not find docker-compose file looking for ${defaultFiles.joinToString(", ")}. " +
                     "Please, provide the exact path as argument."
             )
+
+    private fun showVersionAndExit() {
+        with(Properties()) {
+            // info.properties is generated on build by gradle (see gradle-git-properties plugin)
+            load(Cli::class.java.classLoader.getResourceAsStream(GIT_PROPERTIES_FILE))
+            println("Version: ${getProperty("git.build.version")} (sha: ${getProperty("git.commit.id")})")
+            println()
+            forEach { k, v -> println("$k=$v") }
+        }
+        exitProcess(0)
+    }
 }

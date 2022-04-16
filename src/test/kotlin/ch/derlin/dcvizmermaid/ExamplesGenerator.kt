@@ -14,8 +14,8 @@ class ExamplesGenerator {
 
     companion object {
         private val genDocs = System.getenv("GEN_DOCS") == "1"
-        private val outputPathImages = if (genDocs) "docs/assets/generated" else "target/generated"
-        private val outputPathText = if (genDocs) "docs/_includes/generated" else "target/generated"
+        private val outputPathImages = if (genDocs) "docs/assets/generated" else "build/generated"
+        private val outputPathText = if (genDocs) "docs/_includes/generated" else "build/generated"
 
         @BeforeAll
         @JvmStatic
