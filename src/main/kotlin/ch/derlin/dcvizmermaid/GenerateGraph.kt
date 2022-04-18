@@ -72,7 +72,7 @@ object GenerateGraph {
         }
 
     private fun addLinks(graph: MermaidGraph, dc: DockerCompose, withImplicitLinks: Boolean) =
-        (if (withImplicitLinks) dc.extendedLinks else dc.links).sortedBy { it.from }.forEach { link ->
+        (if (withImplicitLinks) dc.implicitLinks else dc.links).sortedBy { it.from }.forEach { link ->
             graph.addLink(link.from, link.to, text = link.alias)
         }
 

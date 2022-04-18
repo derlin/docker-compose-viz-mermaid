@@ -1,6 +1,7 @@
 package ch.derlin.dcvizmermaid.data
 
 import ch.derlin.dcvizmermaid.helpers.YAML
+import ch.derlin.dcvizmermaid.helpers.YamlUtils.asYaml
 import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 import mu.KotlinLogging
 
@@ -30,7 +31,7 @@ data class VolumeBinding(
 
         fun parse(service: String, volumeMapping: Any): VolumeBinding? = when (volumeMapping) {
             is String -> parseString(service, volumeMapping)
-            is Map<*, *> -> parseYaml(service, volumeMapping as YAML)
+            is Map<*, *> -> parseYaml(service, volumeMapping.asYaml())
             else -> null
         }
 

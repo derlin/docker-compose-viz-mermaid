@@ -1,6 +1,7 @@
 package ch.derlin.dcvizmermaid.data
 
 import ch.derlin.dcvizmermaid.helpers.YAML
+import ch.derlin.dcvizmermaid.helpers.YamlUtils.asYaml
 import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 
 data class PortBinding(val service: String, val internalPort: Int, val externalPort: Int = internalPort) {
@@ -12,7 +13,7 @@ data class PortBinding(val service: String, val internalPort: Int, val externalP
             when (declaration) {
                 is Int -> parseString(service, declaration.toString())
                 is String -> parseString(service, declaration)
-                is Map<*, *> -> parseYaml(service, declaration as YAML)
+                is Map<*, *> -> parseYaml(service, declaration.asYaml())
                 else -> null
             }
 

@@ -19,8 +19,8 @@ enum class MermaidOutput {
             MARKDOWN -> outputFile.print("```mermaid\n$text```")
             EDITOR -> println(previewer.getEditorLink(text, mermaidGraph.theme))
             PREVIEW -> println(previewer.getPreviewLink(text, mermaidGraph.theme))
-            PNG -> renderer.savePng(outputFile.orDefaultForExtension("png"), text, mermaidGraph.theme, bgColor)
-            SVG -> renderer.saveSvg(outputFile.orDefaultForExtension("svg"), text, mermaidGraph.theme, bgColor)
+            PNG -> println("Saved image to " + renderer.savePng(outputFile.orDefaultForExtension("png"), text, mermaidGraph.theme, bgColor))
+            SVG -> println("Saved image to " + renderer.saveSvg(outputFile.orDefaultForExtension("svg"), text, mermaidGraph.theme, bgColor))
         }
     }
 
