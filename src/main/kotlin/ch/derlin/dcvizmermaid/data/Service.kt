@@ -1,8 +1,10 @@
 package ch.derlin.dcvizmermaid.data
 
+import ch.derlin.dcvizmermaid.helpers.OrList
+import ch.derlin.dcvizmermaid.helpers.OrMap
 import ch.derlin.dcvizmermaid.helpers.YAML
-import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 import ch.derlin.dcvizmermaid.helpers.YamlUtils.getListByPath
+import ch.derlin.dcvizmermaid.helpers.YamlUtils.getListOrMapByPath
 
 class Service(val name: String, private val content: YAML) {
 
@@ -13,8 +15,11 @@ class Service(val name: String, private val content: YAML) {
             .map { Link.parse(name, it) }
 
     private fun linksFromDependsOn(): List<Link> =
-        content.getListByPath("depends_on", listOf<String>())
-            .map { Link.parse(name, it) }
+        when (val dependsOn = content.getListOrMapByPath("depends_on")) {
+            is OrList -> dependsOn.list
+            is OrMap -> dependsOn.map.keys
+            else -> listOf()
+        }.map { Link.parse(name, it) }
 
     fun volumes(): List<VolumeBinding> =
         listOf("volumes", "volumes_from")
@@ -27,9 +32,9 @@ class Service(val name: String, private val content: YAML) {
 
     fun envMatchingPorts(): List<MaybeReference> {
         // environments can be expressed either as list, or as map...
-        val environmentValues = when (val env = content.getByPath("environment")) {
-            is Map<*, *> -> env.values.mapNotNull { it as? String }
-            is List<*> -> env.mapNotNull { it as? String }.map { it.substringAfter("=") }
+        val environmentValues = when (val env = content.getListOrMapByPath("environment")) {
+            is OrList -> env.list.map { it.substringAfter("=") }
+            is OrMap -> env.map.values.mapNotNull { it as? String }
             else -> listOf()
         }
         return environmentValues

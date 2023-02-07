@@ -5,6 +5,10 @@ import kotlin.reflect.KClass
 
 typealias YAML = Map<String, Any?>
 
+sealed class ListOrMap
+data class OrList(val list: List<String>) : ListOrMap()
+data class OrMap(val map: YAML = mapOf()) : ListOrMap()
+
 @Suppress("UNCHECKED_CAST")
 object YamlUtils {
 
@@ -16,6 +20,12 @@ object YamlUtils {
         require(value is List<*> && value.all { it is T }) { "Unexpected type for list $value" }
         value as List<T>
     } ?: default
+
+    fun YAML.getListOrMapByPath(path: String): ListOrMap? = when (val value = this.getByPath(path)) {
+        is List<*> -> OrList(value as List<String>)
+        is Map<*, *> -> OrMap(value as YAML)
+        else -> null
+    }
 
     fun <T : Any> YAML.getByPath(path: String, type: KClass<T>): T? = getByPath(path)?.let {
         require(type.isInstance(it)) { "Wrong type for $it" }
@@ -32,5 +42,5 @@ object YamlUtils {
     }
 
     // useful to avoid the "uncheck cast" warnings in the calling code
-    fun Any.asYaml(): YAML = this as YAML
+    fun Any.asYaml(): YAML = (this as? YAML) ?: mapOf()
 }

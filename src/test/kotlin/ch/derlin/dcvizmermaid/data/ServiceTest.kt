@@ -3,6 +3,7 @@ package ch.derlin.dcvizmermaid.data
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
 class ServiceTest {
@@ -16,6 +17,36 @@ class ServiceTest {
                 "redis" to link("redis")
             ).forEach { (link, expected) ->
                 assertThat(link).transform { parseLink(it) }.isEqualTo(expected)
+            }
+        }
+    }
+
+    @Test
+    fun `parse depends_on as list or map form`() {
+
+        assertAll {
+            listOf(
+                """
+                depends_on:
+                - foo
+                - bar
+                """,
+                """
+                depends_on:
+                  foo:
+                  bar:
+                """,
+                """
+                depends_on:
+                  foo:
+                    condition: service_healthy
+                  bar:
+                    condition: service_completed_successfully
+                """
+            ).forEach { yaml ->
+                assertThat(yaml)
+                    .transform { Service("service", YamlUtils.load(yaml)).links().map { it.to } }
+                    .isEqualTo(listOf("foo", "bar"))
             }
         }
     }
