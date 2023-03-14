@@ -41,7 +41,11 @@ object LocalRenderer : Renderer {
             page.setContent(HtmlPageRenderingMermaid(mermaidCode))
             // page.locator("svg").waitFor()
             bgColor?.let {
-                page.evalOnSelector("svg", "elt => elt.style.backgroundColor = '$bgColor'")
+                // add background to SVG export.
+                // also add background to the body to avoid white borders on screenshots (PNG)
+                listOf("svg", "body").forEach { selector ->
+                    page.evalOnSelector(selector, "elt => elt.style.backgroundColor = '$bgColor'")
+                }
             }
             block(page)
         }
