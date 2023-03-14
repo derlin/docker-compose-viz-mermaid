@@ -28,11 +28,3 @@ object NetworksClazz : CssClazz {
         GraphTheme.DARK -> "fill:#3f51b5,stroke:#81B1DB"
     }
 }
-
-object ScpClazz : CssClazz { // TODO remove scp support
-    override val name: String = "scp"
-    override fun styles(theme: GraphTheme): String = when (theme) {
-        GraphTheme.DEFAULT -> "fill:#fbfff7,stroke:#8bc34a"
-        GraphTheme.DARK -> "fill:#3f51b5"
-    }
-}

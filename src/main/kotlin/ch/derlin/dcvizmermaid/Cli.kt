@@ -79,8 +79,6 @@ class Cli : CliktCommand(
         option("--theme", "-t", help = "Graph theme").enum<GraphTheme>(ignoreCase = true).default(GraphTheme.DEFAULT)
         val withClasses: Boolean by
         option("--classes", "-c", help = classHelp).flag("--no-classes", "-C", default = true)
-        val withScpClasses: Boolean by
-        option("--scp", "-s", hidden = true).flag(default = false)
     }
 
     private val output by OutputOptions()
@@ -101,7 +99,6 @@ class Cli : CliktCommand(
             withNetworks = processing.withNetworks,
             withImplicitLinks = processing.withImplicitLinks,
             withClasses = output.withClasses,
-            withScpClasses = output.withScpClasses
         )
 
         output.type.process(mermaidGraph, output.file, withBackground = output.forceBackground)

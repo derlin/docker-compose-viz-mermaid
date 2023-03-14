@@ -10,7 +10,6 @@ import ch.derlin.dcvizmermaid.graph.GraphTheme
 import ch.derlin.dcvizmermaid.graph.MermaidGraph
 import ch.derlin.dcvizmermaid.graph.NetworksClazz
 import ch.derlin.dcvizmermaid.graph.PortsClazz
-import ch.derlin.dcvizmermaid.graph.ScpClazz
 import ch.derlin.dcvizmermaid.graph.Shape.CIRCLE
 import ch.derlin.dcvizmermaid.graph.Shape.CYLINDER
 import ch.derlin.dcvizmermaid.graph.Shape.PARALLELOGRAM
@@ -35,7 +34,6 @@ object GenerateGraph {
         withNetworks: Boolean = false,
         withImplicitLinks: Boolean = false,
         withClasses: Boolean = false,
-        withScpClasses: Boolean = false,
     ): MermaidGraph {
 
         val dc = DockerCompose(YamlUtils.load(dockerComposeContent))
@@ -54,8 +52,6 @@ object GenerateGraph {
                 graph.addClass(PortsClazz, portIds)
             if (netIds.isNotEmpty())
                 graph.addClass(NetworksClazz, netIds)
-            if (withScpClasses)
-                graph.addClass(ScpClazz, "service,web,bff,db".split(","))
         }
 
         return graph
