@@ -104,6 +104,16 @@ container).
 
 If classes are enabled, the color of the port will be yellowish (light theme) or purple (dark theme).
 
+### Network bindings
+
+Network bindings are displayed as parallelograms and are linked to containers using dotted connectors.
+Any alias(es) or ip(s) will be shown as text on the connector, separated by commas.
+Only network bindings are supported, that is `networks` keys defined at the service level.
+
+{% include graph.md image='networks-default.svg' %}
+
+If classes are enabled, the color of the network will be light green (light theme) or blue (dark theme).
+
 ### DBs
 
 The tool tries to automatically detect database services and render them as cylindrical shapes.

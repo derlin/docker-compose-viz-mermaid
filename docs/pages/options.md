@@ -29,10 +29,17 @@ use `-f editor` and manually export the svg by clicking on the *download svg* bu
 
 ## Theming
 
-
-| light | dark |
-| ----- | ---- |
-| {% include graph.md image='simple-default.svg' %} | {% include graph.md image='simple-dark.svg' %} |
+[//]: # (Using HTML directly, as with Markdown extra rows and &nbsp; are added, messing everything up)
+<table>
+  <tr>
+    <th>light</th>
+    <th>dark</th>
+  </tr>
+  <tr>
+    <td align="center">{%- include graph.md image='simple-default.svg' -%}</td>
+    <td align="center">{%- include graph.md image='simple-dark.svg' -%}</td>
+  </tr>
+</table>
 
 The diagrams can be generated using either `dark` or `default` (e.g. light) theme.
 Those themes are controlled by using a *shebang* of the following format at the start of the graph:

@@ -32,6 +32,8 @@ class DockerCompose(private val content: YAML) {
         processVolumes(namedVolumes(), services.flatMap { it.volumes() }).toSet()
     }
 
+    val networkBindings: Map<String, List<NetworkBinding>> = services.flatMap { it.networks() }.groupBy { it.network }
+
     private fun namedVolumes(): Set<String> = content["volumes"]?.asYaml()?.keys ?: setOf()
 
     companion object {

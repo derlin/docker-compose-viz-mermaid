@@ -1,0 +1,18 @@
+services:
+
+  app:
+    image: wordpress:latest
+    depends_on: [db]
+    networks:
+      net-app:
+        ipv6_address: 2001:db8::1:0:0:51
+
+  db:
+    image: postgresql:latest
+    networks:
+      net-db:
+        aliases:
+          - database
+          - postgres
+      net-app:
+        ipv4_address: 10.10.0.10

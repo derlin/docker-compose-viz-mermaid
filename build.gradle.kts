@@ -103,7 +103,7 @@ tasks.test {
         exceptionFormat = TestExceptionFormat.FULL
     }
     filter {
-        // use ./gradlew test -Pgenerate to generate also the docs
+        // use ./gradlew test -Pdocs to generate also the docs
         if (project.hasProperty("docs")) {
             environment(mapOf("GEN_DOCS" to "1"))
             // excludeTestsMatching("*Generator*")

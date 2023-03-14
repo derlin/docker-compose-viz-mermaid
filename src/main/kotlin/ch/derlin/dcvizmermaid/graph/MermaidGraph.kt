@@ -9,13 +9,12 @@ class MermaidGraph(val direction: GraphOrientation = GraphOrientation.TB, val th
     private val links: MutableList<Link> = mutableListOf()
     private val classes: MutableList<String> = mutableListOf()
 
-    fun addNode(name: Any, id: String = name.toString(), shape: Shape? = null) {
-        with(id.toValidId()) {
+    fun addNode(name: Any, id: String = name.toString(), shape: Shape? = null): String =
+        id.toValidId().apply {
             if (this !in nodes) {
                 nodes[this] = Node(this, name.toString(), shape ?: NONE)
             }
         }
-    }
 
     fun addLink(from: Any, to: Any, connector: CONNECTOR? = null, text: Any? = null) {
         links += Link(from.toValidId(), to.toValidId(), connector ?: ARROW, text)

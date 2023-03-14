@@ -45,4 +45,5 @@ services:
     depends_on:
       - reviews
       - ratings
-      - details{% endraw %}
+      - details
+{% endraw %}

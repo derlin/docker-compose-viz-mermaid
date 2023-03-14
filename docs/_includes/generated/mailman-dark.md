@@ -13,9 +13,14 @@ flowchart TB
   P1((8024)) -.-> mailmancore
   P2((8000)) -.-> mailmanweb
   P3((8080)) -.-> mailmanweb
+  mailmancore -.- mailman[/mailman/]
+  mailmanweb -.- mailman
+  database -.- mailman
 
   classDef volumes fill:#0f544e,stroke:#23968b
   class Voptmailmancore,Voptmailmanweb,Voptmailmandatabase volumes
   classDef ports fill:#5a5757,stroke:#b6c2ff
   class P0,P1,P2,P3 ports
+  classDef nets fill:#3f51b5,stroke:#81B1DB
+  class mailman nets
 ```

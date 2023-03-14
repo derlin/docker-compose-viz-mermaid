@@ -31,7 +31,7 @@ jobs:
           key: ${{ runner.os }}-playwright
 
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew check
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2

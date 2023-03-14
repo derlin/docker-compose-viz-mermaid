@@ -12,10 +12,11 @@ Usage: cli [OPTIONS] [docker-compose-path]
   You can further customize the result using the options below.
 
 Processing options:
-  -p, --ports / -P, --no-ports      Extract and display ports
-  -v, --volumes / -V, --no-volumes  Extract and display volumes
-  -l, --ilinks / -L, --no-ilinks    Try to find implicit links between services by looking at the
-                                    environment variables
+  -p, --ports / -P, --no-ports        Extract and display ports
+  -v, --volumes / -V, --no-volumes    Extract and display volumes
+  -n, --networks / -N, --no-networks  Extract and display networks
+  -l, --ilinks / -L, --no-ilinks      Try to find implicit links between services by looking at the
+                                      environment variables
 
 Output options:
   -f, --format [TEXT|MARKDOWN|EDITOR|PREVIEW|PNG|SVG]

@@ -53,7 +53,7 @@ class ExamplesGenerator {
         if (genDocs) File("$outputPathText/${file.name}").writeRaw(file.readText())
 
         val text = file.readText()
-        val options = text.lines().first().substringAfter("#").takeIf { it.trim().all { c -> c in "PVC" } } ?: ""
+        val options = text.lines().first().substringAfter("#").takeIf { it.trim().all { c -> c in "PVNC" } } ?: ""
 
         GraphTheme.values().forEach { theme ->
             val basename = "${file.nameWithoutExtension}-${theme.name.lowercase()}"
@@ -62,6 +62,7 @@ class ExamplesGenerator {
                 theme = theme,
                 withPorts = 'P' !in options,
                 withVolumes = 'V' !in options,
+                withNetworks = 'N' !in options,
                 withClasses = 'C' !in options,
             )
 
@@ -82,7 +83,7 @@ class ExamplesGenerator {
             val basename = "${file.nameWithoutExtension}-${theme.name.lowercase()}"
             val graph = GenerateGraph(
                 text, theme = theme,
-                withPorts = true, withVolumes = true, withClasses = true, withImplicitLinks = true
+                withPorts = true, withVolumes = true, withClasses = true, withNetworks = true, withImplicitLinks = true
             )
 
             MermaidOutput.SVG.process(graph, Path.of("$outputPathImages/$basename.svg"), withBackground = true)

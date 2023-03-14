@@ -56,6 +56,8 @@ class Cli : CliktCommand(
         option("--ports", "-p", help = "Extract and display ports").flag("--no-ports", "-P", default = false)
         val withVolumes: Boolean by
         option("--volumes", "-v", help = "Extract and display volumes").flag("--no-volumes", "-V", default = true)
+        val withNetworks: Boolean by
+        option("--networks", "-n", help = "Extract and display networks").flag("--no-networks", "-N", default = true)
         val withImplicitLinks: Boolean by
         option("--ilinks", "-l", help = linksHelp).flag("--no-ilinks", "-L", default = true)
     }
@@ -96,6 +98,7 @@ class Cli : CliktCommand(
             theme = output.theme,
             withPorts = processing.withPorts,
             withVolumes = processing.withVolumes,
+            withNetworks = processing.withNetworks,
             withImplicitLinks = processing.withImplicitLinks,
             withClasses = output.withClasses,
             withScpClasses = output.withScpClasses

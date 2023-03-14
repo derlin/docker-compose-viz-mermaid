@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Run ./jekyll.sh and wait a bit. The site will be available shortly at http://localhost:4000/docker-compose-viz-mermaid//
+
 mkdir -p ".bundles_cache"
 docker run --rm --name dvcm \
   -v "$PWD:/srv/jekyll" \

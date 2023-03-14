@@ -62,4 +62,5 @@ networks:
       driver: default
       config:
         -
-          subnet: 172.19.199.0/24{% endraw %}
+          subnet: 172.19.199.0/24
+{% endraw %}
