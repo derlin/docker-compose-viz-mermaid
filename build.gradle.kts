@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.7.20"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
     id("io.gitlab.arturbosch.detekt").version("1.20.0-RC2")
@@ -23,11 +23,11 @@ repositories {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:1.30")
+    implementation("org.yaml:snakeyaml:1.33")
     implementation("com.github.ajalt:clikt:2.8.0")
-    implementation("com.microsoft.playwright:playwright:1.20.1")
+    implementation("com.microsoft.playwright:playwright:1.31.0")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
-    implementation("org.slf4j:slf4j-simple:1.7.36")
+    implementation("org.slf4j:slf4j-simple:2.0.5")
 
     testImplementation(kotlin("test"))
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
@@ -38,6 +38,7 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     val noPlaywright = project.hasProperty("noPlaywright")
     if (noPlaywright) {
         archiveBaseName.set("${archiveBaseName.get()}_no_local")
@@ -61,13 +62,13 @@ abstract class ExecutableJarTask : DefaultTask() {
     // This custom task will prepend the content of a bash launch script
     // at the beginning of a jar, and make it executable (chmod +x)
 
-    @org.gradle.api.tasks.InputFiles
+    @InputFiles
     var originalJars: ConfigurableFileTree = project.fileTree("${project.buildDir}/libs") { include("*.jar") }
 
-    @org.gradle.api.tasks.OutputDirectory
+    @OutputDirectory
     var outputDir: File = project.buildDir.resolve("bin") // where to write the modified jar(s)
 
-    @org.gradle.api.tasks.InputFile
+    @InputFile
     var launchScript: File = project.rootDir.resolve("launch.sh") // script to prepend
 
     @TaskAction
