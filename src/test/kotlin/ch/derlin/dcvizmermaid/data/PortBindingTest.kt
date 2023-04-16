@@ -45,6 +45,12 @@ class PortBindingTest {
                 """.trimIndent() to port(80, 8080),
                 """
                 target: 80
+                published: "8080"
+                protocol: tcp
+                mode: host
+                """.trimIndent() to port(80, 8080),
+                """
+                target: 80
                 protocol: tcp
                 mode: host
                 """.trimIndent() to null

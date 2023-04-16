@@ -28,7 +28,11 @@ data class PortBinding(val service: String, val internalPort: Int, val externalP
 
         private fun parseYaml(service: String, declaration: YAML): PortBinding? =
             if (declaration.containsKey("published")) {
-                declaration.getByPath("published", Int::class)?.let { external ->
+                when (val published = declaration.getByPath("published")) {
+                    is String -> published.toInt()
+                    is Int -> published
+                    else -> null
+                }?.let { external ->
                     return PortBinding(service, internalPort = declaration.getByPath("target", Int::class) ?: 0, externalPort = external)
                 }
             } else null
