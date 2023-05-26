@@ -9,8 +9,7 @@ import java.util.zip.Deflater
 object KrokiRenderer : Renderer {
 
     override fun savePng(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String =
-        throw NotImplementedError("kroki.io doesn't support PNG rendering yet")
-    // "${Config.krokiUrl}/mermaid/png/${encode(graph)}".downloadTo(outputFile)
+        "${Config.krokiUrl}/mermaid/png/${encode(graph)}".downloadTo(outputFile)
 
     override fun saveSvg(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String =
         "${Config.krokiUrl}/mermaid/svg/${encode(graph)}".downloadTo(outputFile)
