@@ -27,7 +27,7 @@ dependencies {
     implementation("com.github.ajalt:clikt:2.8.0")
     implementation("com.microsoft.playwright:playwright:1.31.0")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("org.slf4j:slf4j-simple:2.0.5")
+    implementation("ch.qos.logback:logback-classic:1.4.6")
 
     testImplementation(kotlin("test"))
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")

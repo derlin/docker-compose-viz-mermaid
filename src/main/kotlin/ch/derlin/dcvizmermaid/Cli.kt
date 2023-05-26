@@ -3,6 +3,7 @@ package ch.derlin.dcvizmermaid
 import ch.derlin.dcvizmermaid.graph.GraphOrientation
 import ch.derlin.dcvizmermaid.graph.GraphTheme
 import ch.derlin.dcvizmermaid.graph.MermaidOutput
+import ch.qos.logback.classic.Level
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.context
@@ -17,6 +18,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.path
+import mu.KotlinLogging
 import java.io.File
 import java.nio.file.Path
 import java.util.Properties
@@ -48,6 +50,9 @@ class Cli : CliktCommand(
 
     private val showVersionAndExit: Boolean by
     option("--version", help = "Show the version and exit").flag(default = false)
+
+    private val debug: Boolean by
+    option("--debug", help = "Be verbose").flag(default = false)
 
     class ProcessingOptions : OptionGroup(name = "Processing options") {
         private val linksHelp = "Try to find implicit links between services by looking at the environment variables"
@@ -89,6 +94,10 @@ class Cli : CliktCommand(
 
     override fun run() {
         if (showVersionAndExit) showVersionAndExit()
+        if (debug)
+            (KotlinLogging.logger("ch.derlin")
+                .underlyingLogger as ch.qos.logback.classic.Logger)
+                .level = Level.DEBUG
 
         val mermaidGraph = GenerateGraph(
             (dockerComposeInput ?: findDefaultFile()).readText(),
