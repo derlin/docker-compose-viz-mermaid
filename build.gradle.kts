@@ -23,10 +23,10 @@ repositories {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:1.33")
+    implementation("org.yaml:snakeyaml:2.0")
     implementation("com.github.ajalt:clikt:2.8.0")
     implementation("com.microsoft.playwright:playwright:1.31.0")
-    implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.slf4j:slf4j-simple:2.0.5")
 
     testImplementation(kotlin("test"))

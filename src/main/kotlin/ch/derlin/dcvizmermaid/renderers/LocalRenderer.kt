@@ -14,6 +14,7 @@ object LocalRenderer : Renderer {
     private const val VIEWPORT_SCALE_FACTOR = 1.2 // improve a bit the quality
 
     override fun savePng(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String {
+        // TODO actually generating JPEG (JFIF)
         renderCodeOnPage(graph, theme.bgColor()) { page ->
             page.querySelector("svg")
                 .screenshot(ElementHandle.ScreenshotOptions().setPath(outputFile.toPath()))

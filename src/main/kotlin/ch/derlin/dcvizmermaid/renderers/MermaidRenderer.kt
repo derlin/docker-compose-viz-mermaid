@@ -14,6 +14,7 @@ object MermaidRenderer : Renderer, Previewer {
         "${Config.mermaidLiveEditorUrl}/view/#${toMermaidBase64(graph, theme)}"
 
     override fun savePng(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?) =
+        // TODO this is actually returning a JPEG!
         "${Config.mermaidInkUrl}/img/${toMermaidBase64(graph, theme)}".appendBgColor(bgColor).downloadTo(outputFile)
 
     override fun saveSvg(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?) =
@@ -26,8 +27,10 @@ object MermaidRenderer : Renderer, Previewer {
 
     private fun toMermaidBase64(graph: String, theme: GraphTheme = GraphTheme.DEFAULT): String {
         val escapedCode = graph.replace("\"", "\\\"").replace("\n", "\\n")
-        val data = "{\"code\":\"$escapedCode\"," +
-            "\"mermaid\": {\"theme\": \"${theme.name.lowercase()}\"},\"updateEditor\":true,\"autoSync\":true,\"updateDiagram\":true}"
+        val data = """{
+            |"code": "$escapedCode",
+            |"mermaid": {"theme": "${theme.name.lowercase()}"},"updateEditor":true,"autoSync":true,"updateDiagram":true
+            |}""".trimMargin()
         return Base64.getEncoder().encodeToString(data.toByteArray()).trimEnd('=')
     }
 }
