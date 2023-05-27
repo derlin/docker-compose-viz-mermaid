@@ -33,6 +33,8 @@ Given a JRE (java 8+) is installed on your machine, run:
 java -jar docker-compose-viz-mermaid-*.jar
 ```
 
+(Note: if you want to use the `mermaid-cli` renderer, you will need nodejs and npm installed on your machine.)
+
 ## Usage
 
 The best way to understand how it works is to run the tool with the `-h` option:
@@ -137,7 +139,9 @@ To do so, it launches and instruments a headless Chromium using <https://playwri
 The latter will download Chromium the first time it is launched, so be patient and don't worry:
 the next execution will be dazzlingly fast.
 
-There is also an option to use well-known online tools to render images, namely <https://mermaid.ink/> or <https://kroki.io>.
+Another option is to use well-known online tools to render images, namely <https://mermaid.ink/> or <https://kroki.io>.
+You can finally opt for the official mermaid-cli tool, but this requires you have nodejs and npm available on your system.
+The installation of `mmdc` (mermaid-cli) will be handled by docker-compose-viz-mermaid on first use.
 Have a look at [environment variables]({{ site.baseurl }}{% link pages/options.md %}#environment-variables) for details.
 
 ## Data privacy

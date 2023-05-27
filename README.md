@@ -15,8 +15,9 @@ Inspired from https://github.com/pmsipilot/docker-compose-viz.
 ## Examples
 
 
-More examples are located in `src/test/resources/examples/full` 
+More examples are located in `src/test/resources/examples/full`
 and the generated artifacts are located under `docs/assets/generated` for images and `docs/_includes/generated` for text.
+
 ## Roadmap
 
 **TODO**

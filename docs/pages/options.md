@@ -10,14 +10,14 @@ nav_order: 2
 The output type is controlled via the `-f` or `--format` options.
 The output can be either the mermaid code, a link to online mermaid tools, or the rendered graph as image:
 
-| type | description |
-| ---- | ----------- |
-| `text` | generates the mermaid diagram, that can be copy-pasted in the mermaid live editor, or added in a readme. |
-| `markdown` | same as text, but the diagram is wrapped inside a markdown code block |
-| `editor` | generates the link to the mermaid live editor, just click on it to get the live editor populated with the diagram (good if you want a base and then change stuff) |
-| `preview` | same as `editor`, but the link points to a preview page |
-| `png` | generates the diagram as png, and saves it to a file (`image.png` by default) |
-| `svg` | generates the diagram as svg, and saves it to a file (`image.svg` by default) |
+| type       | description                                                                                                                                                       |
+|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `text`     | generates the mermaid diagram, that can be copy-pasted in the mermaid live editor, or added in a readme.                                                          |
+| `markdown` | same as text, but the diagram is wrapped inside a markdown code block                                                                                             |
+| `editor`   | generates the link to the mermaid live editor, just click on it to get the live editor populated with the diagram (good if you want a base and then change stuff) |
+| `preview`  | same as `editor`, but the link points to a preview page                                                                                                           |
+| `png`      | generates the diagram as png, and saves it to a file (`image.png` by default)                                                                                     |
+| `svg`      | generates the diagram as svg, and saves it to a file (`image.svg` by default)                                                                                     |
 
 Both `png` and `svg` use a local Chromium instance by default, while `editor` and `preview` will output links to
 online opensource tools. See [environment variables]({{ site.baseurl }}{% link pages/options.md %}#environment-variables) to change
@@ -43,6 +43,7 @@ use `-f editor` and manually export the svg by clicking on the *download svg* bu
 
 The diagrams can be generated using either `dark` or `default` (e.g. light) theme.
 Those themes are controlled by using a *shebang* of the following format at the start of the graph:
+
 ```text
 %%{init: {'theme': 'dark'}}%%
 ```
@@ -73,6 +74,7 @@ so that ports and volumes have a distinct color. Note that the classes definitio
 All examples on this site use the classes option.
 
 If you want different colors and styles, generate the diagram and open it in the mermaid live editor. The classes have the format:
+
 ```text
 classDef <classname> <styles, e.g. fill:red>
 class <id[,id]> <classname>
@@ -89,16 +91,25 @@ Have a look at the [usage]({{ site.baseurl }}{% link pages/index.md %}#usage) fo
 
 Further configuration is available through environment variables:
 
-| Environment variable      | Used For              | Default value |
-| :-------------------------| :-------------------- | :------------ |
-| `MERMAID_RENDERER`        | rendering             | empty for local renderer (other supported values are `mermaid.ink`, `kroki.io`)  |
-| `MERMAID_LIVE_EDITOR_URL` | preview               | <https://mermaid-js.github.io/mermaid-live-editor> |
-| `MERMAID_INK_URL`         | preview and rendering | <https://mermaid.ink> |
-| `KROKI_URL`               | preview and rendering | <https://kroki.io> |
+| Environment variable      | Used For              | Default value                                                                                  |
+|:--------------------------|:----------------------|:-----------------------------------------------------------------------------------------------|
+| `MERMAID_RENDERER`        | rendering             | empty for local renderer (other supported values are `mermaid.ink`, `kroki.io`, `mermaid-cli`) |
+| `MERMAID_LIVE_EDITOR_URL` | preview               | <https://mermaid-js.github.io/mermaid-live-editor>                                             |
+| `MERMAID_INK_URL`         | preview and rendering | <https://mermaid.ink>                                                                          |
+| `KROKI_URL`               | preview and rendering | <https://kroki.io>                                                                             |
+| `MMDC_EXECUTABLE_PATH`    | installation          | `$HOME/.mmdc`                                                                                  |
+| `MMDC_INSTALL_PATH`       | rendering             | `$HOME/.mmdc/node_modules/.bin/mmdc`                                                           |
 
 By default, the rendering of images (SVG, PNG) is done locally using a headless Chromium.
-It is possible to change this behaviour and select one of <https://mermaid.ink> or <https://kroki.io>
-(doing so will make rending impossible without a network connection).
+It is possible to change this behaviour by setting the `MERMAID_RENDERER` environment variable:
 
-All URLs to third-party tools are configurable, which is useful in case you have e.g.
+* `mermaid.ink`: uses the online service <https://mermaid.ink>,
+* `kroki.io`: uses the online service <https://kroki.io>,
+* `mermaid-cli`: uses the npm package `@mermaid-js/mermaid-cli` (<https://github.com/mermaid-js/mermaid-cli>).
+  **IMPORTANT**: this requires nodejs >= 19 and npm to be installed on your machine.
+  If `MMDC_EXECUTABLE_PATH` doesn't exist, mermaid-cli will be installed upon first use
+
+URLs to kroki and mermaid.ink are configurable, which is useful in case you have e.g.
 Mermaid Live Editor // Mermaid Ink running inside your organisation.
+
+The mermaid-cli tool is to be preferred if you have nodejs on your system.
