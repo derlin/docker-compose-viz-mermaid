@@ -93,7 +93,9 @@ tasks.register<ExecutableJarTask>("exec-jar") {
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags("flaky")
+    }
     outputs.upToDateWhen { false } // always run tests !
     testLogging {
         // get actual information about failed tests in the console

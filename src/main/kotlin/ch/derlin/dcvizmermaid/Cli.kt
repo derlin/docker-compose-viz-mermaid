@@ -94,10 +94,10 @@ class Cli : CliktCommand(
 
     override fun run() {
         if (showVersionAndExit) showVersionAndExit()
-        if (debug)
-            (KotlinLogging.logger("ch.derlin")
-                .underlyingLogger as ch.qos.logback.classic.Logger)
+        if (debug) {
+            (KotlinLogging.logger("ch.derlin").underlyingLogger as ch.qos.logback.classic.Logger)
                 .level = Level.DEBUG
+        }
 
         val mermaidGraph = GenerateGraph(
             (dockerComposeInput ?: findDefaultFile()).readText(),

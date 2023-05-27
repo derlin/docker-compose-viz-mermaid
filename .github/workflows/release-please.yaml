@@ -44,3 +44,22 @@ jobs:
           tag_name: ${{ needs.release-please.outputs.tag }}
           files: |
             target/*.jar
+
+      - name: Upload Jar artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: jars
+          # Use a wildcard to keep the structure
+          path: ./build*/libs/*.jar
+          retention-days: 30
+
+  publish-docker-image:
+    needs: [ publish, release-please ]
+    if: ${{ needs.release-please.outputs.release_created }}
+    uses: ./.github/workflows/reusable-docker.yaml
+    secrets: inherit # pass all secrets to the called workflow
+    with:
+      artifact: jars
+      publish: true
+      publish_dockerhub: true
+      version: ${{ needs.release-please.outputs.tag }}

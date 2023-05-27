@@ -7,11 +7,13 @@ import ch.derlin.dcvizmermaid.graph.GraphTheme
 import dummyGraph
 import isPng
 import isSvg
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import size
 import tmpFileWithExtension
 
+@Tag("flaky") // Server returned HTTP response code: 504 for URL
 class KrokiRendererTest {
 
     @Test

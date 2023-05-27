@@ -1,4 +1,5 @@
 # see https://github.com/mermaid-js/mermaid-cli/blob/master/Dockerfile
+# !!! doesn't support arm64 for now
 FROM minlag/mermaid-cli:10.1.0
 
 ENV MERMAID_RENDERER=mermaid-cli \

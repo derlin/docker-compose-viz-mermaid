@@ -34,11 +34,35 @@ jobs:
         run: ./gradlew check
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: build/reports/tests/test
           retention-days: 30
+
+      - name: Create JAR
+        run: ./gradlew jar -PnoPlaywright
+
+      - name: Upload Jars
+        uses: actions/upload-artifact@v3
+        with:
+          name: jars
+          # Use a wildcard to keep the structure
+          path: ./build*/libs/*.jar
+          retention-days: 30
+
+  docker:
+    uses: ./.github/workflows/reusable-docker.yaml
+    needs: [ test ]
+    secrets: inherit # pass all secrets to the called workflow
+    with:
+      artifact: jars
+      # publish only on push to main or develop (releases are handled in another workflow)
+      publish: >-
+        ${{ github.event_name == 'push' &&
+          (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') }}
+      publish_dockerhub: >-
+        ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
   deploy-nightly:
     #
@@ -46,7 +70,7 @@ jobs:
     # build the packages and update nightly release
     #
     runs-on: ubuntu-latest
-    needs: test
+    needs: [ test, docker ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:

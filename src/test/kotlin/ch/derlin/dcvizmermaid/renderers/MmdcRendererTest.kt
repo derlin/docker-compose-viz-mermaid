@@ -21,7 +21,7 @@ import java.nio.file.Files
 class MmdcRendererTest {
 
     @Test
-    fun `install mmdc`() {
+    fun `install mmdc and generate images`() {
         val tempInstallDir = Files.createTempDirectory("tmpDirPrefix").toFile()
         tempInstallDir.deleteOnExit()
         System.setProperty("MMDC_INSTALL_PATH", tempInstallDir.absolutePath)
@@ -37,6 +37,19 @@ class MmdcRendererTest {
         }
 
         assertThat(out.toString()).contains("mermaid-cli installed")
+
+        // do it here, so we know we have the right executables
+        val graph = dummyGraph()
+        assertAll {
+            listOf(".png", ".svg").forEach { extension ->
+                val outFile = tmpFileWithExtension(extension)
+                val pngPath = assertDoesNotThrow {
+                    // we use the same function here, since they both do the same
+                    MmdcRenderer.savePng(outputFile = outFile, graph = graph, theme = GraphTheme.DARK, bgColor = null)
+                }
+                assertThat(File(pngPath)).exists()
+            }
+        }
     }
 
     @Test
@@ -54,22 +67,6 @@ class MmdcRendererTest {
             }
             assertThat(ex.message).isNotNull().contains("Aborting")
             assertThat(tempInstallDir.listFiles()).isNotNull().isEmpty()
-        }
-    }
-
-    @Test
-    fun `generate images`() {
-        val graph = dummyGraph()
-
-        assertAll {
-            listOf(".png", ".svg").forEach { extension ->
-                val outFile = tmpFileWithExtension(extension)
-                val pngPath = assertDoesNotThrow {
-                    // we use the same function here, since they both do the same
-                    MmdcRenderer.savePng(outputFile = outFile, graph = graph, theme = GraphTheme.DARK, bgColor = null)
-                }
-                assertThat(File(pngPath)).exists()
-            }
         }
     }
 }
