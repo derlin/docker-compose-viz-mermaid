@@ -34,7 +34,7 @@ jobs:
 
       - name: Build release jars
         run: |
-          ./gradlew -Dsnapshot=false exec-jar
+          ./gradlew -Dsnapshot=false jar
           ./gradlew -Dsnapshot=false jar -PnoPlaywright
           ./gradlew exec-jar
 
@@ -43,7 +43,7 @@ jobs:
         with:
           tag_name: ${{ needs.release-please.outputs.tag }}
           files: |
-            target/*.jar
+            build/bin/*.jar
 
       - name: Upload Jar artifacts
         uses: actions/upload-artifact@v3
