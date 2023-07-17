@@ -18,7 +18,7 @@ class LocalRendererTest {
     fun `generate svg`() {
         val outFile = tmpFileWithExtension(".svg")
         assertDoesNotThrow {
-            MermaidRenderer.saveSvg(outFile, graph = dummyGraph(), theme = GraphTheme.DEFAULT, bgColor = null)
+            LocalRenderer.saveSvg(outFile, graph = dummyGraph(), theme = GraphTheme.DEFAULT, bgColor = null)
         }
         assertThat(outFile.size()).isGreaterThan(0L)
         assertThat(outFile.isSvg()).isTrue()
@@ -28,7 +28,7 @@ class LocalRendererTest {
     fun `generate png (actually jpeg)`() {
         val outFile = tmpFileWithExtension(".jpeg")
         assertDoesNotThrow {
-            MermaidRenderer.savePng(outFile, graph = dummyGraph(), theme = GraphTheme.DEFAULT, bgColor = null)
+            LocalRenderer.savePng(outFile, graph = dummyGraph(), theme = GraphTheme.DEFAULT, bgColor = null)
         }
         assertThat(outFile.size()).isGreaterThan(0L)
         assertThat(outFile.isJpeg()).isTrue()

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 [[ -n "$DEBUG" ]] && set -x
 
 # Find Java (cf: spring-boot launcher)

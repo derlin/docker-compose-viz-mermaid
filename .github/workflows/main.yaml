@@ -31,7 +31,7 @@ jobs:
           key: ${{ runner.os }}-playwright
 
       - name: Run tests
-        run: ./gradlew check
+        run: ./gradlew check -PexcludeTags=flaky
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v3

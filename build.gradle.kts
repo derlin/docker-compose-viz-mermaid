@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm") version "1.7.20"
     id("com.gorylenko.gradle-git-properties") version "2.4.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
-    id("io.gitlab.arturbosch.detekt").version("1.20.0-RC2")
+    id("io.gitlab.arturbosch.detekt").version("1.22.0")
 }
 
 group = "ch.derlin"
@@ -94,7 +94,12 @@ tasks.register<ExecutableJarTask>("exec-jar") {
 
 tasks.test {
     useJUnitPlatform {
-        excludeTags("flaky")
+        if (project.hasProperty("excludeTags")) {
+            excludeTags(project.properties["excludeTags"] as String)
+        }
+        if (project.hasProperty("includeTags")) {
+            excludeTags(project.properties["includeTags"] as String)
+        }
     }
     outputs.upToDateWhen { false } // always run tests !
     testLogging {

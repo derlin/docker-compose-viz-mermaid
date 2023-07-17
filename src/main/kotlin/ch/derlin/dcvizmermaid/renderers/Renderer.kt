@@ -21,7 +21,13 @@ interface Renderer {
 
     fun String.downloadTo(outputFile: File): String {
         logger.debug { "Fetching from URL: $this" }
-        URL(this).openStream().transferTo(outputFile.outputStream())
+        with(URL(this).openConnection()) {
+            setRequestProperty(
+                "User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+            )
+            getInputStream().transferTo(outputFile.outputStream())
+        }
         println("Saved image to $outputFile")
         return outputFile.absolutePath
     }

@@ -9,6 +9,7 @@ import ch.derlin.dcvizmermaid.graph.GraphTheme
 import dummyGraph
 import isJpeg
 import isSvg
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -31,6 +32,7 @@ class MermaidRendererTest {
     }
 
     @Test
+    @Tag("flaky") // 403 error on GitHub Actions, maybe due to CloudFlare?
     fun `generate invalid graph`() {
         val outFile = tmpFileWithExtension(".png")
         val message = assertThrows<Exception> {
@@ -40,6 +42,7 @@ class MermaidRendererTest {
     }
 
     @Test
+    @Tag("flaky")
     fun `generate png (actually jpeg)`() {
         val outFile = tmpFileWithExtension(".jpeg")
         assertDoesNotThrow {
@@ -50,6 +53,7 @@ class MermaidRendererTest {
     }
 
     @Test
+    @Tag("flaky")
     fun `generate svg`() {
         val outFile = tmpFileWithExtension(".svg")
         assertDoesNotThrow {
