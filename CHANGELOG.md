@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.2.0](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.1.0...v1.2.0) (2023-07-18)
+
+
+### 🐛 Bug Fixes
+
+* published port may be string ([2a541b4](https://github.com/derlin/docker-compose-viz-mermaid/commit/2a541b40c36c610f9c79fbef93a3cf8163a24a06)), closes [#10](https://github.com/derlin/docker-compose-viz-mermaid/issues/10)
+* remove white border in PNG export (dark theme) ([fffbf91](https://github.com/derlin/docker-compose-viz-mermaid/commit/fffbf91258938e3cbd6b34553c8e86fd51597c85))
+
+
+### 🚀 Features
+
+* add --debug option ([6e42f1b](https://github.com/derlin/docker-compose-viz-mermaid/commit/6e42f1bf4d5948f0b30a3ccf8d3f359b2f9fbf9c))
+* add mermaid-cli renderer ([69c516e](https://github.com/derlin/docker-compose-viz-mermaid/commit/69c516e798eb449f336e0c0dd38fc07a2dd4c6ea))
+* add png support to KrokiRenderer ([8853bfd](https://github.com/derlin/docker-compose-viz-mermaid/commit/8853bfda40896d83bfe4580248acaa36e2150a11))
+* optionally display network bindings ([930b1fd](https://github.com/derlin/docker-compose-viz-mermaid/commit/930b1fd9530b2dd8028bcba3451f8074d7791f36))
+* remove hidden scp classes support ([d2f0499](https://github.com/derlin/docker-compose-viz-mermaid/commit/d2f0499be499e538ed515a4287b24e9373a4fa5f))
+
+
+### 💬 Documentation
+
+* document the mermaid-cli renderer ([7dd2847](https://github.com/derlin/docker-compose-viz-mermaid/commit/7dd28475123565e0c10af09f8c34eaff17d35145))
+
+
+### ⟲ CI
+
+* build and push docker image ([9779848](https://github.com/derlin/docker-compose-viz-mermaid/commit/9779848febb3e3fc2bf99694fe47b26d733d21a6))
+* fix releases missing artifacts ([0c77882](https://github.com/derlin/docker-compose-viz-mermaid/commit/0c77882ea2a598152a0e59d7ec507001789a1ccb))
+
 ## [1.1.0](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.0.0...v1.1.0) (2023-02-07)
 
 
