@@ -22,7 +22,7 @@ import ch.derlin.dcvizmermaid.helpers.YamlUtils
 object GenerateGraph {
 
     private const val ANONYMOUS_VOLUME_TEXT = "⋅ ∃ ⋅"
-    private val knownDbs = listOf("db", "database", "redis", "mysql", "postgres", "postgresql", "mongo", "mongodb")
+    private val knownDbs = listOf("db", "database", "redis", "mysql", "postgres", "postgresql", "mongo", "mongodb", "mariadb")
 
     @Suppress("LongParameterList")
     operator fun invoke(
