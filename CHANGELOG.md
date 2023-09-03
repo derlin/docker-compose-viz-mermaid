@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.1](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.2.0...v1.2.1) (2023-09-03)
+
+
+### 🐛 Bug Fixes
+
+* add MariaDB to known databases ([b230942](https://github.com/derlin/docker-compose-viz-mermaid/commit/b230942dcb40a67055cce15745c2ff6f668c3008))
+
+
+### ⟲ CI
+
+* run MermaidRenderer tests again ([e2ace90](https://github.com/derlin/docker-compose-viz-mermaid/commit/e2ace90eb5f1b39361142d3a29904ab73437f66c))
+
 ## [1.2.0](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.1.0...v1.2.0) (2023-07-18)
 
 
