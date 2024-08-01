@@ -8,7 +8,9 @@ import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFailure
 import assertk.assertions.isSuccess
+import ch.derlin.dcvizmermaid.assertIsSuccess
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFails
 
 class MermaidGraphTest {
 
@@ -92,11 +94,11 @@ class MermaidGraphTest {
         assertAll {
             val graph = MermaidGraph()
             graph.addLink("N1", "N2")
-            assertThat { graph.build() }.isFailure()
+            assertFails { graph.build() }
             graph.addNode("N1")
-            assertThat { graph.build() }.isFailure()
+            assertFails { graph.build() }
             graph.addNode("N2")
-            assertThat { graph.build() }.isSuccess()
+            assertIsSuccess { graph.build() }
         }
     }
 

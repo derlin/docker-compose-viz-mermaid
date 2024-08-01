@@ -2,6 +2,7 @@ package ch.derlin.dcvizmermaid
 
 import assertk.assertAll
 import assertk.assertThat
+import assertk.assertions.isEqualTo
 import assertk.assertions.isSuccess
 import ch.derlin.dcvizmermaid.graph.GraphTheme
 import ch.derlin.dcvizmermaid.graph.MermaidOutput
@@ -30,9 +31,9 @@ class ExamplesGenerator {
 
     @Test
     fun `generate help`() {
-        assertThat {
-            File("$outputPathText/help.md").writeText(Cli().getFormattedHelp())
-        }.isSuccess()
+        assertIsSuccess {
+            File("$outputPathText/help.md").writeText(Cli().getFormattedHelp()!!)
+        }
     }
 
     @Test
@@ -40,11 +41,11 @@ class ExamplesGenerator {
         assertAll {
             File("src/test/resources/examples/full").walkTopDown()
                 .filter { it.isFile && it.extension == "yaml" }
-                .forEach { assertThat { processFullExamples(it) }.isSuccess() }
+                .forEach { assertIsSuccess { processFullExamples(it) } }
 
             File("src/test/resources/examples/partial").walkTopDown()
                 .filter { it.isFile && it.extension == "yaml" }
-                .forEach { assertThat { processYamlPartial(it) }.isSuccess() }
+                .forEach { assertIsSuccess { processYamlPartial(it) } }
         }
     }
 

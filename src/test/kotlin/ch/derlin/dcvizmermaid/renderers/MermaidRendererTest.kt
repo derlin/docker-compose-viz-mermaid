@@ -61,6 +61,6 @@ class MermaidRendererTest {
 
     private fun assertIsValidEditorLink(url: String) {
         val content = assertDoesNotThrow { URL(url).readText() }
-        assertThat(content).contains("<!DOCTYPE", "Mermaid Live Editor")
+        assertThat(content).transform { it.lowercase() }.contains("<!doctype", "mermaid live editor")
     }
 }

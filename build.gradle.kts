@@ -2,9 +2,9 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
-    id("com.gorylenko.gradle-git-properties") version "2.4.0"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    kotlin("jvm") version "1.9.20"
+    id("com.gorylenko.gradle-git-properties") version "2.4.2"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
     id("io.gitlab.arturbosch.detekt").version("1.22.0")
 }
 
@@ -23,14 +23,14 @@ repositories {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:2.0")
-    implementation("com.github.ajalt:clikt:2.8.0")
-    implementation("com.microsoft.playwright:playwright:1.31.0")
+    implementation("org.yaml:snakeyaml:2.2")
+    implementation("com.github.ajalt.clikt:clikt:4.4.0")
+    implementation("com.microsoft.playwright:playwright:1.45.1")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("ch.qos.logback:logback-classic:1.4.6")
+    implementation("ch.qos.logback:logback-classic:1.5.6")
 
     testImplementation(kotlin("test"))
-    testImplementation("com.willowtreeapps.assertk:assertk:0.25")
+    testImplementation("com.willowtreeapps.assertk:assertk:0.28.1")
 }
 
 tasks.withType<KotlinCompile> {

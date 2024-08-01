@@ -7,7 +7,7 @@ import ch.qos.logback.classic.Level
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.context
-import com.github.ajalt.clikt.output.CliktHelpFormatter
+import com.github.ajalt.clikt.output.MordantHelpFormatter
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.groups.OptionGroup
@@ -21,7 +21,7 @@ import com.github.ajalt.clikt.parameters.types.path
 import mu.KotlinLogging
 import java.io.File
 import java.nio.file.Path
-import java.util.Properties
+import java.util.*
 import kotlin.system.exitProcess
 
 private const val GIT_PROPERTIES_FILE = "info.properties"
@@ -89,7 +89,7 @@ class Cli : CliktCommand(
     private val output by OutputOptions()
 
     init {
-        context { helpFormatter = CliktHelpFormatter(showDefaultValues = true, maxWidth = 100) }
+        context { helpFormatter = { MordantHelpFormatter(it, showDefaultValues = true, showRequiredTag = true) } }
     }
 
     override fun run() {
