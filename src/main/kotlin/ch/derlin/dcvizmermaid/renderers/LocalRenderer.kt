@@ -8,12 +8,16 @@ import com.microsoft.playwright.Playwright
 import java.io.File
 
 object LocalRenderer : Renderer {
-
     private const val VIEWPORT_WIDTH = 1280
     private const val VIEWPORT_HEIGHT = 1024
     private const val VIEWPORT_SCALE_FACTOR = 1.2 // improve a bit the quality
 
-    override fun savePng(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String {
+    override fun savePng(
+        outputFile: File,
+        graph: String,
+        theme: GraphTheme,
+        bgColor: String?,
+    ): String {
         // TODO actually generating JPEG (JFIF)
         renderCodeOnPage(graph, theme.bgColor()) { page ->
             page.querySelector("svg")
@@ -22,7 +26,12 @@ object LocalRenderer : Renderer {
         return outputFile.absolutePath.toString()
     }
 
-    override fun saveSvg(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String {
+    override fun saveSvg(
+        outputFile: File,
+        graph: String,
+        theme: GraphTheme,
+        bgColor: String?,
+    ): String {
         renderCodeOnPage(graph, theme.bgColor()) { page ->
             page.querySelector(".mermaid").innerHTML().let { svgContent ->
                 outputFile.writeText(svgContent)
@@ -31,13 +40,18 @@ object LocalRenderer : Renderer {
         return outputFile.absolutePath.toString()
     }
 
-    private fun renderCodeOnPage(mermaidCode: String, bgColor: String? = null, block: (Page) -> Unit) {
+    private fun renderCodeOnPage(
+        mermaidCode: String,
+        bgColor: String? = null,
+        block: (Page) -> Unit,
+    ) {
         Playwright.create().use { playwright ->
-            val browser = playwright.chromium().launch().newContext(
-                Browser.NewContextOptions()
-                    .setViewportSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
-                    .setDeviceScaleFactor(VIEWPORT_SCALE_FACTOR)
-            )
+            val browser =
+                playwright.chromium().launch().newContext(
+                    Browser.NewContextOptions()
+                        .setViewportSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
+                        .setDeviceScaleFactor(VIEWPORT_SCALE_FACTOR),
+                )
             val page: Page = browser.newPage()
             page.setContent(HtmlPageRenderingMermaid(mermaidCode))
             // page.locator("svg").waitFor()
@@ -53,10 +67,10 @@ object LocalRenderer : Renderer {
     }
 
     private object HtmlPageRenderingMermaid {
-
-        operator fun invoke(mermaidCode: String): String = HTML_TEMPLATE
-            .replace(MERMAID_JS_PLACEHOLDER, mermaidJsCode)
-            .replace(CODE_PLACEHOLDER, mermaidCode)
+        operator fun invoke(mermaidCode: String): String =
+            HTML_TEMPLATE
+                .replace(MERMAID_JS_PLACEHOLDER, mermaidJsCode)
+                .replace(CODE_PLACEHOLDER, mermaidCode)
 
         private val mermaidJsCode: String by lazy {
             requireNotNull(javaClass.classLoader.getResource("mermaid.min.js")) {

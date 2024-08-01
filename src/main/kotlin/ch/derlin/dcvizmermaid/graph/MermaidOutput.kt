@@ -6,9 +6,19 @@ import java.io.File
 import java.nio.file.Path
 
 enum class MermaidOutput {
-    TEXT, MARKDOWN, EDITOR, PREVIEW, PNG, SVG;
+    TEXT,
+    MARKDOWN,
+    EDITOR,
+    PREVIEW,
+    PNG,
+    SVG,
+    ;
 
-    fun process(mermaidGraph: MermaidGraph, outputFile: Path? = null, withBackground: Boolean = false) {
+    fun process(
+        mermaidGraph: MermaidGraph,
+        outputFile: Path? = null,
+        withBackground: Boolean = false,
+    ) {
         val text = buildGraph(mermaidGraph, withBackground)
         val renderer = Config.renderer
         val previewer = MermaidRenderer
@@ -24,14 +34,18 @@ enum class MermaidOutput {
         }
     }
 
-    private fun buildGraph(mermaidGraph: MermaidGraph, withBackground: Boolean) = when (this) {
+    private fun buildGraph(
+        mermaidGraph: MermaidGraph,
+        withBackground: Boolean,
+    ) = when (this) {
         TEXT, MARKDOWN, EDITOR -> mermaidGraph.build(withBackground)
         else -> mermaidGraph.build() // mermaid.ink supports background color
     }
 
     private fun Path?.print(content: String) {
         this?.toFile()?.let {
-            it.writeText(content); println("Written graph to ${it.absolutePath}")
+            it.writeText(content)
+            println("Written graph to ${it.absolutePath}")
         } ?: println(content)
     }
 

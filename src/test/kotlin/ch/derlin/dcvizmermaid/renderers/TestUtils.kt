@@ -9,20 +9,16 @@ fun dummyGraph(): String =
         services:
           web:
             image: derlin/rickroller
-        """.trimIndent()
+        """.trimIndent(),
     ).build()
 
-fun tmpFileWithExtension(extension: String) =
-    File.createTempFile("test", extension).also { it.deleteOnExit() }
+fun tmpFileWithExtension(extension: String) = File.createTempFile("test", extension).also { it.deleteOnExit() }
 
-fun File.size(): Long =
-    Files.readAttributes(this.toPath(), BasicFileAttributes::class.java).size()
+fun File.size(): Long = Files.readAttributes(this.toPath(), BasicFileAttributes::class.java).size()
 
-fun File.isJpeg(): Boolean =
-    startsWithBytes("FF", "D8", "FF")
+fun File.isJpeg(): Boolean = startsWithBytes("FF", "D8", "FF")
 
-fun File.isPng(): Boolean =
-    startsWithBytes("89", "50", "4E", "47", "0D", "0A", "1A", "0A")
+fun File.isPng(): Boolean = startsWithBytes("89", "50", "4E", "47", "0D", "0A", "1A", "0A")
 
 fun File.isSvg(): Boolean {
     if (!isFile || !exists()) return false

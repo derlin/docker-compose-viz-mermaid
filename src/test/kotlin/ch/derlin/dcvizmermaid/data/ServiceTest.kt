@@ -7,14 +7,13 @@ import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
 class ServiceTest {
-
     @Test
     fun `parse link`() {
         assertAll {
             mapOf(
                 "db" to link("db"),
                 "db:database" to link("db", "database"),
-                "redis" to link("redis")
+                "redis" to link("redis"),
             ).forEach { (link, expected) ->
                 assertThat(link).transform { parseLink(it) }.isEqualTo(expected)
             }
@@ -23,7 +22,6 @@ class ServiceTest {
 
     @Test
     fun `parse depends_on as list or map form`() {
-
         assertAll {
             listOf(
                 """
@@ -42,7 +40,7 @@ class ServiceTest {
                     condition: service_healthy
                   bar:
                     condition: service_completed_successfully
-                """
+                """,
             ).forEach { yaml ->
                 assertThat(yaml)
                     .transform { Service("service", YamlUtils.load(yaml)).links().map { it.to } }

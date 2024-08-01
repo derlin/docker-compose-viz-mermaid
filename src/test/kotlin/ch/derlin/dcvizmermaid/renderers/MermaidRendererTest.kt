@@ -17,7 +17,6 @@ import tmpFileWithExtension
 import java.net.URL
 
 class MermaidRendererTest {
-
     @Test
     fun `preview and editor link`() {
         val url = assertDoesNotThrow { MermaidRenderer.getPreviewLink(dummyGraph(), GraphTheme.DARK) }
@@ -33,9 +32,10 @@ class MermaidRendererTest {
     @Test
     fun `generate invalid graph`() {
         val outFile = tmpFileWithExtension(".png")
-        val message = assertThrows<Exception> {
-            MermaidRenderer.savePng(outFile, graph = "invalid graph", theme = GraphTheme.DEFAULT, bgColor = null)
-        }.message
+        val message =
+            assertThrows<Exception> {
+                MermaidRenderer.savePng(outFile, graph = "invalid graph", theme = GraphTheme.DEFAULT, bgColor = null)
+            }.message
         assertThat(message).isNotNull().contains("response code", "400")
     }
 

@@ -12,11 +12,15 @@ group = "ch.derlin"
 // Get the version from version.txt. It should NOT contain -SNAPSHOT, but be THE LATEST RELEASED version.
 // The version will be computed automatically as <next-patch-version>-SNAPSHOT.
 // In case `-Dsnapshot=false` is passed to the gradle command, the version will be used as is (useful during release)
-version = file("version.txt").readText().let {
-    val match = requireNotNull("(\\d+\\.\\d+\\.)(\\d+)".toRegex().find(it)) { "Could not extract version from version.txt" }
-    if (System.getProperty("snapshot") in listOf("0", "false")) match.value
-    else match.groupValues[1] + (match.groupValues[2].toInt() + 1) + "-SNAPSHOT"
-}
+version =
+    file("version.txt").readText().let {
+        val match = requireNotNull("(\\d+\\.\\d+\\.)(\\d+)".toRegex().find(it)) { "Could not extract version from version.txt" }
+        if (System.getProperty("snapshot") in listOf("0", "false")) {
+            match.value
+        } else {
+            match.groupValues[1] + (match.groupValues[2].toInt() + 1) + "-SNAPSHOT"
+        }
+    }
 
 repositories {
     mavenCentral()
@@ -54,7 +58,7 @@ tasks.jar {
         configurations.runtimeClasspath.get()
             // exclude playwright dependencies if ran with the argument -PnoPlaywright
             .filter { !(noPlaywright && it.path.contains("/com.microsoft.playwright/")) }
-            .map { if (it.isDirectory) it else zipTree(it) }
+            .map { if (it.isDirectory) it else zipTree(it) },
     )
 }
 

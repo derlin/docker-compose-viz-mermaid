@@ -19,7 +19,6 @@ import java.io.PrintStream
 import java.nio.file.Files
 
 class MmdcRendererTest {
-
     @Test
     fun `install mmdc and generate images`() {
         val tempInstallDir = Files.createTempDirectory("tmpDirPrefix").toFile()
@@ -32,7 +31,7 @@ class MmdcRendererTest {
                 mmdcInstallPath = tempInstallDir.path,
                 mmdcExecutable = Config.pathJoin(tempInstallDir.path, "node_modules", ".bin", "mmdc"),
                 systemOut = PrintStream(out),
-                systemIn = "y".byteInputStream()
+                systemIn = "y".byteInputStream(),
             )
         }
 
@@ -43,10 +42,11 @@ class MmdcRendererTest {
         assertAll {
             listOf(".png", ".svg").forEach { extension ->
                 val outFile = tmpFileWithExtension(extension)
-                val pngPath = assertDoesNotThrow {
-                    // we use the same function here, since they both do the same
-                    MmdcRenderer.savePng(outputFile = outFile, graph = graph, theme = GraphTheme.DARK, bgColor = null)
-                }
+                val pngPath =
+                    assertDoesNotThrow {
+                        // we use the same function here, since they both do the same
+                        MmdcRenderer.savePng(outputFile = outFile, graph = graph, theme = GraphTheme.DARK, bgColor = null)
+                    }
                 assertThat(File(pngPath)).exists()
             }
         }
@@ -58,13 +58,14 @@ class MmdcRendererTest {
         tempInstallDir.deleteOnExit()
 
         listOf("", "n", "yes").forEach {
-            val ex = assertThrows<Exception> {
-                MmdcRenderer.checkSystem(
-                    mmdcInstallPath = tempInstallDir.path,
-                    mmdcExecutable = Config.pathJoin(tempInstallDir.path, "node_modules", ".bin", "mmdc"),
-                    systemIn = it.byteInputStream()
-                )
-            }
+            val ex =
+                assertThrows<Exception> {
+                    MmdcRenderer.checkSystem(
+                        mmdcInstallPath = tempInstallDir.path,
+                        mmdcExecutable = Config.pathJoin(tempInstallDir.path, "node_modules", ".bin", "mmdc"),
+                        systemIn = it.byteInputStream(),
+                    )
+                }
             assertThat(ex.message).isNotNull().contains("Aborting")
             assertThat(tempInstallDir.listFiles()).isNotNull().isEmpty()
         }

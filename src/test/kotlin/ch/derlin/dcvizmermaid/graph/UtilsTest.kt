@@ -6,14 +6,13 @@ import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 
 class UtilsTest {
-
     @Test
     fun `to valid id`() {
         assertAll {
             mapOf(
                 "node" to "node",
                 "some-id" to "someid",
-                "??1--2_@3 " to "123"
+                "??1--2_@3 " to "123",
             ).forEach { (input, expected) ->
                 assertThat(input.toValidId()).isEqualTo(expected)
             }

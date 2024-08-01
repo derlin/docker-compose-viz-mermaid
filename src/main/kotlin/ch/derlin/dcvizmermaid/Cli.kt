@@ -21,7 +21,7 @@ import com.github.ajalt.clikt.parameters.types.path
 import mu.KotlinLogging
 import java.io.File
 import java.nio.file.Path
-import java.util.*
+import java.util.Properties
 import kotlin.system.exitProcess
 
 private const val GIT_PROPERTIES_FILE = "info.properties"
@@ -38,33 +38,32 @@ class Cli : CliktCommand(
     * 'editor' // 'preview' generates a link to the mermaid online editor, and print it to the console.
     ```
     You can further customize the result using the options below.
-    """.trimIndent()
+    """.trimIndent(),
 ) {
-
     private val defaultFiles = listOf("docker-compose.yaml", "docker-compose.yml")
 
     // NOTE: this awful formatting is the best I could do with ktlint
 
     private val dockerComposeInput: File? by
-    argument("docker-compose-path").file(mustExist = true, mustBeReadable = true, canBeDir = false).optional()
+        argument("docker-compose-path").file(mustExist = true, mustBeReadable = true, canBeDir = false).optional()
 
     private val showVersionAndExit: Boolean by
-    option("--version", help = "Show the version and exit").flag(default = false)
+        option("--version", help = "Show the version and exit").flag(default = false)
 
     private val debug: Boolean by
-    option("--debug", help = "Be verbose").flag(default = false)
+        option("--debug", help = "Be verbose").flag(default = false)
 
     class ProcessingOptions : OptionGroup(name = "Processing options") {
         private val linksHelp = "Try to find implicit links between services by looking at the environment variables"
 
         val withPorts: Boolean by
-        option("--ports", "-p", help = "Extract and display ports").flag("--no-ports", "-P", default = false)
+            option("--ports", "-p", help = "Extract and display ports").flag("--no-ports", "-P", default = false)
         val withVolumes: Boolean by
-        option("--volumes", "-v", help = "Extract and display volumes").flag("--no-volumes", "-V", default = true)
+            option("--volumes", "-v", help = "Extract and display volumes").flag("--no-volumes", "-V", default = true)
         val withNetworks: Boolean by
-        option("--networks", "-n", help = "Extract and display networks").flag("--no-networks", "-N", default = true)
+            option("--networks", "-n", help = "Extract and display networks").flag("--no-networks", "-N", default = true)
         val withImplicitLinks: Boolean by
-        option("--ilinks", "-l", help = linksHelp).flag("--no-ilinks", "-L", default = true)
+            option("--ilinks", "-l", help = linksHelp).flag("--no-ilinks", "-L", default = true)
     }
 
     private val processing by ProcessingOptions()
@@ -73,17 +72,21 @@ class Cli : CliktCommand(
         private val classHelp = "Add CSS classes to mermaid to make the output nicer"
 
         val type: MermaidOutput by
-        option("--format", "-f", help = "Output type (case insensitive)").enum<MermaidOutput>(ignoreCase = true).default(MermaidOutput.TEXT)
+            option(
+                "--format",
+                "-f",
+                help = "Output type (case insensitive)",
+            ).enum<MermaidOutput>(ignoreCase = true).default(MermaidOutput.TEXT)
         val file: Path? by
-        option("--out", "-o", help = "Write output to a specific file").path()
+            option("--out", "-o", help = "Write output to a specific file").path()
         val forceBackground: Boolean by
-        option("--with-bg", "-b", help = "Force background color").flag(default = false)
+            option("--with-bg", "-b", help = "Force background color").flag(default = false)
         val direction: GraphOrientation by
-        option("--dir", "-d", help = "Graph orientation").enum<GraphOrientation>(ignoreCase = true).default(GraphOrientation.TB)
+            option("--dir", "-d", help = "Graph orientation").enum<GraphOrientation>(ignoreCase = true).default(GraphOrientation.TB)
         val theme: GraphTheme by
-        option("--theme", "-t", help = "Graph theme").enum<GraphTheme>(ignoreCase = true).default(GraphTheme.DEFAULT)
+            option("--theme", "-t", help = "Graph theme").enum<GraphTheme>(ignoreCase = true).default(GraphTheme.DEFAULT)
         val withClasses: Boolean by
-        option("--classes", "-c", help = classHelp).flag("--no-classes", "-C", default = true)
+            option("--classes", "-c", help = classHelp).flag("--no-classes", "-C", default = true)
     }
 
     private val output by OutputOptions()
@@ -99,16 +102,17 @@ class Cli : CliktCommand(
                 .level = Level.DEBUG
         }
 
-        val mermaidGraph = GenerateGraph(
-            (dockerComposeInput ?: findDefaultFile()).readText(),
-            direction = output.direction,
-            theme = output.theme,
-            withPorts = processing.withPorts,
-            withVolumes = processing.withVolumes,
-            withNetworks = processing.withNetworks,
-            withImplicitLinks = processing.withImplicitLinks,
-            withClasses = output.withClasses,
-        )
+        val mermaidGraph =
+            GenerateGraph(
+                (dockerComposeInput ?: findDefaultFile()).readText(),
+                direction = output.direction,
+                theme = output.theme,
+                withPorts = processing.withPorts,
+                withVolumes = processing.withVolumes,
+                withNetworks = processing.withNetworks,
+                withImplicitLinks = processing.withImplicitLinks,
+                withClasses = output.withClasses,
+            )
 
         output.type.process(mermaidGraph, output.file, withBackground = output.forceBackground)
     }
@@ -119,7 +123,7 @@ class Cli : CliktCommand(
             .firstOrNull { it.isFile && it.exists() }
             ?: throw UsageError(
                 "Could not find docker-compose file looking for ${defaultFiles.joinToString(", ")}. " +
-                    "Please, provide the exact path as argument."
+                    "Please, provide the exact path as argument.",
             )
 
     private fun showVersionAndExit() {

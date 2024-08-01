@@ -20,7 +20,6 @@ import ch.derlin.dcvizmermaid.graph.withGeneratedIds
 import ch.derlin.dcvizmermaid.helpers.YamlUtils
 
 object GenerateGraph {
-
     private const val ANONYMOUS_VOLUME_TEXT = "⋅ ∃ ⋅"
     private val knownDbs = listOf("db", "database", "redis", "mysql", "postgres", "postgresql", "mongo", "mongodb", "mariadb")
 
@@ -35,7 +34,6 @@ object GenerateGraph {
         withImplicitLinks: Boolean = false,
         withClasses: Boolean = false,
     ): MermaidGraph {
-
         val dc = DockerCompose(YamlUtils.load(dockerComposeContent))
         val graph = MermaidGraph(direction, theme)
 
@@ -46,24 +44,35 @@ object GenerateGraph {
         val netIds = addNetworks(graph, dc, withNetworks)
 
         if (withClasses) {
-            if (volumeIds.isNotEmpty())
+            if (volumeIds.isNotEmpty()) {
                 graph.addClass(VolumeClazz, volumeIds)
-            if (portIds.isNotEmpty())
+            }
+            if (portIds.isNotEmpty()) {
                 graph.addClass(PortsClazz, portIds)
-            if (netIds.isNotEmpty())
+            }
+            if (netIds.isNotEmpty()) {
                 graph.addClass(NetworksClazz, netIds)
+            }
         }
 
         return graph
     }
 
-    private fun addServices(graph: MermaidGraph, dc: DockerCompose) =
-        dc.services.forEach {
-            graph.addNode(it.name, shape = if (it.name in knownDbs) CYLINDER else null)
-        }
+    private fun addServices(
+        graph: MermaidGraph,
+        dc: DockerCompose,
+    ) = dc.services.forEach {
+        graph.addNode(it.name, shape = if (it.name in knownDbs) CYLINDER else null)
+    }
 
-    private fun addVolumes(graph: MermaidGraph, dc: DockerCompose, withVolumes: Boolean): List<String> =
-        if (!withVolumes) listOf() else {
+    private fun addVolumes(
+        graph: MermaidGraph,
+        dc: DockerCompose,
+        withVolumes: Boolean,
+    ): List<String> =
+        if (!withVolumes) {
+            listOf()
+        } else {
             var num = 0
             dc.volumeBindings.map { volume ->
                 val id = "V" + (volume.source ?: num++).toValidId()
@@ -74,23 +83,42 @@ object GenerateGraph {
             }
         }
 
-    private fun addLinks(graph: MermaidGraph, dc: DockerCompose, withImplicitLinks: Boolean) =
-        (if (withImplicitLinks) dc.implicitLinks else dc.links).sortedBy { it.from }.forEach { link ->
-            graph.addLink(link.from, link.to, text = link.alias)
-        }
+    private fun addLinks(
+        graph: MermaidGraph,
+        dc: DockerCompose,
+        withImplicitLinks: Boolean,
+    ) = (if (withImplicitLinks) dc.implicitLinks else dc.links).sortedBy { it.from }.forEach { link ->
+        graph.addLink(link.from, link.to, text = link.alias)
+    }
 
-    private fun addPorts(graph: MermaidGraph, dc: DockerCompose, withPorts: Boolean): List<String> =
-        if (!withPorts) listOf() else dc.ports.withGeneratedIds("P") { id, port ->
-            graph.addNode(port.externalPort, id, CIRCLE)
-            graph.addLink(id, port.service, connector = DOT_ARROW, text = port.internalIfDifferent)
-        }
-
-    private fun addNetworks(graph: MermaidGraph, dc: DockerCompose, withNetworks: Boolean): List<String> =
-        if (!withNetworks) listOf() else dc.networkBindings.map { (name, bindings) ->
-            val id = graph.addNode(name, shape = PARALLELOGRAM)
-            bindings.forEach {
-                graph.addLink(it.service, it.network, DOT_LINE, text = it.displayAlias())
+    private fun addPorts(
+        graph: MermaidGraph,
+        dc: DockerCompose,
+        withPorts: Boolean,
+    ): List<String> =
+        if (!withPorts) {
+            listOf()
+        } else {
+            dc.ports.withGeneratedIds("P") { id, port ->
+                graph.addNode(port.externalPort, id, CIRCLE)
+                graph.addLink(id, port.service, connector = DOT_ARROW, text = port.internalIfDifferent)
             }
-            id
+        }
+
+    private fun addNetworks(
+        graph: MermaidGraph,
+        dc: DockerCompose,
+        withNetworks: Boolean,
+    ): List<String> =
+        if (!withNetworks) {
+            listOf()
+        } else {
+            dc.networkBindings.map { (name, bindings) ->
+                val id = graph.addNode(name, shape = PARALLELOGRAM)
+                bindings.forEach {
+                    graph.addLink(it.service, it.network, DOT_LINE, text = it.displayAlias())
+                }
+                id
+            }
         }
 }

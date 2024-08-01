@@ -13,4 +13,3 @@ ij_continuation_indent_size = 4
 
 [*.{yaml,yml}]
 indent_size = 2
-insert_final_newline = true

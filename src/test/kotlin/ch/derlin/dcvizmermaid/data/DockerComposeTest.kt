@@ -8,7 +8,6 @@ import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
 class DockerComposeTest {
-
     @Test
     fun `parse services`() {
         assertAll {
@@ -45,11 +44,12 @@ class DockerComposeTest {
 
     @Test
     fun `implicit links from refs`() {
-        val portBindings = listOf(
-            PortBinding("kafka", 9092, 9092),
-            PortBinding("web", 8080, 6000),
-            PortBinding("web2", 8080, 8080)
-        )
+        val portBindings =
+            listOf(
+                PortBinding("kafka", 9092, 9092),
+                PortBinding("web", 8080, 6000),
+                PortBinding("web2", 8080, 8080),
+            )
 
         assertAll {
             // positive
@@ -86,11 +86,9 @@ class DockerComposeTest {
                 // untouched
                 volumeBinding("./source", "/config", ro = true) to false,
                 volumeBinding(null, "/some/path/xx.sock") to false,
-
                 // transformed
                 volumeBinding("app-settings", "/something") to true,
                 volumeBinding("config", "/target/path") to true,
-
             ).forEach { (vb, modified) ->
                 assertThat(vb)
                     .transform { DockerCompose.processVolumes(namedVolumes, listOf(vb)) }

@@ -9,10 +9,12 @@ import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
 class PortBindingTest {
-
     @Test
     fun `parse short port bindings`() {
-        fun port(internal: Int, external: Int? = null) = PortBinding("service", internal, external ?: internal)
+        fun port(
+            internal: Int,
+            external: Int? = null,
+        ) = PortBinding("service", internal, external ?: internal)
 
         assertAll {
             mapOf(
@@ -53,7 +55,7 @@ class PortBindingTest {
                 target: 80
                 protocol: tcp
                 mode: host
-                """.trimIndent() to null
+                """.trimIndent() to null,
             ).forEach { (port, expected) ->
                 assertThat(port).transform { parsePort(YamlUtils.load(it)) }.isEqualTo(expected)
             }

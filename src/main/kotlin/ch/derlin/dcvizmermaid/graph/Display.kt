@@ -3,7 +3,9 @@ package ch.derlin.dcvizmermaid.graph
 import ch.derlin.dcvizmermaid.data.VolumeBinding.VolumeType
 
 enum class GraphTheme {
-    DEFAULT, DARK;
+    DEFAULT,
+    DARK,
+    ;
 
     fun shebang(withBgColor: Boolean = false): String {
         val options = mutableListOf("'theme': '${this.name.lowercase()}'")
@@ -12,27 +14,45 @@ enum class GraphTheme {
         return "%%{init: {${options.joinToString(", ")}}}%%"
     }
 
-    fun bgColor(): String = when (this) {
-        DEFAULT -> "#FFF"
-        DARK -> "#444"
-    }
+    fun bgColor(): String =
+        when (this) {
+            DEFAULT -> "#FFF"
+            DARK -> "#444"
+        }
 }
 
 enum class GraphOrientation {
-    LR, RL, TB, BT;
+    LR,
+    RL,
+    TB,
+    BT,
+    ;
 
-    fun inverse(): GraphOrientation = when (this) {
-        LR -> TB
-        RL -> BT
-        TB -> LR
-        BT -> RL
-    }
+    fun inverse(): GraphOrientation =
+        when (this) {
+            LR -> TB
+            RL -> BT
+            TB -> LR
+            BT -> RL
+        }
 }
 
 enum class Shape {
-    NONE, RECT_ROUNDED, CIRCLE, HEXAGON, PARALLELOGRAM, CYLINDER, STADIUM, RHOMBUS, ASYM;
+    NONE,
+    RECT_ROUNDED,
+    CIRCLE,
+    HEXAGON,
+    PARALLELOGRAM,
+    CYLINDER,
+    STADIUM,
+    RHOMBUS,
+    ASYM,
+    ;
 
-    fun format(id: Any, name: Any): String {
+    fun format(
+        id: Any,
+        name: Any,
+    ): String {
         val validName = name.toValidName()
         return when (this) {
             NONE -> if (id == name) validName else "$id[$validName]"
@@ -61,15 +81,16 @@ enum class CONNECTOR(val labelled: String, val simple: String) {
     X("-- %s --x", "--x"),
     DOT_X("-. %s .-x", "-.-x"),
     DOT_DBL_X("x-. %s .-x", "x-.-x"),
-    DOT_X_REV("x-. %s .-", "x-.-");
+    DOT_X_REV("x-. %s .-", "x-.-"),
+    ;
 
-    fun format(text: Any?): String =
-        text?.toValidName()?.let { labelled.format(it) } ?: simple
+    fun format(text: Any?): String = text?.toValidName()?.let { labelled.format(it) } ?: simple
 }
 
-fun VolumeType.toShape() = when (this) {
-    VolumeType.BIND -> Shape.HEXAGON
-    VolumeType.VOLUME -> Shape.STADIUM
-    VolumeType.NPIPE -> Shape.ASYM
-    VolumeType.TMPFS -> Shape.RHOMBUS
-}
+fun VolumeType.toShape() =
+    when (this) {
+        VolumeType.BIND -> Shape.HEXAGON
+        VolumeType.VOLUME -> Shape.STADIUM
+        VolumeType.NPIPE -> Shape.ASYM
+        VolumeType.TMPFS -> Shape.RHOMBUS
+    }

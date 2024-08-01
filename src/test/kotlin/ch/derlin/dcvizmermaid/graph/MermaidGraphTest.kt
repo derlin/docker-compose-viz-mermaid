@@ -6,14 +6,11 @@ import assertk.assertions.containsExactly
 import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
-import assertk.assertions.isFailure
-import assertk.assertions.isSuccess
 import ch.derlin.dcvizmermaid.assertIsSuccess
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFails
 
 class MermaidGraphTest {
-
     @Test
     fun `add node ensures valid ids`() {
         val n1 = "some_node-1"
@@ -69,7 +66,7 @@ class MermaidGraphTest {
         assertThat(buildAndGetLines(graph)).containsExactly(
             "r(r) --> h{{h}}",
             "r --> c[(c)]",
-            "h --> c"
+            "h --> c",
         )
     }
 
@@ -85,7 +82,7 @@ class MermaidGraphTest {
             "N1 --> N3",
             "N1 --> N5",
             "N2",
-            "N4"
+            "N4",
         )
     }
 
@@ -129,32 +126,32 @@ class MermaidGraphTest {
 
         assertThat(graph.build()).isEqualTo(
             """
-          %%{init: {'theme': 'default'}}%%
-          flowchart TB
-            service x-.-x db((db))
-            web -. REST .-> service
+            %%{init: {'theme': 'default'}}%%
+            flowchart TB
+              service x-.-x db((db))
+              web -. REST .-> service
 
-            n{{none}}
+              n{{none}}
 
-            classDef W
-            class web W
-            """.trimIndent() + "\n"
+              classDef W
+              class web W
+            """.trimIndent() + "\n",
         )
 
         assertThat(graph.build(withBackground = true)).isEqualTo(
             """
-          %%{init: {'theme': 'default', 'themeVariables': {'clusterBkg': '#FFF', 'clusterBorder': '#FFF'}}}%%
-          flowchart LR
-          subgraph " "
-            service x-.-x db((db))
-            web -. REST .-> service
+            %%{init: {'theme': 'default', 'themeVariables': {'clusterBkg': '#FFF', 'clusterBorder': '#FFF'}}}%%
+            flowchart LR
+            subgraph " "
+              service x-.-x db((db))
+              web -. REST .-> service
 
-            n{{none}}
+              n{{none}}
 
-            classDef W
-            class web W
-          end
-            """.trimIndent() + "\n"
+              classDef W
+              class web W
+            end
+            """.trimIndent() + "\n",
         )
     }
 

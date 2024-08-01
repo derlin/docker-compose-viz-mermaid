@@ -9,7 +9,6 @@ import mu.KotlinLogging
 import java.io.File
 
 object Config {
-
     private val logger = KotlinLogging.logger {}
 
     /** Override the mermaid.ink URL used to generate PNG/SVG */
@@ -47,11 +46,12 @@ object Config {
         get("MMDC_EXECUTABLE_PATH", pathJoin(mmdcLocalInstallPath, "node_modules", ".bin", "mmdc"))
     }
 
-    const val mmdcVersion: String = "@mermaid-js/mermaid-cli@^10"
+    const val MMDC_VERSION: String = "@mermaid-js/mermaid-cli@^10"
 
-    private fun get(env: String, defaultValue: String) =
-        System.getProperty(env, System.getenv().getOrDefault(env, defaultValue))
+    private fun get(
+        env: String,
+        defaultValue: String,
+    ) = System.getProperty(env, System.getenv().getOrDefault(env, defaultValue))
 
-    internal fun pathJoin(vararg segments: String): String =
-        segments.joinToString(File.separator)
+    internal fun pathJoin(vararg segments: String): String = segments.joinToString(File.separator)
 }

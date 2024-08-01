@@ -11,7 +11,6 @@ import ch.derlin.dcvizmermaid.helpers.YamlUtils
 import org.junit.jupiter.api.Test
 
 class VolumeBindingTest {
-
     @Test
     fun `parse volumes short syntax`() {
         assertAll {

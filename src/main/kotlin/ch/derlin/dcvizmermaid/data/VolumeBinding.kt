@@ -22,28 +22,37 @@ data class VolumeBinding(
         BIND, // bind mount (the most common): linked to a path on the host
         VOLUME, // named volume: persistent, but created/stored under /var/lib/docker/volumes/ (anonymous volumes are possible)
         NPIPE, // for e.g. mounting docker.sock
-        TMPFS // temporary directory a container can write to (!no source!)
+        TMPFS, // temporary directory a container can write to (!no source!)
     }
 
     companion object {
-
         private val logger = KotlinLogging.logger {}
 
-        fun parse(service: String, volumeMapping: Any): VolumeBinding? = when (volumeMapping) {
-            is String -> parseString(service, volumeMapping)
-            is Map<*, *> -> parseYaml(service, volumeMapping.asYaml())
-            else -> null
-        }
+        fun parse(
+            service: String,
+            volumeMapping: Any,
+        ): VolumeBinding? =
+            when (volumeMapping) {
+                is String -> parseString(service, volumeMapping)
+                is Map<*, *> -> parseYaml(service, volumeMapping.asYaml())
+                else -> null
+            }
 
         @Suppress("MagicNumber")
-        private fun parseString(service: String, volumeMapping: String): VolumeBinding? =
+        private fun parseString(
+            service: String,
+            volumeMapping: String,
+        ): VolumeBinding? =
             volumeMapping.split(":").let {
                 when (it.size) {
                     1 ->
                         VolumeBinding(service, target = it[0], type = VolumeType.VOLUME) // anonymous volume
                     2 ->
-                        if (it.last() in listOf("ro", "rw")) VolumeBinding(service, target = it[0], ro = it[1] == "ro")
-                        else VolumeBinding(service, source = it[0], target = it[1])
+                        if (it.last() in listOf("ro", "rw")) {
+                            VolumeBinding(service, target = it[0], ro = it[1] == "ro")
+                        } else {
+                            VolumeBinding(service, source = it[0], target = it[1])
+                        }
                     3 ->
                         VolumeBinding(service, source = it[0], target = it[1], ro = it[2] == "ro")
                     else -> {
@@ -62,7 +71,7 @@ data class VolumeBinding(
                         target = target,
                         source = volumeMapping.getByPath("source", String::class),
                         type = VolumeType.valueOf((volumeMapping.getByPath("type", String::class) ?: "bind").uppercase()),
-                        ro = volumeMapping.getByPath("read_only", Boolean::class) == true
+                        ro = volumeMapping.getByPath("read_only", Boolean::class) == true,
                     )
                 } catch (ex: Exception) {
                     logger.error("Could not read volume '$volumeMapping'") { ex }

@@ -14,24 +14,32 @@ data class NetworkBinding(
     val ipv4: String? = null,
     val ipv6: String? = null,
 ) {
-
-    fun displayAlias(): String? = when {
-        aliases.isNotEmpty() -> aliases.joinToString(", ")
-        else -> listOfNotNull(ipv4, ipv6).joinToString(", ").ifBlank { null }
-    }
+    fun displayAlias(): String? =
+        when {
+            aliases.isNotEmpty() -> aliases.joinToString(", ")
+            else -> listOfNotNull(ipv4, ipv6).joinToString(", ").ifBlank { null }
+        }
 
     companion object {
-        fun parse(service: String, declaration: ListOrMap?): List<NetworkBinding> =
+        fun parse(
+            service: String,
+            declaration: ListOrMap?,
+        ): List<NetworkBinding> =
             when (declaration) {
                 is OrList -> parseList(service, declaration.list)
                 is OrMap -> parseYaml(service, declaration.map)
                 else -> listOf()
             }
 
-        private fun parseList(service: String, declaration: List<String>): List<NetworkBinding> =
-            declaration.map { NetworkBinding(it, service) }
+        private fun parseList(
+            service: String,
+            declaration: List<String>,
+        ): List<NetworkBinding> = declaration.map { NetworkBinding(it, service) }
 
-        private fun parseYaml(service: String, declaration: YAML): List<NetworkBinding> =
+        private fun parseYaml(
+            service: String,
+            declaration: YAML,
+        ): List<NetworkBinding> =
             declaration.mapValues { it.value?.asYaml() ?: emptyMap() }.map { (name, props) ->
                 when {
                     props.containsKey("aliases") ->

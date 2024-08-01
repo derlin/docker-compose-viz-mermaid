@@ -7,15 +7,21 @@ import java.util.Base64
 import java.util.zip.Deflater
 
 object KrokiRenderer : Renderer {
+    override fun savePng(
+        outputFile: File,
+        graph: String,
+        theme: GraphTheme,
+        bgColor: String?,
+    ): String = "${Config.krokiUrl}/mermaid/png/${encode(graph)}".downloadTo(outputFile)
 
-    override fun savePng(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String =
-        "${Config.krokiUrl}/mermaid/png/${encode(graph)}".downloadTo(outputFile)
+    override fun saveSvg(
+        outputFile: File,
+        graph: String,
+        theme: GraphTheme,
+        bgColor: String?,
+    ): String = "${Config.krokiUrl}/mermaid/svg/${encode(graph)}".downloadTo(outputFile)
 
-    override fun saveSvg(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String =
-        "${Config.krokiUrl}/mermaid/svg/${encode(graph)}".downloadTo(outputFile)
-
-    private fun encode(decoded: String): String =
-        String(Base64.getUrlEncoder().encode(compress(decoded.toByteArray())), Charsets.UTF_8)
+    private fun encode(decoded: String): String = String(Base64.getUrlEncoder().encode(compress(decoded.toByteArray())), Charsets.UTF_8)
 
     private fun compress(source: ByteArray): ByteArray {
         // see https://github.com/DaveJarvis/keenwrite/issues/138#issuecomment-922562707

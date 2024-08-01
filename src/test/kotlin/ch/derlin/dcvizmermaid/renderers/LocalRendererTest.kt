@@ -13,7 +13,6 @@ import size
 import tmpFileWithExtension
 
 class LocalRendererTest {
-
     @Test
     fun `generate svg`() {
         val outFile = tmpFileWithExtension(".svg")

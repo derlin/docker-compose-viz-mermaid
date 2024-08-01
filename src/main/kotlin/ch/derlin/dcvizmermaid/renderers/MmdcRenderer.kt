@@ -9,18 +9,29 @@ import java.io.PrintStream
 import java.util.concurrent.TimeUnit
 
 object MmdcRenderer : Renderer {
-
     private val logger = KotlinLogging.logger {}
 
     private const val EXEC_TIMEOUT_SECONDS = 60L
 
-    override fun savePng(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String =
-        render(outputFile, graph, bgColor)
+    override fun savePng(
+        outputFile: File,
+        graph: String,
+        theme: GraphTheme,
+        bgColor: String?,
+    ): String = render(outputFile, graph, bgColor)
 
-    override fun saveSvg(outputFile: File, graph: String, theme: GraphTheme, bgColor: String?): String =
-        render(outputFile, graph, bgColor)
+    override fun saveSvg(
+        outputFile: File,
+        graph: String,
+        theme: GraphTheme,
+        bgColor: String?,
+    ): String = render(outputFile, graph, bgColor)
 
-    private fun render(outputFile: File, graph: String, bgColor: String?): String {
+    private fun render(
+        outputFile: File,
+        graph: String,
+        bgColor: String?,
+    ): String {
         checkSystem(Config.mmdcLocalInstallPath, Config.mmdcExecutable)
 
         val tempFile = File.createTempFile("dcviz", "png")
@@ -41,10 +52,10 @@ object MmdcRenderer : Renderer {
         systemOut: PrintStream = System.out,
         systemIn: InputStream = System.`in`,
     ) {
-
         File(mmdcExecutable).let { f ->
-            if (f.exists() && f.isFile && f.canExecute())
+            if (f.exists() && f.isFile && f.canExecute()) {
                 return
+            }
         }
 
         val runtime = Runtime.getRuntime()
@@ -57,11 +68,10 @@ object MmdcRenderer : Renderer {
             if (it.readText().trim() != "y") error("You did not confirm. Aborting.")
         }
 
-        val installCommand = "npm install --prefix $mmdcInstallPath ${Config.mmdcVersion}"
+        val installCommand = "npm install --prefix $mmdcInstallPath ${Config.MMDC_VERSION}"
         systemOut.println("Running: $installCommand")
         runtime.exec(installCommand).let { process ->
             if (process.waitFor() != 0) {
-
                 error("Something went wrong while running: $installCommand: ${process.errorStream.reader().readText()}")
             }
         }

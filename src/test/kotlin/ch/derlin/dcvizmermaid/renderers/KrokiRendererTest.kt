@@ -15,7 +15,6 @@ import tmpFileWithExtension
 
 @Tag("flaky") // Server returned HTTP response code: 504 for URL
 class KrokiRendererTest {
-
     @Test
     fun `generate png`() {
         val outFile = tmpFileWithExtension(".png")

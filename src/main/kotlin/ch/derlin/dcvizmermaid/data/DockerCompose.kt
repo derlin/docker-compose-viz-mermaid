@@ -8,7 +8,6 @@ import ch.derlin.dcvizmermaid.helpers.YamlUtils.getByPath
 import mu.KotlinLogging
 
 class DockerCompose(private val content: YAML) {
-
     @Suppress("UNCHECKED_CAST")
     val services: List<Service> by lazy {
         val root = if ("services" !in content) content else content.getByPath("services", type = Map::class)
@@ -39,20 +38,30 @@ class DockerCompose(private val content: YAML) {
     companion object {
         val logger = KotlinLogging.logger {}
 
-        fun linksFromMaybeRefs(serviceName: String, ports: Iterable<PortBinding>, maybeRefs: Iterable<MaybeReference>): List<Link> =
+        fun linksFromMaybeRefs(
+            serviceName: String,
+            ports: Iterable<PortBinding>,
+            maybeRefs: Iterable<MaybeReference>,
+        ): List<Link> =
             maybeRefs.mapNotNull { maybeRef ->
-                val maybePort = if (maybeRef.internal) {
-                    ports.find { it.service == maybeRef.service && it.internalPort == maybeRef.port }
-                } else {
-                    ports.find { it.externalPort == maybeRef.port }
-                }
+                val maybePort =
+                    if (maybeRef.internal) {
+                        ports.find { it.service == maybeRef.service && it.internalPort == maybeRef.port }
+                    } else {
+                        ports.find { it.externalPort == maybeRef.port }
+                    }
                 maybePort?.let { Link(serviceName, it.service) }
             }
 
-        fun processVolumes(namedVolumes: Collection<String>, volumeBindings: Collection<VolumeBinding>) =
-            volumeBindings.map { binding ->
-                if (binding.source !in namedVolumes) binding
-                else binding.copy(type = VolumeBinding.VolumeType.VOLUME)
+        fun processVolumes(
+            namedVolumes: Collection<String>,
+            volumeBindings: Collection<VolumeBinding>,
+        ) = volumeBindings.map { binding ->
+            if (binding.source !in namedVolumes) {
+                binding
+            } else {
+                binding.copy(type = VolumeBinding.VolumeType.VOLUME)
             }
+        }
     }
 }

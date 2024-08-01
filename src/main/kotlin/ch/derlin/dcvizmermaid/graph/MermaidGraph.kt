@@ -4,23 +4,34 @@ import ch.derlin.dcvizmermaid.graph.CONNECTOR.ARROW
 import ch.derlin.dcvizmermaid.graph.Shape.NONE
 
 class MermaidGraph(val direction: GraphOrientation = GraphOrientation.TB, val theme: GraphTheme = GraphTheme.DEFAULT) {
-
     private val nodes: MutableMap<String, Node> = mutableMapOf()
     private val links: MutableList<Link> = mutableListOf()
     private val classes: MutableList<String> = mutableListOf()
 
-    fun addNode(name: Any, id: String = name.toString(), shape: Shape? = null): String =
+    fun addNode(
+        name: Any,
+        id: String = name.toString(),
+        shape: Shape? = null,
+    ): String =
         id.toValidId().apply {
             if (this !in nodes) {
                 nodes[this] = Node(this, name.toString(), shape ?: NONE)
             }
         }
 
-    fun addLink(from: Any, to: Any, connector: CONNECTOR? = null, text: Any? = null) {
+    fun addLink(
+        from: Any,
+        to: Any,
+        connector: CONNECTOR? = null,
+        text: Any? = null,
+    ) {
         links += Link(from.toValidId(), to.toValidId(), connector ?: ARROW, text)
     }
 
-    fun addClass(clazz: CssClazz, ids: Iterable<String>) {
+    fun addClass(
+        clazz: CssClazz,
+        ids: Iterable<String>,
+    ) {
         classes += "classDef ${clazz.name} ${clazz.styles(theme)}"
         classes += "class ${ids.joinToString(",")} ${clazz.name}"
     }
@@ -75,7 +86,9 @@ class MermaidGraph(val direction: GraphOrientation = GraphOrientation.TB, val th
             internal set
 
         override fun equals(other: Any?): Boolean = this === other && javaClass == other.javaClass && id == other.id
+
         override fun hashCode(): Int = id.hashCode()
+
         override fun toString(): String = "Node(id=$id, name=$name, shape=$shape)"
 
         fun format(): String {
@@ -87,7 +100,9 @@ class MermaidGraph(val direction: GraphOrientation = GraphOrientation.TB, val th
 
     private class Link(val from: String, val to: String, val connector: CONNECTOR, val text: Any? = null) {
         override fun equals(other: Any?): Boolean = this === other && javaClass == other.javaClass && from == other.from && to == other.to
+
         override fun hashCode(): Int = 31 * from.hashCode() + to.hashCode()
+
         override fun toString(): String = "Link(from=$from, to=$to, connector=$connector, text=$text)"
     }
 }
