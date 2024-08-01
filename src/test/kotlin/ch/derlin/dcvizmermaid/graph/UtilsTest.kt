@@ -25,7 +25,7 @@ class UtilsTest {
             mapOf(
                 // no quotes
                 "node" to "node",
-                "/path/to/file.txt" to "/path/to/file.txt",
+                "/path/to/file.txt" to "\"/path/to/file.txt\"",
                 "some node" to "some node",
                 "some-node ?" to "some-node ?",
                 // quotes

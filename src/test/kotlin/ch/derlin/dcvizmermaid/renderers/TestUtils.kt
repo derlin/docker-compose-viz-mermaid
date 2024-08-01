@@ -8,8 +8,17 @@ fun dummyGraph(): String =
         """
         services:
           web:
-            image: derlin/rickroller
+            image: derlin/rickroller:latest
+            ports:
+              - 8080:80
+            volumes:
+              - ./foo.conf:/data/.foo.conf
+              - settings:/settings
+        volumes:
+           settings:
         """.trimIndent(),
+        withPorts = true,
+        withVolumes = true,
     ).build()
 
 fun tmpFileWithExtension(extension: String) = File.createTempFile("test", extension).also { it.deleteOnExit() }
