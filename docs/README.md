@@ -1,5 +1,10 @@
 # Docs
 
+## Requirements
+
+- make
+- docker
+
 ## Generate assets
 
 Everything under `assets/generated` and `_includes/generated` is generated automatically from tests.
@@ -9,23 +14,16 @@ Those tests are however disabled by default. To generate them, use:
 ./gradlew test -Pgenerate
 ```
 
+To copy them after re-generation, use the `Makefile` in this folder:
+```bash
+make update_generated_assets
+```
+
 ## Run this site locally
 
-**INFO**: the script `jekyll.sh` does everything automatically for you.
-
-Launch Jekyll in a docker container:
+Launch Jekyll in a docker container using:
 ```bash
-docker run --rm --volume="$PWD:/srv/jekyll" -p 4000:4000 -it jekyll/builder:3.8 bash
+make serve
 ```
 
-Then, inside the docker container, run:
-```bash
-# update bundler
-gem install bundler
-# do this once
-bundle install
-# then run the server
-bundle exec jekyll serve --host 0.0.0.0 --verbose --config "_config.yml,_config_dev.yml"
-```
-
-The local site will be available at http://localhost:4000.
+The local site will be available at http://localhost:4000/docker-compose-viz-mermaid/.
