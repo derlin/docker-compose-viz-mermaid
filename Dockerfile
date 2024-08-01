@@ -1,6 +1,4 @@
-# see https://github.com/mermaid-js/mermaid-cli/blob/master/Dockerfile
-# !!! doesn't support arm64 for now
-FROM minlag/mermaid-cli:10.1.0
+FROM minlag/mermaid-cli:10.9.1 as base
 
 ENV MERMAID_RENDERER=mermaid-cli \
     MMDC_EXECUTABLE_PATH=/mmdc-wrapper
@@ -13,11 +11,14 @@ RUN echo -e '#!/bin/ash\n/home/mermaidcli/node_modules/.bin/mmdc -p /puppeteer-c
     chmod +x $MMDC_EXECUTABLE_PATH && chown mermaidcli $MMDC_EXECUTABLE_PATH
 COPY build/libs/*no_local*.jar /docker-compose-viz-mermaid.jar
 
+FROM base as test
+
 # Test that it works as expected
 USER mermaidcli
 RUN echo -e "services:\n  web:\n    image: derlin/rickroller" > /tmp/dc.yaml && \
       echo y | java -jar /docker-compose-viz-mermaid.jar /tmp/dc.yaml -f svg -o /tmp/dc.svg && \
       rm /tmp/dc*
 
+FROM base as final
 ENTRYPOINT ["java", "-jar", "/docker-compose-viz-mermaid.jar"]
 CMD [ "--help" ]
