@@ -19,5 +19,5 @@ internal fun Any.toValidId(): String = toString().replace("[^a-zA-Z0-9]".toRegex
 
 internal fun Any.toValidName() =
     toString().replace("\"", "'").let {
-        if ("[\\w !?_/':,.-]*".toRegex().matchEntire(it) == null) "\"$it\"" else it
+        if ("[\\w !?_/':,-]*".toRegex().matchEntire(it) == null) "\"$it\"" else it
     }
