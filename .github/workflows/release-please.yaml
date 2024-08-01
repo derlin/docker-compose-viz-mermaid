@@ -27,7 +27,7 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup gradle
         uses: ./.github/actions/gradlew
@@ -39,14 +39,14 @@ jobs:
           ./gradlew exec-jar
 
       - name: Attach assets to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.tag }}
           files: |
             build/bin/*.jar
 
       - name: Upload Jar artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jars
           # Use a wildcard to keep the structure
