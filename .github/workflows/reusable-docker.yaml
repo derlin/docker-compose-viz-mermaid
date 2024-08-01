@@ -104,7 +104,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64 # TODO also support the new mac architecture (requires buildx)
+          platforms: linux/amd64,linux/arm64
           push: ${{ inputs.publish }}
           tags: ${{ steps.tags.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
