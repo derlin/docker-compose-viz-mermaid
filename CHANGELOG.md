@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.3.0...v1.3.1) (2024-08-02)
+
+
+### 💬 Documentation
+
+* add Docker installation ([0cc5e7c](https://github.com/derlin/docker-compose-viz-mermaid/commit/0cc5e7c3065d527e8c9e2bdfe4a7a07cf7140d38))
+
 ## [1.3.0](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.2.0...v1.3.0) (2024-08-02)
 
 
