@@ -17,6 +17,18 @@ Inspired from [docker-compose-viz](https://github.com/pmsipilot/docker-compose-v
 
 ## Installation
 
+### Using docker
+
+It is available on DockerHub for both ARM and AMD.
+
+For example:
+```bash
+docker run --rm -v $(PWD):/data derlin/docker-compose-viz-mermaid /data/docker-compose.yml -f png
+# -> will generate the image.png in the current directory
+```
+
+### Running directly
+
 This is a simple jar, that you can download from:
 * [nightly](https://github.com/derlin/docker-compose-viz-mermaid/releases/tag/nightly),
 * [releases](https://github.com/derlin/docker-compose-viz-mermaid/releases).
