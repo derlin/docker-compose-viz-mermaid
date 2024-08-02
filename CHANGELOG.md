@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.3.0](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.2.0...v1.3.0) (2024-08-02)
+
+
+### 🚀 Features
+
+* provide an ARM docker image ([4e76d1a](https://github.com/derlin/docker-compose-viz-mermaid/commit/4e76d1a296a9f43bddce5c28ed9711b5075492ac))
+
+
+### 🐛 Bug Fixes
+
+* add MariaDB to known databases ([b230942](https://github.com/derlin/docker-compose-viz-mermaid/commit/b230942dcb40a67055cce15745c2ff6f668c3008))
+* properly quote labels with dots ([a6a5e35](https://github.com/derlin/docker-compose-viz-mermaid/commit/a6a5e3542a8b180361d16a0920956a05a34dea4b))
+* update dependencies ([4c0f84c](https://github.com/derlin/docker-compose-viz-mermaid/commit/4c0f84c7acfeff2bce023f00ee6fa603489522c6))
+* update docker image ([eaf82ba](https://github.com/derlin/docker-compose-viz-mermaid/commit/eaf82ba2bb964a4762c7d9773c493f50691ddcd4))
+
+
+### 💬 Documentation
+
+* update gems and examples, add Makefile ([a4bbae8](https://github.com/derlin/docker-compose-viz-mermaid/commit/a4bbae86ae03f0462d7a4ab6e545d11db777891c))
+
+
+### ⟲ CI
+
+* run MermaidRenderer tests again ([e2ace90](https://github.com/derlin/docker-compose-viz-mermaid/commit/e2ace90eb5f1b39361142d3a29904ab73437f66c))
+
 ## [1.2.0](https://github.com/derlin/docker-compose-viz-mermaid/compare/v1.1.0...v1.2.0) (2023-07-18)
 
 
